@@ -6,6 +6,7 @@ import App from "./app";
 import { createStore } from "./store/createStore";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const store = createStore();
 

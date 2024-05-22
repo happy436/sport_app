@@ -21,7 +21,7 @@ const Home: React.FC<profileProps> = () => {
 					<Divider></Divider>
 					<ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
 						<li>
-							<Link to="/daily">
+							<Link to="/habits">
 								<Card
 									className="mx-auto max-w-xs flex gap-3 hover:bg-slate-800"
 									decoration="top"

@@ -11,9 +11,9 @@ const PageTitle: FC<PageProps> = ({ children }) => {
 	);
 };
 
-const PageContent: FC<PageProps> = ({ children }) => {
+const PageContent: FC<PageProps> = ({ children, className }) => {
 	return (
-		<div className="flex flex-col gap-3">
+		<div className={classNames("flex flex-col gap-3", className)}>
 			{children}
 		</div>
 	);
