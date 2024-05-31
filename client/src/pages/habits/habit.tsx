@@ -9,6 +9,7 @@ import {
 	DialogPanel,
 	NumberInput,
 	ProgressCircle,
+	Switch,
 	TextInput,
 } from "@tremor/react";
 import { habitData } from "./habits";
@@ -27,6 +28,11 @@ const Habit: React.FC<habitProps> = () => {
 	const [value, setValue] = useState(0);
 	const [inputValue, setInputValue] = useState(0);
 	const [persentValue, setPercentValue] = useState(0);
+	const [isSwitchOn, setIsSwitchOn] = React.useState<boolean>(false);
+
+	const handleSwitchChange = (value: boolean) => {
+		setIsSwitchOn(value);
+	};
 
 	useEffect(() => {
 		setValue(habitData.value);
@@ -39,9 +45,9 @@ const Habit: React.FC<habitProps> = () => {
 	}, [value]);
 
 	const handleIncreaseValue = () => {
-        const newValue = Number(value) + Number(inputValue)
+		const newValue = Number(value) + Number(inputValue);
 		setValue(newValue);
-        dispatch(editHabitData({ _id: habitData._id, value: newValue }));
+		dispatch(editHabitData({ _id: habitData._id, value: newValue }));
 	};
 
 	const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,20 +89,24 @@ const Habit: React.FC<habitProps> = () => {
 					</ProgressCircle>
 				</div>
 				<div className="flex justify-center gap-3">
-					<div className="flex-1 p-[16px]"></div>
+					<div className=" p-[16px] w-[46px]">
+						{/* TODO Шаблони */}
+					</div>
 					<Button
 						onClick={() => {
 							setIsOpen(true);
 						}}
-						className="flex-1"
 					>
 						<p className="text-xl">+</p>
 					</Button>
-					<Button className="flex-1" icon={RiRestartLine}></Button>
+					<Button icon={RiRestartLine}></Button>
 				</div>
 				<Dialog
 					open={isOpen}
-					onClose={(val) => setIsOpen(val)}
+					onClose={(val) => {
+						setIsOpen(val);
+                        setInputValue(0)
+					}}
 					static={true}
 				>
 					<DialogPanel className="flex flex-col gap-2">
@@ -105,17 +115,28 @@ const Habit: React.FC<habitProps> = () => {
 						</h3>
 						<NumberInput
 							min="0"
+							/* defaultValue={inputValue} */
 							max={habitData.goal.toString()}
 							placeholder={`Value (${habitData.units})`}
 							onChange={handleChangeValue}
 						/>
+						{inputValue !== 0 && (
+							<div className="flex gap-3">
+								<Switch
+									id="switch"
+									name="switch"
+									checked={isSwitchOn}
+									onChange={handleSwitchChange}
+								/>
+								<label>Save the value?</label>
+							</div>
+						)}
 						<Button
 							color={habitData.color}
 							className=" w-full text-white"
 							onClick={() => {
 								setIsOpen(false);
 								handleIncreaseValue();
-                                
 							}}
 							type="button"
 						>

@@ -14,8 +14,26 @@ const mockData = {
 	goalPeriod: "day",
 	reminderTime: [],
 	reminderMessage: "",
-	showMemo: false,
+	history: [{ value: 0, date: 1716978056126 }],
+	createdAt: Date.now(),
+	/* showMemo: false, */
 };
+
+/* export interface habitData {
+	+ _id: string;
+	+ name: string;
+	+ description: string;
+	
+	+ goal: number;
+	+ units: string;
+	+ icon: string;
+	+ color: string;
+	+ tags: string[];
+	+ goalPeriod: string;
+	+ reminderTime: string[];
+	+ reminderMessage: string;
+	+ showMemo: boolean;
+} */
 
 const habitsSlice = createSlice({
 	name: "habits",
@@ -52,12 +70,12 @@ const habitsSlice = createSlice({
 			const index = state.entities.findIndex(
 				(c) => c._id === action.payload._id
 			);
-            console.log(action.payload)
+			console.log(action.payload);
 			state.entities[index] = {
 				...state.entities[index],
 				...action.payload,
 			};
-            console.log(state.entities[index])
+			console.log(state.entities[index]);
 			state.isLoading = false;
 		},
 	},
@@ -88,7 +106,7 @@ export const createHabit = (data) => async (dispatch) => {
 	const note = {
 		...data,
 		_id: nanoid(),
-		created_at: Date.now(),
+		createdtAt: Date.now(),
 		userId: /* localStorageService.getUserId() */ nanoid(),
 	};
 	dispatch(habitsRequested());
