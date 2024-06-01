@@ -8,14 +8,13 @@ import {
 	Dialog,
 	DialogPanel,
 	NumberInput,
-	ProgressCircle,
 	Switch,
-	TextInput,
 } from "@tremor/react";
 import { habitData } from "./habits";
 import { editHabitData } from "../../store/habits";
 import { Bounce, toast } from "react-toastify";
 import { RiRestartLine } from "@remixicon/react";
+import ProgressCircle from "@components/common/ProgressCircle";
 
 type habitProps = {};
 
@@ -79,11 +78,11 @@ const Habit: React.FC<habitProps> = () => {
 				<div>
 					<ProgressCircle
 						value={persentValue}
-						size="xl"
+						size="xxl"
 						showAnimation
 						color={habitData.color}
 					>
-						<span className="text-xs font-medium">
+						<span className="text-xl font-medium">
 							{value} / {habitData.goal}
 						</span>
 					</ProgressCircle>
