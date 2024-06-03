@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getHabits } from "../../store/habits";
-import { Button, Card } from "@tremor/react";
+import { Button, Card, DatePicker } from "@tremor/react";
 import Page from "../../components/common/page";
 import Calendar from "./Calendar";
 
@@ -20,6 +20,12 @@ export interface habitData {
 	reminderTime: string[];
 	reminderMessage: string;
 	showMemo: boolean;
+	history: historyData[];
+}
+
+export interface historyData {
+	value: number;
+	date: number;
 }
 
 const Habits: React.FC = () => {
@@ -29,41 +35,103 @@ const Habits: React.FC = () => {
 	useEffect(() => {
 		loadHabits();
 	}, []); */
+	const [activeDay, setActiveDay] = useState(new Date().getTime());
+	const handleChange = (value: number) => {
+		if (value !== undefined) {
+			const date = new Date(value);
+			const timestamp = date.getTime();
+			setActiveDay(timestamp);
+		}
+	};
 
-	const getPercent = (habit: habitData) => {
-		const { value, goal } = habit;
+	const getPercent = (habit: habitData, timestamp: number) => {
+		const { history, goal } = habit;
+		const date = new Date(timestamp);
+		const startOfDay = new Date(
+			date.getFullYear(),
+			date.getMonth(),
+			date.getDate()
+		);
+		const startOfDayTimestamp = startOfDay.getTime();
+
+		const value = history.filter(
+			(item: historyData) => item.date === startOfDayTimestamp
+		)[0].value;
 		return (Number(value) * 100) / Number(goal);
 	};
+
+	const giveTodayValue = (arr: historyData[], timestamp: number) => {
+		const date = new Date(timestamp);
+		const startOfDay = new Date(
+			date.getFullYear(),
+			date.getMonth(),
+			date.getDate()
+		);
+		const startOfDayTimestamp = startOfDay.getTime();
+		return arr.filter(
+			(item: historyData) => item.date === startOfDayTimestamp
+		)[0].value;
+	};
+
+	/* function calculateStreak(currentDate:number, data:habitData) {
+		const startOfDay = new Date(
+			new Date(currentDate).setHours(0, 0, 0, 0)
+		).getTime();
+        let streak = 0
+
+        const {history, goal} = data
+
+        const filteredData = history.filter((entry, index, array) => {
+            const yesterday = new Date()
+            yesterday.setDate(yesterday.getDate() - 1)
+            // TODO finished this function
+            return false;
+        });
+    
+        streak = filteredData.length;
+
+
+		return streak > 0 ? `🔥 ${streak} Day${streak > 1 ? "s" : ""}` : "";
+	} */
 
 	return (
 		<Page>
 			<Page.PageTitle>Habits</Page.PageTitle>
 			{/* TODO filter*/}
 			<Page.PageContent>
-				<Calendar/>
-				<ul className="max-w-96">
+				<section>
+					<DatePicker
+						onValueChange={handleChange}
+						defaultValue={new Date(activeDay)}
+					/>
+				</section>
+				<ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 					{data.length !== 0 ? (
 						data.map((habit: habitData) => (
 							<Link
 								to={`/habit/${habit._id}`}
 								key={habit._id}
-								className="max-w-96"
+								className="w-full"
 							>
-								<li className="max-w-96">
+								<li className="">
 									<Card
 										decoration="top"
 										decorationColor="indigo"
-										className="text-white overflow-hidden relative max-w-96"
+										className="text-white overflow-hidden relative"
 									>
 										<div
 											className={`h-full absolute bg-indigo-500/25 left-0 top-0`}
 											style={{
-												width: `${getPercent(habit)}%`,
+												width: `${getPercent(
+													habit,
+													activeDay
+												)}%`,
 											}}
 										></div>
-										<span className="text-xs absolute top-0 right-3">
+										{/* <span className="text-xs absolute top-0 right-3">
 											🔥 1 Day
-										</span>
+											{calculateStreak(activeDay, habit)}
+										</span> */}
 										<div className="flex gap-3 items-center w-full">
 											<div className="h-full flex items-center text-2xl">
 												{habit.icon}
@@ -79,8 +147,11 @@ const Habits: React.FC = () => {
 												</div>
 												<div className="flex">
 													<span className="text-lg">
-														{habit.value} /{" "}
-														{habit.goal}{" "}
+														{giveTodayValue(
+															habit.history,
+															activeDay
+														)}{" "}
+														/ {habit.goal}{" "}
 														{habit.units}
 													</span>
 												</div>

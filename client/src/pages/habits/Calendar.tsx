@@ -11,7 +11,6 @@ const Calendar: React.FC<CalendarProps> = () => {
 			const timestamp = date.getTime();
 			setActiveDay(timestamp);
 		}
-        
 	};
 
 	return (
