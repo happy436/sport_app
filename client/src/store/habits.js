@@ -1,23 +1,59 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { Bounce, toast } from "react-toastify";
 
-const mockData = {
-	_id: "awdawdawdasd",
-	name: "Push ups",
-	description: "Do 100 push ups per day",
-	value: 25,
-	goal: 100,
-	units: "count",
-	icon: "🏋️‍♂️",
-	color: "indigo",
-	tags: [],
-	goalPeriod: "day",
-	reminderTime: [],
-	reminderMessage: "",
-	history: [{ value: 0, date: 1716978056126 }],
-	createdAt: Date.now(),
-	/* showMemo: false, */
-};
+const mockData = [
+	{
+		_id: "awdawdawdasd",
+		name: "Push ups",
+		description: "Do 100 push ups per day",
+		value: 25,
+		goal: 100,
+		units: "count",
+		icon: "🏋️‍♂️",
+		color: "indigo",
+		tags: [],
+		goalPeriod: "day",
+		reminderTime: [],
+		reminderMessage: "",
+		history: [{ value: 0, date: Date.now() }],
+		createdAt: Date.now(),
+		showMemo: false,
+	},
+	{
+		_id: "bdsjfsd9fsd8f",
+		name: "Morning Run",
+		description: "Run 5 kilometers every morning",
+		value: 2,
+		goal: 5,
+		units: "km",
+		icon: "🏃‍♂️",
+		color: "green",
+		tags: ["running", "exercise", "health"],
+		goalPeriod: "day",
+		reminderTime: [],
+		reminderMessage: "",
+		history: [{ value: 0, date: Date.now() }],
+		createdAt: Date.now(),
+		showMemo: false,
+	},
+	{
+		_id: "9fds8f7ds8f7sd",
+		name: "Water Intake",
+		description: "Drink 8 glasses of water per day",
+		value: 4,
+		goal: 8,
+		units: "glasses",
+		icon: "💧",
+		color: "blue",
+		tags: ["hydration", "health"],
+		goalPeriod: "day",
+		reminderTime: [],
+		reminderMessage: "",
+		history: [{ value: 0, date: Date.now() }],
+		createdAt: Date.now(),
+		showMemo: false,
+	},
+];
 
 /* export interface habitData {
 	+ _id: string;
@@ -38,7 +74,7 @@ const mockData = {
 const habitsSlice = createSlice({
 	name: "habits",
 	initialState: {
-		entities: [mockData],
+		entities: mockData,
 		isLoading: true,
 		error: null,
 	},
