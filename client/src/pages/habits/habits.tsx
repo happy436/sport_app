@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { getHabits } from "../../store/habits";
 import { Button, Card } from "@tremor/react";
 import Page from "../../components/common/page";
+import Calendar from "./Calendar";
 
 export interface habitData {
 	_id: string;
@@ -23,7 +24,7 @@ export interface habitData {
 
 const Habits: React.FC = () => {
 	// TODO custom hook
-	const data:[] = useSelector(getHabits()) || [];
+	const data: [] = useSelector(getHabits()) || [];
 	/* const loadHabits = () => dispatch(loadHabitsList());
 	useEffect(() => {
 		loadHabits();
@@ -37,22 +38,22 @@ const Habits: React.FC = () => {
 	return (
 		<Page>
 			<Page.PageTitle>Habits</Page.PageTitle>
-			{/* TODO calendar */}
 			{/* TODO filter*/}
 			<Page.PageContent>
-				<ul className="w-full">
+				<Calendar/>
+				<ul className="max-w-96">
 					{data.length !== 0 ? (
 						data.map((habit: habitData) => (
 							<Link
 								to={`/habit/${habit._id}`}
 								key={habit._id}
-								className="w-full"
+								className="max-w-96"
 							>
-								<li className="w-full">
+								<li className="max-w-96">
 									<Card
 										decoration="top"
 										decorationColor="indigo"
-										className="text-white w-full overflow-hidden relative"
+										className="text-white overflow-hidden relative max-w-96"
 									>
 										<div
 											className={`h-full absolute bg-indigo-500/25 left-0 top-0`}
