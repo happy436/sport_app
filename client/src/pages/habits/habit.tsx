@@ -34,7 +34,7 @@ const Habit: React.FC<habitProps> = () => {
 	};
 
 	useEffect(() => {
-		setValue(habitData.value);
+		setValue(!habitData ? habitData.value : 0);
 		setPercentValue((Number(value) * 100) / Number(habitData.goal));
 	}, []);
 

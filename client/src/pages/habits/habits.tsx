@@ -54,10 +54,16 @@ const Habits: React.FC = () => {
 		);
 		const startOfDayTimestamp = startOfDay.getTime();
 
-		const value = history.filter(
-			(item: historyData) => item.date === startOfDayTimestamp
-		)[0].value;
-		return (Number(value) * 100) / Number(goal);
+		const data = history.filter((item: historyData) => {
+			if (item.date === startOfDayTimestamp) {
+				return item;
+			}
+		});
+		if (data.length > 0) {
+			return (Number(data[0].value) * 100) / Number(goal);
+		} else {
+			return 0;
+		}
 	};
 
 	const giveTodayValue = (arr: historyData[], timestamp: number) => {
@@ -68,9 +74,13 @@ const Habits: React.FC = () => {
 			date.getDate()
 		);
 		const startOfDayTimestamp = startOfDay.getTime();
-		return arr.filter(
-			(item: historyData) => item.date === startOfDayTimestamp
-		)[0].value;
+		const data = arr.filter((item: historyData) => {
+			if (item.date === startOfDayTimestamp) {
+				return item;
+			}
+		});
+
+		return data.length > 0 ? data[0].value : 0;
 	};
 
 	/* function calculateStreak(currentDate:number, data:habitData) {
@@ -78,19 +88,14 @@ const Habits: React.FC = () => {
 			new Date(currentDate).setHours(0, 0, 0, 0)
 		).getTime();
         let streak = 0
-
         const {history, goal} = data
-
         const filteredData = history.filter((entry, index, array) => {
             const yesterday = new Date()
             yesterday.setDate(yesterday.getDate() - 1)
             // TODO finished this function
             return false;
         });
-    
         streak = filteredData.length;
-
-
 		return streak > 0 ? `🔥 ${streak} Day${streak > 1 ? "s" : ""}` : "";
 	} */
 
