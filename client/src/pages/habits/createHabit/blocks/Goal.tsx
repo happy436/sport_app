@@ -30,7 +30,7 @@ const Goal: React.FC<goalProps> = ({
 		"min",
 		"hr",
 		"ml",
-		"l",
+		"L",
 		"Cal",
 		"Kcal",
 		"g",
