@@ -1,20 +1,82 @@
 import { Card, Divider, ProgressCircle } from "@tremor/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getHabits } from "../store/habits";
 
 type profileProps = {};
 
+export interface habitData {
+	_id: string;
+	name: string;
+	description: string;
+	value: number;
+	goal: number;
+	units: string;
+	icon: string;
+	color: string;
+	tags: string[];
+	goalPeriod: string;
+	reminderTime: string[];
+	reminderMessage: string;
+	showMemo: boolean;
+	history: historyData[];
+}
+
+export interface historyData {
+	value: number;
+	date: number;
+}
+
 const Home: React.FC<profileProps> = () => {
+	const [activeDay, setActiveDay] = useState(new Date().getTime());
+	const [achievements, setAchievements] = useState(0);
 	const cardList = [
 		/* { url: "/measurements", name: "Measurements", color: "lime" },
 		{ url: "/nutrition", name: "Nutrition", color: "yellow" }, */
 	];
+	const [habits, setHabits] = useState([]);
+	const getData = useSelector(getHabits());
+
+	useEffect(() => {
+		setHabits(getData);
+	}, []);
+
+	useEffect(() => {
+		console.log(habits);
+		setAchievements(checkGoalsAchievedToday(habits));
+	}, [habits]);
+
+	const checkGoalsAchievedToday = (tasks:habitData[]) => {
+		let achievedToday = 0;
+		tasks.forEach((task) => {
+			let goalMet = false;
+			task.history.forEach((record) => {
+				if (record.date === activeDay) {
+					if (record.value >= task.goal) {
+						goalMet = true;
+					}
+				}
+			});
+			if (!goalMet) {
+				if (0 >= task.goal) {
+					goalMet = true;
+				}
+			}
+			if (goalMet) {
+				achievedToday++;
+			}
+		});
+		return achievedToday;
+	};
+
+	const getPercentCompleted = (num1: number, num2: number) => {
+		const percent = (num1 * 100) / num2;
+		return percent.toFixed(0)
+	};
+
 	return (
 		<>
-			{/* <div className="flex items-end gap-3">
-				<p className="text-slate-500">Hello</p>
-				<p className="text-2xl">Ly</p>
-			</div> */}
 			<div>
 				<div>
 					<h3 className="text-2xl">Actions</h3>
@@ -28,12 +90,19 @@ const Home: React.FC<profileProps> = () => {
 									decorationColor="indigo"
 								>
 									<ProgressCircle
-										value={75}
+										value={getPercentCompleted(
+											achievements,
+											habits.length
+										)}
 										size="md"
 										color="indigo"
 									>
 										<span className="text-xs font-medium text-white">
-											75%
+											{getPercentCompleted(
+												achievements,
+												habits.length
+											)}
+											%
 										</span>
 									</ProgressCircle>
 									<div>
@@ -41,7 +110,8 @@ const Home: React.FC<profileProps> = () => {
 											Daily
 										</p>
 										<p className="text-slate-500">
-											3 / 4 Complete
+											{achievements} / {habits.length}{" "}
+											Complete
 										</p>
 									</div>
 								</Card>

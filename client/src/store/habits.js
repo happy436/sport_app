@@ -17,7 +17,7 @@ const mockData = [
 		history: [
 			{ value: 10, date: 1717189200000 },
 			{ value: 15, date: 1717275600000 },
-			{ value: 25, date: 1717362000000 },
+			{ value: 100, date: 1717362000000 },
 		],
 		createdAt: 1717189200000,
 		showMemo: false,
