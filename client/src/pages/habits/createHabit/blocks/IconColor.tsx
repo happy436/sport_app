@@ -37,6 +37,7 @@ const IconColor: React.FC<IconColorProps> = ({
 		"🏐",
 		"🎱",
 		"🎯",
+        "💧",
 		"🎮",
 		"♟",
 		"🎤",
