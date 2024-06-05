@@ -31,7 +31,7 @@ function App() {
 				<Route path="/*" element={<MainPage />}>
 					<Route path="home" element={<Home />} />
 					<Route path="habits" element={<Habits />} />
-					<Route path="habit/:id" element={<Habit />} />
+					<Route path="habit/:id/:timestamp" element={<Habit />} />
 					<Route path="habit/createHabit" element={<CreateHabit />} />
 					<Route path="measurements" element={<Measurements />} />
 					{/* 					<Route path="profile" element={<Profile />}>
