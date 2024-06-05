@@ -8,16 +8,24 @@ import { habitData, historyData } from "../home";
 
 const Habits: React.FC = () => {
 	// TODO custom hook
-	const data: [] = useSelector(getHabits()) || [];
+	const getData = useSelector(getHabits());
 	/* const loadHabits = () => dispatch(loadHabitsList());
 	useEffect(() => {
 		loadHabits();
 	}, []); */
+	const [data, setData] = useState([]);
 	const [activeDay, setActiveDay] = useState(0);
 	useEffect(() => {
-		const timestamp = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+		setData(getData);
+		const today = Date.now();
+		const timestamp = new Date(
+			new Date(today).setHours(0, 0, 0, 0)
+		).getTime();
 		setActiveDay(timestamp);
 	}, []);
+	useEffect(() => {
+		console.log(data);
+	}, [data]);
 	const handleChange = (value: number) => {
 		if (value !== undefined) {
 			const date = new Date(value);
@@ -87,10 +95,12 @@ const Habits: React.FC = () => {
 			{/* TODO filter*/}
 			<Page.PageContent>
 				<section>
-					<DatePicker
-						onValueChange={handleChange}
-						defaultValue={new Date(activeDay)}
-					/>
+					{activeDay !== 0 && (
+						<DatePicker
+							onValueChange={handleChange}
+							defaultValue={new Date(activeDay)}
+						/>
+					)}
 				</section>
 				<ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 					{data.length !== 0 ? (

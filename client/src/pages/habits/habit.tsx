@@ -49,7 +49,7 @@ const Habit: React.FC<habitProps> = () => {
 		dispatch(
 			editHabitData({
 				_id: habitData._id,
-				history: [{ date: timestamp, value: newValue }],
+				history: [{ value: newValue, date: Number(timestamp) }],
 			})
 		);
 	};
@@ -85,6 +85,7 @@ const Habit: React.FC<habitProps> = () => {
 					</Link>
 					{habitData.name}
 				</div>
+				<p className="text-xl font-normal">{habitData.description}</p>
 			</Page.PageTitle>
 			<Page.PageContent className="h-full justify-center">
 				<div>

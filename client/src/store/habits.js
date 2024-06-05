@@ -118,7 +118,10 @@ const habitsSlice = createSlice({
 			console.log(action.payload);
 			state.entities[index] = {
 				...state.entities[index],
-				...action.payload,
+				history: [
+					...state.entities[index].history,
+					...action.payload.history,
+				],
 			};
 			console.log(state.entities[index]);
 			state.isLoading = false;
@@ -163,7 +166,7 @@ export const createHabit = (data) => async (dispatch) => {
 	}
 };
 
-export const editHabitData = (payload) => async (dispatch) => {
+export const editHabitData = (payload) => async (dispatch,state) => {
 	dispatch(habitsRequested());
 	try {
 		//const { content } = await habitsService.update(payload);
@@ -180,6 +183,7 @@ export const editHabitData = (payload) => async (dispatch) => {
 			transition: Bounce,
 		});
 		dispatch(editHabit(payload));
+        
 	} catch (error) {
 		dispatch(habitsRequestFailed(error.message));
 	}
