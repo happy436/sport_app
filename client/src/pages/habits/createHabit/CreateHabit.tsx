@@ -9,24 +9,10 @@ import { createHabit } from "../../../store/habits";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
-
-interface HabitData {
-	name: string;
-	description: string;
-	color: string;
-	icon: string;
-	tags: string[];
-    value:number;
-	goal: number;
-	units: string;
-	goalPeriod: string;
-	reminderTime: string[];
-	reminderMessage: string;
-	showMemo: boolean;
-}
+import { habitData } from "../../home";
 
 const CreateHabitPage = () => {
-    // TODO to do useHabit castom hook
+	// TODO to do useHabit castom hook
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const colorList = [
@@ -58,25 +44,25 @@ const CreateHabitPage = () => {
 		const randomIndex = Math.floor(Math.random() * colorList.length);
 		return colorList[randomIndex].toString();
 	}
-	const [data, setData] = useState<HabitData>({
+	const [data, setData] = useState<habitData>({
 		name: "",
 		description: "",
 		color: getRandomColor(),
-        // TODO icons 
+		// TODO icons
 		icon: "",
 		// TODO save tags in global state for user and filter similar
-		tags: [],
-        value:0,
+		tags: [""],
 		goal: 0,
 		units: "count",
 		goalPeriod: "day",
 		reminderTime: [],
 		reminderMessage: "",
 		showMemo: false,
+		history: [],
 	});
 
-	const validateForm = (formData: HabitData) => {
-        // TODO to do validation
+	const validateForm = (formData: habitData) => {
+		// TODO to do validation
 		const errors = [];
 
 		// Проверка обязательных полей
@@ -173,9 +159,9 @@ const CreateHabitPage = () => {
 		}
 
 		dispatch(createHabit(data));
-		if(validateForm(data)){
-            navigate("/habits");
-        }
+		if (validateForm(data)) {
+			navigate("/habits");
+		}
 		console.log(data);
 	};
 	return (
@@ -189,7 +175,7 @@ const CreateHabitPage = () => {
 					<TextField name="description" onChange={handleChange} />
 				</Card>
 				<IconColor
-                    icon={data.icon}
+					icon={data.icon}
 					color={data.color}
 					colorList={colorList}
 					handleClick={handleClick}
