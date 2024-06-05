@@ -100,7 +100,6 @@ const habitsSlice = createSlice({
 			state.isLoading = false;
 		},
 		addHabit: (state, action) => {
-			console.log(state.entities);
 			state.entities.push(action.payload);
 			state.isLoading = false;
 		},

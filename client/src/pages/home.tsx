@@ -43,7 +43,6 @@ const Home: React.FC<profileProps> = () => {
 	}, []);
 
 	useEffect(() => {
-		console.log(habits);
 		setAchievements(checkGoalsAchievedToday(habits));
 	}, [habits]);
 

@@ -98,7 +98,6 @@ const CreateHabitPage = () => {
 	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		//console.log(e)
 		setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
 	const handleChangeCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,7 +141,6 @@ const CreateHabitPage = () => {
 	const scheduleNotification = (time: Date) => {
 		const currentTime = new Date();
 		const timeDiff = time.getTime() - currentTime.getTime();
-		console.log(timeDiff);
 		if (timeDiff > 0) {
 			setTimeout(() => {
 				showNotification();
@@ -162,7 +160,6 @@ const CreateHabitPage = () => {
 		if (validateForm(data)) {
 			navigate("/habits");
 		}
-		console.log(data);
 	};
 	return (
 		<div className="flex flex-col items-center">

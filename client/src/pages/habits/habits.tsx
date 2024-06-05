@@ -23,9 +23,6 @@ const Habits: React.FC = () => {
 		).getTime();
 		setActiveDay(timestamp);
 	}, []);
-	useEffect(() => {
-		console.log(data);
-	}, [data]);
 	const handleChange = (value: number) => {
 		if (value !== undefined) {
 			const date = new Date(value);
