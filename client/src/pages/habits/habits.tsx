@@ -4,29 +4,7 @@ import { Link } from "react-router-dom";
 import { getHabits } from "../../store/habits";
 import { Button, Card, DatePicker } from "@tremor/react";
 import Page from "../../components/common/page";
-import Calendar from "./Calendar";
-
-export interface habitData {
-	_id: string;
-	name: string;
-	description: string;
-	value: number;
-	goal: number;
-	units: string;
-	icon: string;
-	color: string;
-	tags: string[];
-	goalPeriod: string;
-	reminderTime: string[];
-	reminderMessage: string;
-	showMemo: boolean;
-	history: historyData[];
-}
-
-export interface historyData {
-	value: number;
-	date: number;
-}
+import { habitData, historyData } from "../home";
 
 const Habits: React.FC = () => {
 	// TODO custom hook
@@ -35,7 +13,11 @@ const Habits: React.FC = () => {
 	useEffect(() => {
 		loadHabits();
 	}, []); */
-	const [activeDay, setActiveDay] = useState(new Date().getTime());
+	const [activeDay, setActiveDay] = useState(0);
+	useEffect(() => {
+		const timestamp = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+		setActiveDay(timestamp);
+	}, []);
 	const handleChange = (value: number) => {
 		if (value !== undefined) {
 			const date = new Date(value);
@@ -114,7 +96,7 @@ const Habits: React.FC = () => {
 					{data.length !== 0 ? (
 						data.map((habit: habitData) => (
 							<Link
-								to={`/habit/${habit._id}`}
+								to={`/habit/${habit._id}/${activeDay}`}
 								key={habit._id}
 								className="w-full"
 							>

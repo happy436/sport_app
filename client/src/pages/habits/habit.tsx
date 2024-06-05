@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Page from "../../components/common/page";
 import { useDispatch, useSelector } from "react-redux";
 import { getHabitById } from "../../store/habits";
@@ -13,15 +13,15 @@ import {
 import { habitData } from "./habits";
 import { editHabitData } from "../../store/habits";
 import { Bounce, toast } from "react-toastify";
-import { RiRestartLine } from "@remixicon/react";
+import { RiArrowLeftLine, RiRestartLine } from "@remixicon/react";
 import ProgressCircle from "@components/common/ProgressCircle";
 
 type habitProps = {};
 
 const Habit: React.FC<habitProps> = () => {
 	const param = useParams();
-	const habitID = param.id;
-	const habitData: habitData = useSelector(getHabitById(habitID));
+	const { id, timestamp } = param;
+	const habitData: habitData = useSelector(getHabitById(id));
 	const dispatch = useDispatch();
 	const [isOpen, setIsOpen] = useState(false);
 	const [value, setValue] = useState(0);
@@ -46,7 +46,12 @@ const Habit: React.FC<habitProps> = () => {
 	const handleIncreaseValue = () => {
 		const newValue = Number(value) + Number(inputValue);
 		setValue(newValue);
-		dispatch(editHabitData({ _id: habitData._id, value: newValue }));
+		dispatch(
+			editHabitData({
+				_id: habitData._id,
+				history: [{ date: timestamp, value: newValue }],
+			})
+		);
 	};
 
 	const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,7 +78,14 @@ const Habit: React.FC<habitProps> = () => {
 
 	return (
 		<Page className="h-full">
-			<Page.PageTitle>{habitData.name}</Page.PageTitle>
+			<Page.PageTitle>
+				<div className="flex gap-3 items-center">
+					<Link to="/habits">
+						<Button icon={RiArrowLeftLine} />
+					</Link>
+					{habitData.name}
+				</div>
+			</Page.PageTitle>
 			<Page.PageContent className="h-full justify-center">
 				<div>
 					<ProgressCircle
@@ -98,13 +110,13 @@ const Habit: React.FC<habitProps> = () => {
 					>
 						<p className="text-xl">+</p>
 					</Button>
-					<Button icon={RiRestartLine}></Button>
+					<Button icon={RiRestartLine} onClick={() => {}}></Button>
 				</div>
 				<Dialog
 					open={isOpen}
 					onClose={(val) => {
 						setIsOpen(val);
-                        setInputValue(0)
+						setInputValue(0);
 					}}
 					static={true}
 				>
