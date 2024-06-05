@@ -115,15 +115,24 @@ const habitsSlice = createSlice({
 			const index = state.entities.findIndex(
 				(c) => c._id === action.payload._id
 			);
-			console.log(action.payload);
-			state.entities[index] = {
-				...state.entities[index],
-				history: [
-					...state.entities[index].history,
-					...action.payload.history,
-				],
-			};
-			console.log(state.entities[index]);
+
+			if (index !== -1) {
+				const habit = state.entities[index];
+				const historyIndex = habit.history.findIndex(
+					(h) => h.date === action.payload.history.date
+				);
+
+				if (historyIndex !== -1) {
+					// Replace existing history entry
+					habit.history[historyIndex] = action.payload.history;
+				} else {
+					// Add new history entry
+					habit.history.push(action.payload.history);
+				}
+
+				state.entities[index] = { ...habit };
+			}
+
 			state.isLoading = false;
 		},
 	},
@@ -166,7 +175,7 @@ export const createHabit = (data) => async (dispatch) => {
 	}
 };
 
-export const editHabitData = (payload) => async (dispatch,state) => {
+export const editHabitData = (payload) => async (dispatch, state) => {
 	dispatch(habitsRequested());
 	try {
 		//const { content } = await habitsService.update(payload);
@@ -183,7 +192,6 @@ export const editHabitData = (payload) => async (dispatch,state) => {
 			transition: Bounce,
 		});
 		dispatch(editHabit(payload));
-        
 	} catch (error) {
 		dispatch(habitsRequestFailed(error.message));
 	}

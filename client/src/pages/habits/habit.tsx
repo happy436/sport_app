@@ -15,6 +15,7 @@ import { editHabitData } from "../../store/habits";
 import { Bounce, toast } from "react-toastify";
 import { RiArrowLeftLine, RiRestartLine } from "@remixicon/react";
 import ProgressCircle from "@components/common/ProgressCircle";
+import { historyData } from "../home";
 
 type habitProps = {};
 
@@ -34,7 +35,13 @@ const Habit: React.FC<habitProps> = () => {
 	};
 
 	useEffect(() => {
-		setValue(!habitData ? habitData.value : 0);
+		if (habitData) {
+			const findItem = habitData.history.find(
+				(item:historyData) => item.date === Number(timestamp)
+			);
+			findItem && setValue(findItem.value);
+		}
+
 		setPercentValue((Number(value) * 100) / Number(habitData.goal));
 	}, []);
 
@@ -49,10 +56,21 @@ const Habit: React.FC<habitProps> = () => {
 		dispatch(
 			editHabitData({
 				_id: habitData._id,
-				history: [{ value: newValue, date: Number(timestamp) }],
+				history: { value: newValue, date: Number(timestamp) },
 			})
 		);
 	};
+
+    const handleResetValue = () => {
+        const newValue = 0;
+		setValue(newValue);
+		dispatch(
+			editHabitData({
+				_id: habitData._id,
+				history: { value: newValue, date: Number(timestamp) },
+			})
+		);
+    }
 
 	const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.value !== "") {
@@ -111,7 +129,7 @@ const Habit: React.FC<habitProps> = () => {
 					>
 						<p className="text-xl">+</p>
 					</Button>
-					<Button icon={RiRestartLine} onClick={() => {}}></Button>
+					<Button icon={RiRestartLine} onClick={handleResetValue}></Button>
 				</div>
 				<Dialog
 					open={isOpen}
