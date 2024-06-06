@@ -7,10 +7,9 @@ import { getHabits } from "../store/habits";
 type profileProps = {};
 
 export interface habitData {
-	_id: string;
+	_id?: string;
 	name: string;
 	description: string;
-	value: number;
 	goal: number;
 	units: string;
 	icon: string;
@@ -20,7 +19,7 @@ export interface habitData {
 	reminderTime: string[];
 	reminderMessage: string;
 	showMemo: boolean;
-	history: historyData[];
+	history?: historyData[];
 }
 
 export interface historyData {
