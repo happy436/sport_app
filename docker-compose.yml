@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173" # Убедитесь, что порт совпадает с портом, который используется клиентом
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" # Убедитесь, что порт совпадает с портом, который используется сервером
