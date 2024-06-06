@@ -1,6 +1,16 @@
 import { TextInput } from "@tremor/react";
 
-function TextField({ name, onChange, placeholder }) {
+interface TextFieldProps {
+	name: string;
+	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	placeholder?: string;
+}
+
+const TextField: React.FC<TextFieldProps> = ({
+	name,
+	onChange,
+	placeholder,
+}) => {
 	return (
 		<div className="mb-4">
 			<label
@@ -9,17 +19,17 @@ function TextField({ name, onChange, placeholder }) {
 			>
 				{name[0].toUpperCase() + name.slice(1)}
 			</label>
-				<TextInput
-					className="w-full"
-					id={name}
-					name={name}
-					type="text"
-					placeholder={placeholder || name}
-					onChange={onChange}
-                    required 
-				/>
+			<TextInput
+				className="w-full"
+				id={name}
+				name={name}
+				type="text"
+				placeholder={placeholder || name}
+				onChange={onChange}
+				required
+			/>
 		</div>
 	);
-}
+};
 
 export default TextField;
