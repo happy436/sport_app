@@ -32,6 +32,7 @@ const Habits: React.FC = () => {
 	};
 
 	const getPercent = (habit: habitData, timestamp: number) => {
+        
 		const { history, goal } = habit;
 		const date = new Date(timestamp);
 		const startOfDay = new Date(

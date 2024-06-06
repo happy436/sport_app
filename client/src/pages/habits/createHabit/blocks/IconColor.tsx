@@ -3,8 +3,8 @@ import React, { useState } from "react";
 
 type IconColorProps = {
 	color: string;
-	colorList: [];
-	handleClick: () => void;
+	colorList: string[];
+	handleClick: (e: React.MouseEvent<HTMLInputElement>) => void;
 	icon: string;
 };
 
@@ -29,7 +29,7 @@ const IconColor: React.FC<IconColorProps> = ({
 		"🤸‍♂️",
 		"💪",
 		"✍",
-        "📚",
+		"📚",
 		"🎨",
 		"⚽",
 		"⚾",
@@ -37,7 +37,7 @@ const IconColor: React.FC<IconColorProps> = ({
 		"🏐",
 		"🎱",
 		"🎯",
-        "💧",
+		"💧",
 		"🎮",
 		"♟",
 		"🎤",
@@ -71,7 +71,7 @@ const IconColor: React.FC<IconColorProps> = ({
 						<Button
 							color={color}
 							type="button"
-                            onClick={() => setIsOpenIcon(true)}
+							onClick={() => setIsOpenIcon(true)}
 							className="w-[30px] h-[30px]"
 						>
 							{icon || "+"}
@@ -96,8 +96,11 @@ const IconColor: React.FC<IconColorProps> = ({
 												value={item}
 												type="button"
 												onClick={handleClick}
-                                                
-											><p className="text-2xl">{item}</p></Button>
+											>
+												<p className="text-2xl">
+													{item}
+												</p>
+											</Button>
 										</li>
 									))}
 								</ul>

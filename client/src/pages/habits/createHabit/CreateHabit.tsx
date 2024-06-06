@@ -48,7 +48,6 @@ const CreateHabitPage = () => {
 		name: "",
 		description: "",
 		color: getRandomColor(),
-		// TODO icons
 		icon: "",
 		// TODO save tags in global state for user and filter similar
 		tags: [""],
@@ -58,7 +57,6 @@ const CreateHabitPage = () => {
 		reminderTime: [],
 		reminderMessage: "",
 		showMemo: false,
-		history: [],
 	});
 
 	const validateForm = (formData: habitData) => {

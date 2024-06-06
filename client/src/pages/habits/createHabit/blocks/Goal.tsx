@@ -4,7 +4,6 @@ import {
 	Dialog,
 	DialogPanel,
 	NumberInput,
-	TextInput,
 } from "@tremor/react";
 import React, { useState } from "react";
 
