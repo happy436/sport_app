@@ -4,7 +4,7 @@ import MainPage from "./pages/main";
 import Home from "./pages/home";
 import Habits from "./pages/habits/habits";
 import Habit from "./pages/habits/habit";
-import Measurements from "./pages/measurements";
+import Measurements from "./pages/measurements/measurements.tsx";
 import CreateHabit from "./pages/habits/createHabit/CreateHabit.tsx";
 
 const Default = () => {
