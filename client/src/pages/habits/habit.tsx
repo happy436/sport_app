@@ -144,6 +144,7 @@ const Habit: React.FC<habitProps> = () => {
 							Input value
 						</h3>
 						<NumberInput
+                        // TODO validation and error
 							min="0"
 							/* defaultValue={inputValue} */
 							max={habitData.goal.toString()}

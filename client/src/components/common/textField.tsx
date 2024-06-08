@@ -20,6 +20,7 @@ const TextField: React.FC<TextFieldProps> = ({
 				{name[0].toUpperCase() + name.slice(1)}
 			</label>
 			<TextInput
+            // TODO errors and errors message
 				className="w-full"
 				id={name}
 				name={name}

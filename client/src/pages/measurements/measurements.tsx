@@ -20,7 +20,7 @@ const Measurements: React.FC<measurementsProps> = () => {
 			_id: "awdasdawdasdwa",
 			name: "Biceps",
 			units: "mm",
-            createdAt:"01.02.24",
+			createdAt: "01.02.24",
 			measurements: [
 				{ date: "01.02.24", value: 36 },
 				{ date: "01.03.24", value: 35 },
@@ -64,7 +64,7 @@ const Measurements: React.FC<measurementsProps> = () => {
 			_id: "awdasdawsdwa",
 			name: "Cheast",
 			units: "mm",
-            createdAt:"01.02.24",
+			createdAt: "01.02.24",
 			measurements: [
 				{ date: "01.02.24", value: 36 },
 				{ date: "01.03.24", value: 35 },
@@ -107,6 +107,10 @@ const Measurements: React.FC<measurementsProps> = () => {
 	];
 	const unitsArray = ["mm", "cm", "m", "kg"];
 	const [activeDay, setActiveDay] = useState(0);
+	const [inputText, setInputText] = useState("");
+	const [inputSelect, setInputSelect] = useState("");
+	// TODO validation error
+	const [errors, setErrors] = useState([]);
 	const [isOpen, setIsOpen] = useState(false);
 	useEffect(() => {
 		const today = Date.now();
@@ -115,16 +119,32 @@ const Measurements: React.FC<measurementsProps> = () => {
 		).getTime();
 		setActiveDay(timestamp);
 	}, []);
-	const handleChange = (value: number) => {
+	const handleChangeDate = (value: number) => {
 		if (value !== undefined) {
 			const date = new Date(value);
 			const timestamp = date.getTime();
 			setActiveDay(timestamp);
 		}
 	};
-    const validation = () => {
-        // TODO validation
-    }
+
+	const validation = () => {
+		// TODO validation and add toastify
+        const error = []
+        setErrors([])
+		if (inputSelect === "") {
+			setErrors((prev) => [...prev, "select"]);
+            error.push(["select"])
+		} 
+        if (inputText === "") {
+			setErrors((prev) => [...prev, "text"]);
+            error.push("text")
+		}
+        if(error.length > 0){
+            return false;
+        }
+        return true
+	};
+
 	return (
 		<Page>
 			<Page.PageTitle>Measurements</Page.PageTitle>
@@ -132,7 +152,7 @@ const Measurements: React.FC<measurementsProps> = () => {
 				<section>
 					{activeDay !== 0 && (
 						<DatePicker
-							onValueChange={handleChange}
+							onValueChange={handleChangeDate}
 							defaultValue={new Date(activeDay)}
 						/>
 					)}
@@ -169,11 +189,22 @@ const Measurements: React.FC<measurementsProps> = () => {
 							Create measurement
 						</h3>
 						<TextInput
-							value={""}
+							error={errors.includes("text")}
+							errorMessage="Text input is empty!"
+							value={inputText}
 							placeholder={`Measurement name`}
-							onValueChange={() => {}}
+							onValueChange={(value) => {
+								setInputText(value);
+							}}
 						/>
-						<Select placeholder="Choose units">
+						<Select
+							error={errors.includes("select")}
+							errorMessage="Select area is empty!"
+							placeholder="Choose units"
+							onValueChange={(value) => {
+								setInputSelect(value);
+							}}
+						>
 							{unitsArray.map((item) => (
 								<SelectItem key={item} value={item}>
 									{item}
@@ -184,7 +215,9 @@ const Measurements: React.FC<measurementsProps> = () => {
 							color="indigo"
 							className=" w-full text-white"
 							onClick={() => {
-								setIsOpen(false);
+								validation() && setIsOpen(false);
+                                
+								
 							}}
 							type="button"
 						>
