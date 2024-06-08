@@ -6,14 +6,18 @@ import {
 } from "@tremor/react";
 
 type measurementProps = {
+	data: measurementData;
+};
+
+type measurementData = {
 	_id: string;
 	name: string;
-	measurement: measure[];
+	measurements: measure[];
 	units: string;
 };
 
 type measure = {
-	date: number;
+	date: string;
 	value: number;
 };
 
@@ -45,23 +49,22 @@ const Measurement: React.FC<measurementProps> = ({ data }) => {
 	};
 	return (
 		<>
-			
-				<Accordion>
-					<AccordionHeader className="text-sm font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-						{data.name}
-					</AccordionHeader>
-					<AccordionBody className="leading-6">
-						<AreaChart
-							className="mt-4 h-72"
-							data={data.measurements}
-							index="date"
-							categories={["value"]}
-							colors={["blue"]}
-							yAxisWidth={30}
-							customTooltip={customTooltip}
-						/>
-					</AccordionBody>
-				</Accordion>
+			<Accordion>
+				<AccordionHeader className="text-sm font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+					{data.name}
+				</AccordionHeader>
+				<AccordionBody className="leading-6">
+					<AreaChart
+						className="mt-4 h-72"
+						data={data.measurements}
+						index="date"
+						categories={["value"]}
+						colors={["blue"]}
+						yAxisWidth={30}
+						customTooltip={customTooltip}
+					/>
+				</AccordionBody>
+			</Accordion>
 		</>
 	);
 };
