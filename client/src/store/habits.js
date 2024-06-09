@@ -24,10 +24,10 @@ const mockData = [
 	},
 	{
 		_id: "bdsjfsd9fsd8f",
-		name: "Morning Run",
-		description: "Run 5 kilometers every morning",
+		name: "Stand in plank",
+		description: "stand in plank 5 sec",
 		goal: 5,
-		units: "km",
+		units: "sec",
 		icon: "🏃‍♂️",
 		color: "green",
 		tags: ["running", "exercise", "health"],

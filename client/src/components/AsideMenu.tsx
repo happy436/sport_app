@@ -15,7 +15,7 @@ const AsideMenu: React.FC<AsideMenuProps> = () => {
 	];
 	// TODO delete
 	const avatar =
-		"https://static1.srcdn.com/wordpress/wp-content/uploads/2023/11/code-geass-lelouch.jpg";
+		"https://static1.srcdn.com/wordpress/wp-content/uploads/2023/12/lelouch.jpg?q=70&fit=contain&w=750&h=415&dpr=1";
 	return (
 		<aside className="bg-slate-900 w-200px p-4 h-full flex flex-col gap-3 max-sm:hidden fixed">
 			<div className="rounded-full overflow-hidden w-32 h-32">

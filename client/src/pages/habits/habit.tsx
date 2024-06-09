@@ -16,6 +16,7 @@ import { Bounce, toast } from "react-toastify";
 import { RiArrowLeftLine, RiRestartLine } from "@remixicon/react";
 import ProgressCircle from "@components/common/ProgressCircle";
 import { historyData } from "../home";
+import CounterFactory from "./factoryComponent/CounterFactory";
 
 type habitProps = {};
 
@@ -25,7 +26,7 @@ const Habit: React.FC<habitProps> = () => {
 	const habitData: habitData = useSelector(getHabitById(id));
 	const dispatch = useDispatch();
 	const [isOpen, setIsOpen] = useState(false);
-	const [value, setValue] = useState(0);
+	const [value, setValue] = useState<number>(0);
 	const [inputValue, setInputValue] = useState(0);
 	const [persentValue, setPercentValue] = useState(0);
 	const [isSwitchOn, setIsSwitchOn] = React.useState<boolean>(false);
@@ -37,7 +38,7 @@ const Habit: React.FC<habitProps> = () => {
 	useEffect(() => {
 		if (habitData) {
 			const findItem = habitData.history.find(
-				(item:historyData) => item.date === Number(timestamp)
+				(item: historyData) => item.date === Number(timestamp)
 			);
 			findItem && setValue(findItem.value);
 		}
@@ -61,8 +62,8 @@ const Habit: React.FC<habitProps> = () => {
 		);
 	};
 
-    const handleResetValue = () => {
-        const newValue = 0;
+	const handleResetValue = () => {
+		const newValue = 0;
 		setValue(newValue);
 		dispatch(
 			editHabitData({
@@ -70,7 +71,7 @@ const Habit: React.FC<habitProps> = () => {
 				history: { value: newValue, date: Number(timestamp) },
 			})
 		);
-    }
+	};
 
 	const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.value !== "") {
@@ -99,38 +100,25 @@ const Habit: React.FC<habitProps> = () => {
 			<Page.PageTitle>
 				<div className="flex gap-3 items-center">
 					<Link to="/habits">
-						<Button icon={RiArrowLeftLine} />
+						<Button icon={RiArrowLeftLine} color={habitData.color}/>
 					</Link>
 					{habitData.name}
 				</div>
 				<p className="text-xl font-normal">{habitData.description}</p>
 			</Page.PageTitle>
 			<Page.PageContent className="h-full justify-center">
-				<div>
-					<ProgressCircle
-						value={persentValue}
-						size="xxl"
-						showAnimation
-						color={habitData.color}
-					>
-						<span className="text-xl font-medium">
-							{value} / {habitData.goal}
-						</span>
-					</ProgressCircle>
-				</div>
-				<div className="flex justify-center gap-3">
-					<div className=" p-[16px] w-[46px]">
-						{/* TODO Шаблони */}
-					</div>
-					<Button
-						onClick={() => {
-							setIsOpen(true);
-						}}
-					>
-						<p className="text-xl">+</p>
-					</Button>
-					<Button icon={RiRestartLine} onClick={handleResetValue}></Button>
-				</div>
+				<CounterFactory
+					persentValue={persentValue}
+                    value={value}
+                    id={id}
+					color={habitData.color}
+					goal={habitData.goal}
+                    units={habitData.units}
+					setIsOpen={setIsOpen}
+					handleResetValue={handleResetValue}
+                    setValue={setValue}
+                    timestamp={timestamp}
+				/>
 				<Dialog
 					open={isOpen}
 					onClose={(val) => {

@@ -111,7 +111,7 @@ const Habits: React.FC = () => {
 								<li className="">
 									<Card
 										decoration="top"
-										decorationColor="indigo"
+										decorationColor={habit.color}
 										className="text-white overflow-hidden relative"
 									>
 										<div
