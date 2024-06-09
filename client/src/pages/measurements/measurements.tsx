@@ -11,101 +11,17 @@ import {
 	TextInput,
 } from "@tremor/react";
 import Measurement from "./measurement";
+import {getMeasurements} from "../../store/measurements"
+import { useDispatch, useSelector } from "react-redux";
 
 type measurementsProps = {};
 
 const Measurements: React.FC<measurementsProps> = () => {
-	const mockData = [
-		{
-			_id: "awdasdawdasdwa",
-			name: "Biceps",
-			units: "mm",
-			createdAt: "01.02.24",
-			measurements: [
-				{ date: "01.02.24", value: 36 },
-				{ date: "01.03.24", value: 35 },
-				{ date: "01.04.24", value: 35.5 },
-				{ date: "01.05.24", value: 37 },
-				{ date: "01.06.24", value: 38 },
-				{ date: "01.07.24", value: 31 },
-				{ date: "01.08.24", value: 31 },
-				{ date: "01.09.24", value: 31 },
-				{ date: "01.10.24", value: 31 },
-				{ date: "01.11.24", value: 31 },
-				{ date: "01.12.24", value: 31 },
-				{ date: "01.01.25", value: 31 },
-				{ date: "01.02.25", value: 31 },
-				{ date: "01.03.25", value: 31 },
-				{ date: "01.04.25", value: 31 },
-				{ date: "01.05.25", value: 31 },
-				{ date: "01.06.25", value: 31 },
-				{ date: "01.07.25", value: 31 },
-				{ date: "01.08.25", value: 31 },
-				{ date: "01.09.25", value: 31 },
-				{ date: "01.10.25", value: 31 },
-				{ date: "01.11.25", value: 31 },
-				{ date: "01.12.25", value: 31 },
-				{ date: "01.01.26", value: 31 },
-				{ date: "01.02.26", value: 31 },
-				{ date: "01.03.26", value: 31 },
-				{ date: "01.04.26", value: 31 },
-				{ date: "01.05.26", value: 31 },
-				{ date: "01.06.26", value: 31 },
-				{ date: "01.07.26", value: 31 },
-				{ date: "01.08.26", value: 31 },
-				{ date: "01.09.26", value: 31 },
-				{ date: "01.10.26", value: 31 },
-				{ date: "01.11.26", value: 31 },
-				{ date: "01.12.26", value: 31 },
-				{ date: "01.01.27", value: 31 },
-			],
-		},
-		{
-			_id: "awdasdawsdwa",
-			name: "Cheast",
-			units: "mm",
-			createdAt: "01.02.24",
-			measurements: [
-				{ date: "01.02.24", value: 36 },
-				{ date: "01.03.24", value: 35 },
-				{ date: "01.04.24", value: 35.5 },
-				{ date: "01.05.24", value: 37 },
-				{ date: "01.06.24", value: 38 },
-				{ date: "01.07.24", value: 31 },
-				{ date: "01.08.24", value: 31 },
-				{ date: "01.09.24", value: 31 },
-				{ date: "01.10.24", value: 31 },
-				{ date: "01.11.24", value: 31 },
-				{ date: "01.12.24", value: 31 },
-				{ date: "01.01.25", value: 31 },
-				{ date: "01.02.25", value: 31 },
-				{ date: "01.03.25", value: 31 },
-				{ date: "01.04.25", value: 31 },
-				{ date: "01.05.25", value: 31 },
-				{ date: "01.06.25", value: 31 },
-				{ date: "01.07.25", value: 31 },
-				{ date: "01.08.25", value: 31 },
-				{ date: "01.09.25", value: 31 },
-				{ date: "01.10.25", value: 31 },
-				{ date: "01.11.25", value: 31 },
-				{ date: "01.12.25", value: 31 },
-				{ date: "01.01.26", value: 31 },
-				{ date: "01.02.26", value: 31 },
-				{ date: "01.03.26", value: 31 },
-				{ date: "01.04.26", value: 31 },
-				{ date: "01.05.26", value: 31 },
-				{ date: "01.06.26", value: 31 },
-				{ date: "01.07.26", value: 31 },
-				{ date: "01.08.26", value: 31 },
-				{ date: "01.09.26", value: 31 },
-				{ date: "01.10.26", value: 31 },
-				{ date: "01.11.26", value: 31 },
-				{ date: "01.12.26", value: 31 },
-				{ date: "01.01.27", value: 31 },
-			],
-		},
-	];
+    const getData = useSelector(getMeasurements())
+    const dispatch = useDispatch()
 	const unitsArray = ["mm", "cm", "m", "kg"];
+
+    const [data, setData] = useState([])
 	const [activeDay, setActiveDay] = useState(0);
 	const [inputText, setInputText] = useState("");
 	const [inputSelect, setInputSelect] = useState("");
@@ -113,6 +29,7 @@ const Measurements: React.FC<measurementsProps> = () => {
 	const [errors, setErrors] = useState([]);
 	const [isOpen, setIsOpen] = useState(false);
 	useEffect(() => {
+        setData(getData)
 		const today = Date.now();
 		const timestamp = new Date(
 			new Date(today).setHours(0, 0, 0, 0)
@@ -160,7 +77,7 @@ const Measurements: React.FC<measurementsProps> = () => {
 				<div>
 					<ul>
 						<AccordionList>
-							{mockData.map((item) => (
+							{data.map((item) => (
 								<li key={item._id}>
 									<Measurement data={item} />
 								</li>
