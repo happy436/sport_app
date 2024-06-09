@@ -30,9 +30,10 @@ export interface historyData {
 const Home: React.FC<profileProps> = () => {
 	const [activeDay, setActiveDay] = useState(new Date().getTime());
 	const [achievements, setAchievements] = useState(0);
+    
 	const cardList = [
-		/* { url: "/measurements", name: "Measurements", color: "lime" },
-		{ url: "/nutrition", name: "Nutrition", color: "yellow" }, */
+		{ url: "/measurements", name: "Measurements", color: "lime" },
+		/*{ url: "/nutrition", name: "Nutrition", color: "yellow" }, */
 	];
 	const [habits, setHabits] = useState([]);
 	const getData = useSelector(getHabits());
@@ -133,6 +134,7 @@ const Home: React.FC<profileProps> = () => {
 					</ul>
 				</div>
 			</div>
+            
 		</>
 	);
 };
