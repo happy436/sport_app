@@ -11,11 +11,11 @@ type TimerProps = CounterFactoryProps;
 const Timer: React.FC<TimerProps> = ({
 	color,
 	goal,
-	handleResetValue,
 	units,
 	setValue,
 	timestamp,
 	id,
+	handleResetValue,
 }) => {
 	const [couldown, setCouldown] = useState(1);
 	const [goalTime, setGoalTime] = useState(0);
@@ -23,7 +23,7 @@ const Timer: React.FC<TimerProps> = ({
 	const [percent, setPercent] = useState(100);
 	const dispatch = useDispatch();
 
-	useEffect(() => {
+	const setCouldownData = () => {
 		switch (units) {
 			case "sec":
 				setCouldown(goal);
@@ -38,6 +38,10 @@ const Timer: React.FC<TimerProps> = ({
 				setGoalTime(goal * 3600);
 				break;
 		}
+	};
+
+	useEffect(() => {
+		setCouldownData()
 	}, []);
 
 	useEffect(() => {
@@ -63,6 +67,12 @@ const Timer: React.FC<TimerProps> = ({
 			return () => clearInterval(timerId);
 		}
 	}, [couldown, start]);
+
+	const ResetValue = () => {
+		handleResetValue();
+        setCouldownData()
+		setPercent(100);
+	};
 
 	function secondsToMinutes(seconds: number): string {
 		const hours = Math.floor(seconds / 3600);
@@ -115,7 +125,7 @@ const Timer: React.FC<TimerProps> = ({
 				<Button
 					color={color}
 					icon={RiRestartLine}
-					onClick={handleResetValue}
+					onClick={ResetValue}
 				></Button>
 			</div>
 		</>
