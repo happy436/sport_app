@@ -6,19 +6,9 @@ import Habits from "./pages/habits/habits";
 import Habit from "./pages/habits/habit";
 import Measurements from "./pages/measurements/measurements.tsx";
 import CreateHabit from "./pages/habits/createHabit/CreateHabit.tsx";
+import Default from "./pages/default.tsx";
 
-const Default = () => {
-	return (
-		<div>
-			<p>Default</p>
-			<Link to="/home">
-				<Card>
-					<p className="text-white">Profile</p>
-				</Card>
-			</Link>
-		</div>
-	);
-};
+
 
 function App() {
 	const location = useLocation();
