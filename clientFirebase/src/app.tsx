@@ -7,6 +7,7 @@ import Habit from "./pages/habits/habit";
 import Measurements from "./pages/measurements/measurements.tsx";
 import CreateHabit from "./pages/habits/createHabit/CreateHabit.tsx";
 import Default from "./pages/default.tsx";
+import LoginFactory from "./pages/login/loginFactory.tsx";
 
 
 
@@ -15,7 +16,7 @@ function App() {
 	return (
 		<>
 			<Routes location={location} key={location.pathname}>
-				<Route path="/" element={<Default />} />
+				<Route path="/" element={<LoginFactory />} />
 				{/* 				<Route path="signin" element={<SignIn />} />
 				<Route path="signup" element={<SignUp />} /> */}
 				<Route path="/*" element={<MainPage />}>

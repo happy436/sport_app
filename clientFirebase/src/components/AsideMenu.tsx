@@ -1,11 +1,12 @@
 import { Button } from "@tremor/react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import maskote from "../assets/img/1.png";
 
 type AsideMenuProps = {};
 
 const AsideMenu: React.FC<AsideMenuProps> = () => {
-    const location = useLocation();
+	const location = useLocation();
 	const linksArray = [
 		{ url: "/home", name: "Home" },
 		{ url: "/measurements", name: "Measurements" },
@@ -14,8 +15,7 @@ const AsideMenu: React.FC<AsideMenuProps> = () => {
 		{ url: "/settings", name: "Settings" },
 	];
 	// TODO delete
-	const avatar =
-		"https://static1.srcdn.com/wordpress/wp-content/uploads/2023/12/lelouch.jpg?q=70&fit=contain&w=750&h=415&dpr=1";
+	const avatar = maskote;
 	return (
 		<aside className="bg-slate-900 w-200px p-4 h-full flex flex-col gap-3 max-sm:hidden fixed">
 			<div className="rounded-full overflow-hidden w-32 h-32">

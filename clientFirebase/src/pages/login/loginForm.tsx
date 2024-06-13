@@ -2,19 +2,16 @@ import { Button, Card, TextInput } from "@tremor/react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-type LoginFormProps = {};
+type LoginFormProps = {
+	onChangePageType: () => void;
+};
 
-const SIGNIN = "signIn";
-const SIGNUP = "signUp";
-
-type loginField = {
+export type loginField = {
 	name: string;
 	password: string;
 };
 
-const LoginForm: React.FC<LoginFormProps> = () => {
-	const [login] = useState(true);
-	const [typePage, setTypePage] = useState(SIGNIN);
+const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 	const [handleInput, setHandleInput] = useState<loginField>({
 		name: "",
 		password: "",
@@ -87,15 +84,13 @@ const LoginForm: React.FC<LoginFormProps> = () => {
 									submit(e);
 								}}
 							>
-								Sign in
+								Sign In
 							</Button>
 							<span className="flex gap-1">
 								<p>Don't have an account?</p>
 								<p
 									className="font-bold underline underline-offset-1 cursor-pointer"
-									onClick={() => {
-										setTypePage(SIGNUP);
-									}}
+									onClick={() => onChangePageType()}
 								>
 									Sign Up
 								</p>
