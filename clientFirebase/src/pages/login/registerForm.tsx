@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { loginField } from "./loginForm";
 import { Button, Card, TextInput } from "@tremor/react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
 
 type RegisterFormProps = {
 	onChangePageType: () => void;
@@ -8,7 +10,7 @@ type RegisterFormProps = {
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 	const [handleInput, setHandleInput] = useState<loginField>({
-		name: "",
+		email: "",
 		password: "",
 	});
 	const [errors, setErrors] = useState([]);
@@ -16,7 +18,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 		// TODO validation and add toastify
 		const error = [];
 		setErrors([]);
-		if (handleInput.name === "") {
+		if (handleInput.email === "") {
 			setErrors((prev) => [...prev, "email"]);
 			error.push(["email"]);
 		}
@@ -36,7 +38,25 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 	const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 		validation();
+		const { email, password } = handleInput;
+
+		// TODO store firebase auth
+		createUserWithEmailAndPassword(auth, email, password)
+			.then((userCredential) => {
+				// Signed up
+				const user = userCredential.user;
+				console.log(user);
+				// ...
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				console.log(errorCode);
+				console.log(errorMessage);
+				// ..
+			});
 	};
+
 	return (
 		<>
 			<div className="w-screen h-screen flex justify-center items-center">
@@ -46,12 +66,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 							<h2 className="self-center font-bold text-3xl">
 								Sport App
 							</h2>
-                            <h3 className="self-center font-bold text-2xl">Registration</h3>
+							<h3 className="self-center font-bold text-2xl">
+								Registration
+							</h3>
 							<div className="flex flex-col gap-2">
 								<label>Name</label>
 								<TextInput
 									error={errors.includes("email")}
-									errorMessaTge="his field is required!"
+									errorMessage="his field is required!"
 									type="email"
 									name="email"
 									placeholder="Enter your email"

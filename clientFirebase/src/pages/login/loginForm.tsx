@@ -1,19 +1,23 @@
 import { Button, Card, TextInput } from "@tremor/react";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import history from "../../utils/history";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
 
 type LoginFormProps = {
 	onChangePageType: () => void;
 };
 
 export type loginField = {
-	name: string;
+	email: string;
 	password: string;
 };
 
 const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
+	const dispatch = useDispatch();
 	const [handleInput, setHandleInput] = useState<loginField>({
-		name: "",
+		email: "",
 		password: "",
 	});
 	const [errors, setErrors] = useState([]);
@@ -21,7 +25,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		// TODO validation and add toastify
 		const error = [];
 		setErrors([]);
-		if (handleInput.name === "") {
+		if (handleInput.email === "") {
 			setErrors((prev) => [...prev, "email"]);
 			error.push(["email"]);
 		}
@@ -38,10 +42,32 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		const input = { [e.target.name]: e.target.value };
 		setHandleInput((prev) => ({ ...prev, ...input }));
 	};
-	const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	/* 	const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 		validation();
+	}; */
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		if (!validation()) return;
+		const redirect = history.location.state
+			? history.location.state.from.pathname
+			: "/main";
+		//dispatch(logIn({ payload: handleInput, redirect }));
+		const { email, password } = handleInput;
+		signInWithEmailAndPassword(auth, email, password)
+			.then((userCredential) => {
+				// Signed in
+				const user = userCredential.user;
+                console.log(user)
+				// ...
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+			});
 	};
+
 	return (
 		<>
 			<div className="w-screen h-screen flex justify-center items-center">
@@ -51,7 +77,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 							<h2 className="self-center font-bold text-3xl">
 								Sport App
 							</h2>
-                            <h3 className="self-center font-bold text-2xl">Login</h3>
+							<h3 className="self-center font-bold text-2xl">
+								Login
+							</h3>
 							<div className="flex flex-col gap-2">
 								<label>Name</label>
 								<TextInput
@@ -82,7 +110,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 								type="submit"
 								className="font-bold"
 								onClick={(e) => {
-									submit(e);
+									handleSubmit(e);
 								}}
 							>
 								Sign In
