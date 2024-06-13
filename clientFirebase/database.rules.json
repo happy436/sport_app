@@ -1,6 +1,17 @@
 {
-  "rules": {
-    ".read": false,
-    ".write": false
-  }
+	"rules": {
+		"user": {
+			".read": "auth !=null",
+			"$uid": {
+				".write": "$uid === auth.uid"
+			}
+		},
+		"habits": {
+			".read": "auth !=null",
+			".indexOn": ["userId"],
+			"$cid": {
+				".write": "auth !=null&& ((data.child('userId').val() === auth.uid) || (newData.child('userId').val() === auth.uid))"
+			}
+		}
+	}
 }

@@ -17,12 +17,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 		const error = [];
 		setErrors([]);
 		if (handleInput.name === "") {
-			setErrors((prev) => [...prev, "name"]);
-			error.push(["select"]);
+			setErrors((prev) => [...prev, "email"]);
+			error.push(["email"]);
 		}
 		if (handleInput.password === "") {
 			setErrors((prev) => [...prev, "password"]);
-			error.push("text");
+			error.push("tepasswordxt");
 		}
 		if (error.length > 0) {
 			return false;
@@ -46,14 +46,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 							<h2 className="self-center font-bold text-3xl">
 								Sport App
 							</h2>
+                            <h3 className="self-center font-bold text-2xl">Registration</h3>
 							<div className="flex flex-col gap-2">
 								<label>Name</label>
 								<TextInput
-									error={errors.includes("name")}
-									errorMessage="This field is required!"
-									type="text"
-									name="name"
-									placeholder="Enter your name"
+									error={errors.includes("email")}
+									errorMessaTge="his field is required!"
+									type="email"
+									name="email"
+									placeholder="Enter your email"
 									onChange={(e) => {
 										handleChange(e);
 									}}
