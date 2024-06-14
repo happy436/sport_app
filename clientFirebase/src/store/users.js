@@ -96,6 +96,7 @@ export const logIn =
             console.log(data.user)
 			dispatch(authRequestSuccess({ userId: data.user.uid }));
 			localStorageService.setTokens(data.user);
+            
 			//history.push(redirect);
 		} catch (error) {
             console.log(error)
@@ -115,15 +116,16 @@ export const signUp =
 		dispatch(authRequested());
 		try {
 			const data = await authService.register({ email, password });
-			localStorageService.setTokens(data);
-			dispatch(authRequestSuccess({ userId: data.localId }));
-			dispatch(
+			localStorageService.setTokens(data.user);
+			dispatch(authRequestSuccess({ userId: data.user.uid }));
+            // TODO делать запись в базе данных firebase для нового пользователя
+			/* dispatch(
 				createUser({
 					_id: data.localId,
 					email,
 					...rest,
 				})
-			);
+			); */
 		} catch (error) {
 			dispatch(authRequestFailed(error.message));
 		}

@@ -54,7 +54,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		const redirect = history.location.state
 			? history.location.state.from.pathname
 			: "/main";
+        // TODO редирект на правильную страницу пользователя после входа
 		dispatch(logIn({ payload: handleInput, redirect }));
+        // TODO загрузка данных с сервера на странице пользователя
 	};
 
 	return (
