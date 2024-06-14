@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import 'firebase/compat/auth';
 import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 
 export const firebaseConfig = {
 	apiKey: import.meta.env.VITE_APP_FIREBASE_KEY,
@@ -18,6 +19,11 @@ export const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp  = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(firebaseApp);
-export const auth = getAuth();
+
+//авторизация
+export const authFirebase = getAuth();
+
+// получение данных
+export const database = getDatabase();
 
 export default firebaseApp;
