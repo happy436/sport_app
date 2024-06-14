@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { loginField } from "./loginForm";
 import { Button, Card, TextInput } from "@tremor/react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
+import { authFirebase } from "../../firebase";
 
 type RegisterFormProps = {
 	onChangePageType: () => void;
@@ -41,7 +41,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 		const { email, password } = handleInput;
 
 		// TODO store firebase auth
-		createUserWithEmailAndPassword(auth, email, password)
+		createUserWithEmailAndPassword(authFirebase, email, password)
 			.then((userCredential) => {
 				// Signed up
 				const user = userCredential.user;
