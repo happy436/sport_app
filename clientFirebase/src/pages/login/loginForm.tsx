@@ -2,6 +2,7 @@ import { Button, Card, TextInput } from "@tremor/react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import history from "../../utils/history";
+import { logIn } from "../../store/users";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 
@@ -46,26 +47,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		e.preventDefault();
 		validation();
 	}; */
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		if (!validation()) return;
 		const redirect = history.location.state
 			? history.location.state.from.pathname
 			: "/main";
-		//dispatch(logIn({ payload: handleInput, redirect }));
-		const { email, password } = handleInput;
-		signInWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				// Signed in
-				const user = userCredential.user;
-                console.log(user)
-				// ...
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-			});
+		dispatch(logIn({ payload: handleInput, redirect }));
 	};
 
 	return (

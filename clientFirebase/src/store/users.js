@@ -4,6 +4,8 @@ import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage.service";
 import history from "../utils/history";
 import generateAuthError from "../utils/generateAuthError";
+import {authFirebase} from "../firebase"
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const initialState = localStorageService.getAccessToken()
 	? {
@@ -90,12 +92,13 @@ export const logIn =
 		const { email, password } = payload;
 		dispatch(authRequested());
 		try {
-			const data = await authService.login({ email, password });
-            
-			dispatch(authRequestSuccess({ userId: data.localId }));
-			localStorageService.setTokens(data);
-			history.push(redirect);
+            const data = await signInWithEmailAndPassword(authFirebase, email, password)
+            console.log(data.user)
+			dispatch(authRequestSuccess({ userId: data.user.uid }));
+			localStorageService.setTokens(data.user);
+			//history.push(redirect);
 		} catch (error) {
+            console.log(error)
 			const { code, message } = error.response.data.error;
 			if (code === 400) {
 				const errorMessage = generateAuthError(message);
