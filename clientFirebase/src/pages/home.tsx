@@ -30,7 +30,7 @@ export interface historyData {
 const Home: React.FC<profileProps> = () => {
 	const [activeDay, setActiveDay] = useState(new Date().getTime());
 	const [achievements, setAchievements] = useState(0);
-    
+
 	const cardList = [
 		{ url: "/measurements", name: "Measurements", color: "lime" },
 		/*{ url: "/nutrition", name: "Nutrition", color: "yellow" }, */
@@ -46,7 +46,7 @@ const Home: React.FC<profileProps> = () => {
 		setAchievements(checkGoalsAchievedToday(habits));
 	}, [habits]);
 
-	const checkGoalsAchievedToday = (tasks:habitData[]) => {
+	const checkGoalsAchievedToday = (tasks: habitData[]) => {
 		let achievedToday = 0;
 		tasks.forEach((task) => {
 			let goalMet = false;
@@ -71,7 +71,7 @@ const Home: React.FC<profileProps> = () => {
 
 	const getPercentCompleted = (num1: number, num2: number) => {
 		const percent = (num1 * 100) / num2;
-		return percent.toFixed(0)
+		return percent.toFixed(0);
 	};
 
 	return (
@@ -88,31 +88,39 @@ const Home: React.FC<profileProps> = () => {
 									decoration="top"
 									decorationColor="indigo"
 								>
-									<ProgressCircle
-										value={getPercentCompleted(
-											achievements,
-											habits.length
-										)}
-										size="md"
-										color="indigo"
-									>
-										<span className="text-xs font-medium text-white">
-											{getPercentCompleted(
-												achievements,
-												habits.length
-											)}
-											%
-										</span>
-									</ProgressCircle>
-									<div>
-										<p className="text-3xl font-bold text-white">
+									{habits.length !== 0 ? (
+										<>
+											<ProgressCircle
+												value={getPercentCompleted(
+													achievements,
+													habits.length
+												)}
+												size="md"
+												color="indigo"
+											>
+												<span className="text-xs font-medium text-white">
+													{getPercentCompleted(
+														achievements,
+														habits.length
+													)}
+													%
+												</span>
+											</ProgressCircle>
+											<div>
+												<p className="text-3xl font-bold text-white">
+													Daily
+												</p>
+												<p className="text-slate-500">
+													{achievements} /{" "}
+													{habits.length} Complete
+												</p>
+											</div>
+										</>
+									) : (
+										<p className="text-3xl font-bold text-white text-center w-full">
 											Daily
 										</p>
-										<p className="text-slate-500">
-											{achievements} / {habits.length}{" "}
-											Complete
-										</p>
-									</div>
+									)}
 								</Card>
 							</Link>
 						</li>
@@ -134,7 +142,6 @@ const Home: React.FC<profileProps> = () => {
 					</ul>
 				</div>
 			</div>
-            
 		</>
 	);
 };

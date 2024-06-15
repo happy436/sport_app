@@ -83,7 +83,7 @@ const mockData = [
 const habitsSlice = createSlice({
 	name: "habits",
 	initialState: {
-		entities: mockData,
+		entities: [],
 		isLoading: true,
 		error: null,
 	},

@@ -5,6 +5,7 @@ import history from "../../utils/history";
 import { logIn } from "../../store/users";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 type LoginFormProps = {
 	onChangePageType: () => void;
@@ -46,19 +47,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		const input = { [e.target.name]: e.target.value };
 		setHandleInput((prev) => ({ ...prev, ...input }));
 	};
-	/* 	const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		e.preventDefault();
-		validation();
-	}; */
 	const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 		if (!validation()) return;
-		const redirect = history.location.state
-			? history.location.state.from.pathname
-			: "/main";
-        // TODO редирект на правильную страницу пользователя после входа
-		dispatch(logIn({ payload: handleInput, redirect }));
-        // TODO загрузка данных с сервера на странице пользователя
+		dispatch(logIn({ payload: handleInput }));
         navigate('/home')
 	};
 

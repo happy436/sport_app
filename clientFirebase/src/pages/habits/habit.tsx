@@ -13,8 +13,7 @@ import {
 import { habitData } from "./habits";
 import { editHabitData } from "../../store/habits";
 import { Bounce, toast } from "react-toastify";
-import { RiArrowLeftLine, RiRestartLine } from "@remixicon/react";
-import ProgressCircle from "@components/common/ProgressCircle";
+import { RiArrowLeftLine } from "@remixicon/react";
 import { historyData } from "../home";
 import CounterFactory from "./factoryComponent/CounterFactory";
 
