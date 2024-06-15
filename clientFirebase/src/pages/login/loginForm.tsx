@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import history from "../../utils/history";
 import { logIn } from "../../store/users";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
 
 type LoginFormProps = {
 	onChangePageType: () => void;
@@ -15,13 +13,15 @@ export type loginField = {
 	password: string;
 };
 
+type errors = string[]
+
 const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 	const dispatch = useDispatch();
 	const [handleInput, setHandleInput] = useState<loginField>({
 		email: "",
 		password: "",
 	});
-	const [errors, setErrors] = useState([]);
+	const [errors, setErrors] = useState<errors>([]);
 	const validation = () => {
 		// TODO validation and add toastify
 		const error = [];
@@ -43,13 +43,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		const input = { [e.target.name]: e.target.value };
 		setHandleInput((prev) => ({ ...prev, ...input }));
 	};
-	/* 	const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		e.preventDefault();
-		validation();
-	}; */
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
 		if (!validation()) return;
 		const redirect = history.location.state
 			? history.location.state.from.pathname
