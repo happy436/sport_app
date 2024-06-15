@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import history from "../../utils/history";
 import { logIn } from "../../store/users";
-
 import { useNavigate } from "react-router-dom";
 
 type LoginFormProps = {
@@ -48,7 +47,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		e.preventDefault();
 		validation();
 	}; */
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 
 		if (!validation()) return;
@@ -58,7 +57,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
         // TODO редирект на правильную страницу пользователя после входа
 		dispatch(logIn({ payload: handleInput, redirect }));
         // TODO загрузка данных с сервера на странице пользователя
-
         navigate('/home')
 	};
 
@@ -103,7 +101,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 							<Button
 								type="submit"
 								className="font-bold"
-								onClick={(e) => {
+								onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 									handleSubmit(e);
 								}}
 							>
