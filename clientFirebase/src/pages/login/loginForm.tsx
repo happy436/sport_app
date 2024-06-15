@@ -5,6 +5,7 @@ import history from "../../utils/history";
 import { logIn } from "../../store/users";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 type LoginFormProps = {
 	onChangePageType: () => void;
@@ -17,6 +18,7 @@ export type loginField = {
 
 const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 	const dispatch = useDispatch();
+    const navigate = useNavigate()
 	const [handleInput, setHandleInput] = useState<loginField>({
 		email: "",
 		password: "",
@@ -57,6 +59,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
         // TODO редирект на правильную страницу пользователя после входа
 		dispatch(logIn({ payload: handleInput, redirect }));
         // TODO загрузка данных с сервера на странице пользователя
+
+        navigate('/home')
 	};
 
 	return (
