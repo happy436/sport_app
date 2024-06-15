@@ -50,7 +50,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		e.preventDefault();
 		validation();
 	}; */
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 		if (!validation()) return;
 		const redirect = history.location.state
