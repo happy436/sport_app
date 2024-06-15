@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { loginField } from "./loginForm";
 import { Button, Card, TextInput } from "@tremor/react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { authFirebase } from "../../firebase";
+import { signUp } from "../../store/users"
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 type RegisterFormProps = {
 	onChangePageType: () => void;
 };
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
-	const [handleInput, setHandleInput] = useState<loginField>({
+	const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const [handleInput, setHandleInput] = useState<loginField>({
 		email: "",
 		password: "",
 	});
@@ -39,22 +42,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 		e.preventDefault();
 		validation();
 		const { email, password } = handleInput;
-
-		// TODO store firebase auth
-		createUserWithEmailAndPassword(authFirebase, email, password)
-			.then((userCredential) => {
-				// Signed up
-				const user = userCredential.user;
-				console.log(user);
-				// ...
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				console.log(errorCode);
-				console.log(errorMessage);
-				// ..
-			});
+		dispatch(signUp({email, password}))
+        navigate('/home')
 	};
 
 	return (
