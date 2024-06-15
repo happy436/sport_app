@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import history from "../../utils/history";
 import { logIn } from "../../store/users";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
+
 import { useNavigate } from "react-router-dom";
 
 type LoginFormProps = {
