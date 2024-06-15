@@ -5,7 +5,7 @@ import localStorageService from "../services/localStorage.service";
 import history from "../utils/history";
 import generateAuthError from "../utils/generateAuthError";
 import {authFirebase} from "../firebase"
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 const initialState = localStorageService.getAccessToken()
 	? {
@@ -96,8 +96,6 @@ export const logIn =
             console.log(data.user)
 			dispatch(authRequestSuccess({ userId: data.user.uid }));
 			localStorageService.setTokens(data.user);
-            
-			//history.push(redirect);
 		} catch (error) {
             console.log(error)
 			const { code, message } = error.response.data.error;
@@ -115,17 +113,17 @@ export const signUp =
 	async (dispatch) => {
 		dispatch(authRequested());
 		try {
-			const data = await authService.register({ email, password });
+			const data = await createUserWithEmailAndPassword(authFirebase, email, password)
 			localStorageService.setTokens(data.user);
 			dispatch(authRequestSuccess({ userId: data.user.uid }));
             // TODO делать запись в базе данных firebase для нового пользователя
-			/* dispatch(
+			await dispatch(
 				createUser({
-					_id: data.localId,
+					_id: data.user.uid,
 					email,
 					...rest,
 				})
-			); */
+			);
 		} catch (error) {
 			dispatch(authRequestFailed(error.message));
 		}
@@ -135,13 +133,14 @@ export const logOut = () => (dispatch) => {
 	dispatch(userLoggedOut());
 	history.push("/");
 };
+
 function createUser(payload) {
 	return async function (dispatch) {
 		dispatch(userCreateRequested());
 		try {
-			const { content } = await userService.create(payload);
-			dispatch(userCreated(content));
-			history.push("/");
+			const data = await userService.create(payload);
+			dispatch(userCreated(data));
+			history.push("/home");
 		} catch (error) {
 			dispatch(createUserFailed(error.message));
 		}

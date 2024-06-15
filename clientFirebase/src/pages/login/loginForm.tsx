@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import history from "../../utils/history";
 import { logIn } from "../../store/users";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
 
 type LoginFormProps = {
 	onChangePageType: () => void;
@@ -17,6 +19,7 @@ type errors = string[]
 
 const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 	const dispatch = useDispatch();
+    const navigate = useNavigate()
 	const [handleInput, setHandleInput] = useState<loginField>({
 		email: "",
 		password: "",
@@ -43,6 +46,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		const input = { [e.target.name]: e.target.value };
 		setHandleInput((prev) => ({ ...prev, ...input }));
 	};
+	/* 	const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		e.preventDefault();
+		validation();
+	}; */
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!validation()) return;
@@ -52,6 +59,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
         // TODO редирект на правильную страницу пользователя после входа
 		dispatch(logIn({ payload: handleInput, redirect }));
         // TODO загрузка данных с сервера на странице пользователя
+        navigate('/home')
 	};
 
 	return (
@@ -95,7 +103,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 							<Button
 								type="submit"
 								className="font-bold"
-								onClick={(e) => {
+								onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 									handleSubmit(e);
 								}}
 							>

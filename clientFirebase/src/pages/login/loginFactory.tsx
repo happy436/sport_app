@@ -3,7 +3,6 @@ import LoginForm from "./loginForm";
 import RegisterForm from "./registerForm";
 
 type LoginFactoryProps = {
-	signIn: boolean;
 };
 
 const LoginFactory: React.FC<LoginFactoryProps> = () => {
