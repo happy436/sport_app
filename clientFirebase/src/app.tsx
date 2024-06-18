@@ -17,17 +17,12 @@ function App() {
 		<>
 			<Routes location={location} key={location.pathname}>
 				<Route path="/" element={<LoginFactory />} />
-				{/* 				<Route path="signin" element={<SignIn />} />
-				<Route path="signup" element={<SignUp />} /> */}
 				<Route path="/*" element={<MainPage />}>
 					<Route path="home" element={<Home />} />
 					<Route path="habits" element={<Habits />} />
 					<Route path="habit/:id/:timestamp" element={<Habit />} />
 					<Route path="habit/createHabit" element={<CreateHabit />} />
 					<Route path="measurements" element={<Measurements />} />
-					{/* 					<Route path="profile" element={<Profile />}>
-						<Route path="one" element={<Profile1 />} />
-					</Route> */}
 				</Route>
 			</Routes>
 		</>
