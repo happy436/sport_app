@@ -1,7 +1,24 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { Bounce, toast } from "react-toastify";
 
-const mockData = [
+export interface Habit {
+	_id: string;
+	name: string;
+	description: string;
+	goal: number;
+	units: string;
+	icon: string;
+	color: string;
+	tags: string[];
+	goalPeriod: string;
+	reminderTime: string[];
+	reminderMessage: string;
+	history: { value: number; date: number }[];
+	createdAt: number;
+	showMemo: boolean;
+}
+
+const mockData:Habit[] = [
 	{
 		_id: "awdawdawdasd",
 		name: "Push ups",
@@ -83,7 +100,7 @@ const mockData = [
 const habitsSlice = createSlice({
 	name: "habits",
 	initialState: {
-		entities: [],
+		entities: [] as Habit[],
 		isLoading: true,
 		error: null,
 	},
@@ -120,7 +137,6 @@ const habitsSlice = createSlice({
 				const historyIndex = habit.history.findIndex(
 					(h) => h.date === action.payload.history.date
 				);
-
 				if (historyIndex !== -1) {
 					// Replace existing history entry
 					habit.history[historyIndex] = action.payload.history;
@@ -128,10 +144,8 @@ const habitsSlice = createSlice({
 					// Add new history entry
 					habit.history.push(action.payload.history);
 				}
-
 				state.entities[index] = { ...habit };
 			}
-
 			state.isLoading = false;
 		},
 	},
@@ -211,7 +225,7 @@ export const removeHabit = (id) => async (dispatch) => {
 
 export const getHabits = () => (state) => state.habits.entities;
 export const getHabitsLoadingStatus = () => (state) => state.habits.isLoading;
-export const getHabitById = (id) => (state) => {
+export const getHabitById = (id:string) => (state) => {
 	if (state.habits.entities) {
 		return state.habits.entities.find((n) => n._id === id);
 	}

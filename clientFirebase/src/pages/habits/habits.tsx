@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getHabits } from "../../store/habits";
-import { Button, Card, DatePicker } from "@tremor/react";
+import { Button, DatePicker, DatePickerValue } from "@tremor/react";
 import Page from "../../components/common/page";
 import { habitData, historyData } from "../home";
+import HabitCard from "./habitCard";
 
 const Habits: React.FC = () => {
 	// TODO custom hook
@@ -23,7 +24,7 @@ const Habits: React.FC = () => {
 		).getTime();
 		setActiveDay(timestamp);
 	}, []);
-	const handleChange = (value: number) => {
+	const handleChange = (value: DatePickerValue) => {
 		if (value !== undefined) {
 			const date = new Date(value);
 			const timestamp = date.getTime();
@@ -31,8 +32,7 @@ const Habits: React.FC = () => {
 		}
 	};
 
-	const getPercent = (habit: habitData, timestamp: number) => {
-        
+	const getPercent = (habit: habitData, timestamp: number):number => {
 		const { history, goal } = habit;
 		const date = new Date(timestamp);
 		const startOfDay = new Date(
@@ -54,7 +54,7 @@ const Habits: React.FC = () => {
 		}
 	};
 
-	const giveTodayValue = (arr: historyData[], timestamp: number) => {
+	const giveTodayValue = (arr: historyData[], timestamp: number): number => {
 		const date = new Date(timestamp);
 		const startOfDay = new Date(
 			date.getFullYear(),
@@ -100,66 +100,27 @@ const Habits: React.FC = () => {
 						/>
 					)}
 				</section>
-				<ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-					{data.length !== 0 ? (
-						data.map((habit: habitData) => (
+
+				{data.length !== 0 ? (
+					<ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+						{data.map((habit: habitData) => (
 							<Link
 								to={`/habit/${habit._id}/${activeDay}`}
 								key={habit._id}
 								className="w-full"
 							>
-								<li className="">
-									<Card
-										decoration="top"
-										decorationColor={habit.color}
-										className="text-white overflow-hidden relative"
-									>
-										<div
-											className={`h-full absolute bg-indigo-500/25 left-0 top-0`}
-											style={{
-												width: `${getPercent(
-													habit,
-													activeDay
-												)}%`,
-											}}
-										></div>
-										{/* <span className="text-xs absolute top-0 right-3">
-											🔥 1 Day
-											{calculateStreak(activeDay, habit)}
-										</span> */}
-										<div className="flex gap-3 items-center w-full">
-											<div className="h-full flex items-center text-2xl">
-												{habit.icon}
-											</div>
-											<div className="flex justify-between items-center w-full">
-												<div className="flex flex-col gap-1 items-start w-1/2">
-													<span className="text-xl truncate w-full">
-														{habit.name}
-													</span>
-													<span className="text-sm truncate w-full">
-														{habit.description}
-													</span>
-												</div>
-												<div className="flex">
-													<span className="text-lg">
-														{giveTodayValue(
-															habit.history,
-															activeDay
-														)}{" "}
-														/ {habit.goal}{" "}
-														{habit.units}
-													</span>
-												</div>
-											</div>
-										</div>
-									</Card>
-								</li>
+								<HabitCard
+									habit={habit}
+									activeDay={activeDay}
+									getPercent={getPercent}
+									giveTodayValue={giveTodayValue}
+								/>
 							</Link>
-						))
-					) : (
-						<p className="text-2xl text-center">Empty</p>
-					)}
-				</ul>
+						))}
+					</ul>
+				) : (
+					<p className="text-2xl text-center">Empty</p>
+				)}
 
 				<Link to="/habit/createHabit" className="fixed bottom-10">
 					<Button

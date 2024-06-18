@@ -4,7 +4,6 @@ import measurementsReducer from "./measurements";
 import usersReducer from "./users";
 
 const rootReducer = combineReducers({
-	/* notes: notesReducer, */
 	habits: habitsReducer,
     measurements: measurementsReducer,
     users:usersReducer,

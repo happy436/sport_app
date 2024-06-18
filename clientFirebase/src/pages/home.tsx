@@ -19,7 +19,7 @@ export interface habitData {
 	reminderTime: string[];
 	reminderMessage: string;
 	showMemo: boolean;
-	history?: historyData[];
+	history: historyData[];
 }
 
 export interface historyData {
@@ -32,7 +32,7 @@ const Home: React.FC<profileProps> = () => {
 	const [achievements, setAchievements] = useState(0);
 
 	const cardList = [
-		{ url: "/measurements", name: "Measurements", color: "lime" },
+		/* { url: "/measurements", name: "Measurements", color: "lime" }, */
 		/*{ url: "/nutrition", name: "Nutrition", color: "yellow" }, */
 	];
 	const [habits, setHabits] = useState([]);
@@ -48,7 +48,7 @@ const Home: React.FC<profileProps> = () => {
 
 	const checkGoalsAchievedToday = (tasks: habitData[]) => {
 		let achievedToday = 0;
-		tasks.forEach((task) => {
+		tasks.forEach((task:habitData) => {
 			let goalMet = false;
 			task.history.forEach((record) => {
 				if (record.date === activeDay) {
