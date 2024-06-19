@@ -1,16 +1,15 @@
-import { ref, set, get } from "firebase/database";
+import { ref, set, get, update } from "firebase/database";
 import { database } from "../firebase";
 
-const habitService = {
+const habitsService = {
 	get: async (userId) => {
 		const data = await get(ref(database, `habits/${userId}`));
 		if (data.exists()) {
 			const habits = data.val();
-			console.log("User habits:", Object.values(habits));
 			return Object.values(habits);
 		} else {
 			console.log("No data available for this user.");
-			return null;
+			return [];
 		}
 	},
 	create: async (habit) => {
@@ -20,7 +19,33 @@ const habitService = {
 	},
 	delete: () => {},
 	edit: () => {},
-	addNewValue: () => {},
+	updateValue: async (payload) => {
+		const { _id, userId } = payload;
+		const habitRef = ref(database, `habits/${userId}/${_id}/history`);
+		try {
+			const snapshot = await get(habitRef);
+			if (snapshot.exists()) {
+				let historyArray = snapshot.val();
+				if (typeof historyArray === "object") {
+					historyArray = Object.values(historyArray);
+				}
+
+				const updatedHistoryArray = historyArray.map((item) => {
+					if (item.date === payload.history.date) {
+						return { ...item, value: payload.history.value };
+					}
+					return item;
+				});
+
+				await set(habitRef, updatedHistoryArray);
+				console.log("History value updated successfully.");
+			} else {
+				console.log("No history data available for this habit.");
+			}
+		} catch (error) {
+            console.error(error)
+        }
+	},
 };
 
-export default habitService;
+export default habitsService;
