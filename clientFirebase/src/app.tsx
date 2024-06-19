@@ -1,4 +1,3 @@
-import { Card } from "@tremor/react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import MainPage from "./pages/main";
 import Home from "./pages/home";
