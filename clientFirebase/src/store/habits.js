@@ -181,7 +181,7 @@ export const createHabit = (payload) => async (dispatch) => {
 	const habit = {
 		...payload,
 		_id: nanoid(),
-		createdtAt: timestamp,
+		createdAt: timestamp,
 		userId: localStorageService.getUserId(),
 		history: [{ value: 0, date: timestamp }],
 	};

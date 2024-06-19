@@ -18,6 +18,7 @@ const Habits: React.FC = () => {
 			new Date(today).setHours(0, 0, 0, 0)
 		).getTime();
 		setActiveDay(timestamp);
+        console.log(data)
 	}, []);
     useEffect(() => {
         setData(getData);
@@ -25,7 +26,9 @@ const Habits: React.FC = () => {
 	const handleChange = (value: DatePickerValue) => {
 		if (value !== undefined) {
 			const date = new Date(value);
-			const timestamp = date.getTime();
+			const timestamp = new Date(
+                new Date(date).setHours(0, 0, 0, 0)
+            ).getTime();
 			setActiveDay(timestamp);
 		}
 	};
@@ -101,7 +104,7 @@ const Habits: React.FC = () => {
 
 				{data.length !== 0 ? (
 					<ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-						{data.map((habit: habitData) => (
+						{data.filter(item => (activeDay === item.createdAt)).map((habit: habitData) => (
 							<Link
 								to={`/habit/${habit._id}/${activeDay}`}
 								key={habit._id}
