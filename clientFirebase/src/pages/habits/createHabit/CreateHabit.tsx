@@ -9,7 +9,7 @@ import { createHabit } from "../../../store/habits.js";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
-import { habitData } from "../../home";
+import { habitData } from "../../home/home.js";
 
 const CreateHabitPage = () => {
 	// TODO to do useHabit castom hook

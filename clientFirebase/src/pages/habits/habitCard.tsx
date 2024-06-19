@@ -1,6 +1,6 @@
 import { Card } from "@tremor/react";
 import React from "react";
-import { habitData, historyData } from "../home";
+import { habitData, historyData } from "../home/home";
 
 type HabitCardProps = {
 	habit: habitData;

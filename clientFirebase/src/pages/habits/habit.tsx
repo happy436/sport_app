@@ -14,7 +14,7 @@ import { habitData } from "./habits";
 import { editHabitData } from "../../store/habits.js";
 import { Bounce, toast } from "react-toastify";
 import { RiArrowLeftLine } from "@remixicon/react";
-import { historyData } from "../home";
+import { historyData } from "../home/home.js";
 import CounterFactory from "./factoryComponent/CounterFactory";
 
 type habitProps = {};

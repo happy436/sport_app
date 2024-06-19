@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import { getHabits } from "../../store/habits.js";
 import { Button, DatePicker, DatePickerValue } from "@tremor/react";
 import Page from "../../components/common/page";
-import { habitData, historyData } from "../home";
+import { habitData, historyData } from "../home/home.js";
 import HabitCard from "./habitCard";
 
 const Habits: React.FC = () => {
 	// TODO custom hook
-    const [data, setData] = useState([]);
-    const getData = useSelector(getHabits());
+	const [data, setData] = useState([]);
+	const getData = useSelector(getHabits());
 	const [activeDay, setActiveDay] = useState(0);
 	useEffect(() => {
 		const today = Date.now();
@@ -18,22 +18,21 @@ const Habits: React.FC = () => {
 			new Date(today).setHours(0, 0, 0, 0)
 		).getTime();
 		setActiveDay(timestamp);
-        console.log(data)
 	}, []);
-    useEffect(() => {
-        setData(getData);
-    }, [getData])
+	useEffect(() => {
+		setData(getData);
+	}, [getData]);
 	const handleChange = (value: DatePickerValue) => {
 		if (value !== undefined) {
 			const date = new Date(value);
 			const timestamp = new Date(
-                new Date(date).setHours(0, 0, 0, 0)
-            ).getTime();
+				new Date(date).setHours(0, 0, 0, 0)
+			).getTime();
 			setActiveDay(timestamp);
 		}
 	};
 
-	const getPercent = (habit: habitData, timestamp: number):number => {
+	const getPercent = (habit: habitData, timestamp: number): number => {
 		const { history, goal } = habit;
 		const date = new Date(timestamp);
 		const startOfDay = new Date(
@@ -104,20 +103,22 @@ const Habits: React.FC = () => {
 
 				{data.length !== 0 ? (
 					<ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-						{data.filter(item => (activeDay === item.createdAt)).map((habit: habitData) => (
-							<Link
-								to={`/habit/${habit._id}/${activeDay}`}
-								key={habit._id}
-								className="w-full"
-							>
-								<HabitCard
-									habit={habit}
-									activeDay={activeDay}
-									getPercent={getPercent}
-									giveTodayValue={giveTodayValue}
-								/>
-							</Link>
-						))}
+						{data
+							.filter((item) => activeDay === item.createdAt)
+							.map((habit: habitData) => (
+								<Link
+									to={`/habit/${habit._id}/${activeDay}`}
+									key={habit._id}
+									className="w-full"
+								>
+									<HabitCard
+										habit={habit}
+										activeDay={activeDay}
+										getPercent={getPercent}
+										giveTodayValue={giveTodayValue}
+									/>
+								</Link>
+							))}
 					</ul>
 				) : (
 					<p className="text-2xl text-center">Empty</p>

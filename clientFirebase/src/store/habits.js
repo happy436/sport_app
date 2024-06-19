@@ -130,7 +130,6 @@ const habitsSlice = createSlice({
 			state.isLoading = false;
 		},
 		editHabit: (state, action) => {
-			console.log(action.payload);
 			const index = state.entities.findIndex(
 				(c) => c._id === action.payload._id
 			);
