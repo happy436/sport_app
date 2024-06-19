@@ -1,9 +1,9 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { Bounce, toast } from "react-toastify";
-import localStorageService from "../services/localStorage.service"
-import habitService from "../services/habit.service"
+import localStorageService from "../services/localStorage.service";
+import habitsService from "../services/habit.service";
 
-export interface Habit {
+/* export interface Habit {
 	_id: string;
 	name: string;
 	description: string;
@@ -81,7 +81,7 @@ const mockData:Habit[] = [
 		createdAt: 1717189200000,
 		showMemo: false,
 	},
-];
+]; */
 
 /* export interface habitData {
 	+ _id: string;
@@ -102,7 +102,7 @@ const mockData:Habit[] = [
 const habitsSlice = createSlice({
 	name: "habits",
 	initialState: {
-		entities: [] as Habit[],
+		entities: [] /*  as Habit[] */,
 		isLoading: true,
 		error: null,
 	},
@@ -130,6 +130,7 @@ const habitsSlice = createSlice({
 			state.isLoading = false;
 		},
 		editHabit: (state, action) => {
+			console.log(action.payload);
 			const index = state.entities.findIndex(
 				(c) => c._id === action.payload._id
 			);
@@ -167,7 +168,7 @@ export const loadHabitsList = () => async (dispatch) => {
 	const userId = localStorageService.getUserId();
 	dispatch(habitsRequested());
 	try {
-		const fetch = await habitService.get(userId)
+		const fetch = await habitsService.get(userId);
 		dispatch(habitsReceived(fetch));
 	} catch (error) {
 		dispatch(habitsRequestFailed(error.message));
@@ -175,27 +176,29 @@ export const loadHabitsList = () => async (dispatch) => {
 };
 
 export const createHabit = (payload) => async (dispatch) => {
+	const today = Date.now();
+	const timestamp = new Date(new Date(today).setHours(0, 0, 0, 0)).getTime();
 	const habit = {
 		...payload,
 		_id: nanoid(),
-		createdtAt: Date.now(),
+		createdtAt: timestamp,
 		userId: localStorageService.getUserId(),
-        history:[{value:0, date:Date.now()}]
+		history: [{ value: 0, date: timestamp }],
 	};
 	dispatch(habitsRequested());
 	try {
-		const data = await habitService.create(habit)
+		const data = await habitsService.create(habit);
 		dispatch(addHabit(data));
 	} catch (error) {
 		dispatch(habitsRequestFailed(error.message));
 	}
 };
 
-export const editHabitData = (payload) => async (dispatch, state) => {
+export const editHabitData = (payload) => async (dispatch) => {
 	dispatch(habitsRequested());
+	const newData = { ...payload, userId: localStorageService.getUserId() };
 	try {
-		//const { content } = await habitsService.update(payload);
-		//if (typeof content === "object") {
+		await habitsService.updateValue(newData);
 		toast.success("Habit edit successful", {
 			autoClose: 2000,
 			position: "top-right",
@@ -217,7 +220,7 @@ export const removeHabit = (id) => async (dispatch) => {
 	dispatch(habitsRequested());
 	try {
 		/* const { content } = await habitsService.removeNote(id); */
-		if (!content) {
+		if (content) {
 			toast.success("Note deleted successfully", { autoClose: 2000 });
 			dispatch(deleteHabit({ id }));
 		}
@@ -228,7 +231,7 @@ export const removeHabit = (id) => async (dispatch) => {
 
 export const getHabits = () => (state) => state.habits.entities;
 export const getHabitsLoadingStatus = () => (state) => state.habits.isLoading;
-export const getHabitById = (id:string) => (state) => {
+export const getHabitById = (id) => (state) => {
 	if (state.habits.entities) {
 		return state.habits.entities.find((n) => n._id === id);
 	}

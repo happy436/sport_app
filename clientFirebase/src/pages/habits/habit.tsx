@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Page from "../../components/common/page";
 import { useDispatch, useSelector } from "react-redux";
-import { getHabitById } from "../../store/habits";
+import { getHabitById } from "../../store/habits.js";
 import {
 	Button,
 	Dialog,
@@ -11,7 +11,7 @@ import {
 	Switch,
 } from "@tremor/react";
 import { habitData } from "./habits";
-import { editHabitData } from "../../store/habits";
+import { editHabitData } from "../../store/habits.js";
 import { Bounce, toast } from "react-toastify";
 import { RiArrowLeftLine } from "@remixicon/react";
 import { historyData } from "../home";

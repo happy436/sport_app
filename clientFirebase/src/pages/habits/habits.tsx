@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getHabits, loadHabitsList } from "../../store/habits";
+import { getHabits, loadHabitsList } from "../../store/habits.js";
 import { Button, DatePicker, DatePickerValue } from "@tremor/react";
 import Page from "../../components/common/page";
 import { habitData, historyData } from "../home";

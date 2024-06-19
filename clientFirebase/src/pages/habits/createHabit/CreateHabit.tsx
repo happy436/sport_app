@@ -5,7 +5,7 @@ import IconColor from "./blocks/IconColor";
 import Tags from "./blocks/Tags";
 import Goal from "./blocks/Goal";
 import Reminder from "./blocks/Reminder";
-import { createHabit } from "../../../store/habits";
+import { createHabit } from "../../../store/habits.js";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";

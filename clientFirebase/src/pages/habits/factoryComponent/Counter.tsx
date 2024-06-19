@@ -34,11 +34,13 @@ const Counter: React.FC<CounterProps> = ({
 					onClick={() => {
 						setIsOpen(true);
 					}}
+                    color={color}
 				>
 					<p className="text-xl">+</p>
 				</Button>
 				<Button
 					icon={RiRestartLine}
+                    color={color}
 					onClick={handleResetValue}
 				></Button>
 			</div>

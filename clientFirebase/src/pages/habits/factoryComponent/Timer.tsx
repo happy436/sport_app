@@ -4,7 +4,7 @@ import { Button } from "@tremor/react";
 import { RiPauseLine, RiPlayFill, RiRestartLine } from "@remixicon/react";
 import { CounterFactoryProps } from "./CounterFactory";
 import { useDispatch } from "react-redux";
-import { editHabitData } from "../../../store/habits";
+import { editHabitData } from "../../../store/habits.js";
 
 type TimerProps = CounterFactoryProps;
 

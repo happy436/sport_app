@@ -2,7 +2,7 @@ import { Card, Divider, ProgressCircle } from "@tremor/react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getHabits } from "../store/habits";
+import { getHabits } from "../store/habits.js";
 
 type profileProps = {};
 
