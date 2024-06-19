@@ -112,8 +112,8 @@ const Goal: React.FC<goalProps> = ({
 							</Button>
 						</DialogPanel>
 					</Dialog>
-					<p> / </p>
-					<div className="flex gap-2 items-center">
+					{/* <p> / </p> */}
+					{/* <div className="flex gap-2 items-center">
 						{goalPeriodButtonsList.map((button) => (
 							<Button
 								key={button}
@@ -137,7 +137,7 @@ const Goal: React.FC<goalProps> = ({
 								{`${button[0].toUpperCase() + button.slice(1)}`}
 							</Button>
 						))}
-					</div>
+					</div> */}
 				</div>
 			</div>
 		</Card>

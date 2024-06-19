@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getHabits } from "../../store/habits";
+import { getHabits, loadHabitsList } from "../../store/habits";
 import { Button, DatePicker, DatePickerValue } from "@tremor/react";
 import Page from "../../components/common/page";
 import { habitData, historyData } from "../home";
@@ -9,21 +9,22 @@ import HabitCard from "./habitCard";
 
 const Habits: React.FC = () => {
 	// TODO custom hook
-	const getData = useSelector(getHabits());
-	/* const loadHabits = () => dispatch(loadHabitsList());
-	useEffect(() => {
-		loadHabits();
-	}, []); */
-	const [data, setData] = useState([]);
+    const [data, setData] = useState([]);
+    const dispatch = useDispatch()
+	const loadHabits = () => dispatch(loadHabitsList());
+    const getData = useSelector(getHabits());
 	const [activeDay, setActiveDay] = useState(0);
 	useEffect(() => {
-		setData(getData);
+        loadHabits();
 		const today = Date.now();
 		const timestamp = new Date(
 			new Date(today).setHours(0, 0, 0, 0)
 		).getTime();
 		setActiveDay(timestamp);
 	}, []);
+    useEffect(() => {
+        setData(getData);
+    }, [getData])
 	const handleChange = (value: DatePickerValue) => {
 		if (value !== undefined) {
 			const date = new Date(value);

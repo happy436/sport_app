@@ -1,5 +1,7 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { Bounce, toast } from "react-toastify";
+import localStorageService from "../services/localStorage.service"
+import habitService from "../services/habit.service"
 
 export interface Habit {
 	_id: string;
@@ -162,27 +164,28 @@ const {
 } = actions;
 
 export const loadHabitsList = () => async (dispatch) => {
-	/* const userId = localStorageService.getUserId(); */
+	const userId = localStorageService.getUserId();
 	dispatch(habitsRequested());
 	try {
-		/* const { content } = await habitsService.getHabits(userId); */
-		dispatch(habitsReceived(/* content */));
+		const fetch = await habitService.get(userId)
+		dispatch(habitsReceived(fetch));
 	} catch (error) {
 		dispatch(habitsRequestFailed(error.message));
 	}
 };
 
-export const createHabit = (data) => async (dispatch) => {
-	const note = {
-		...data,
+export const createHabit = (payload) => async (dispatch) => {
+	const habit = {
+		...payload,
 		_id: nanoid(),
 		createdtAt: Date.now(),
-		userId: /* localStorageService.getUserId() */ nanoid(),
+		userId: localStorageService.getUserId(),
+        history:[{value:0, date:Date.now()}]
 	};
 	dispatch(habitsRequested());
 	try {
-		/* const { content } = await habitsService.createNote(note); */
-		dispatch(addHabit(note));
+		const data = await habitService.create(habit)
+		dispatch(addHabit(data));
 	} catch (error) {
 		dispatch(habitsRequestFailed(error.message));
 	}
