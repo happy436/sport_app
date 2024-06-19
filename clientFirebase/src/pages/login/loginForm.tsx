@@ -1,10 +1,7 @@
 import { Button, Card, TextInput } from "@tremor/react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import history from "../../utils/history";
 import { logIn } from "../../store/users";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 
 type LoginFormProps = {
@@ -16,11 +13,11 @@ export type loginField = {
 	password: string;
 };
 
-type errors = string[]
+type errors = string[];
 
 const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 	const dispatch = useDispatch();
-    const navigate = useNavigate()
+	const navigate = useNavigate();
 	const [handleInput, setHandleInput] = useState<loginField>({
 		email: "",
 		password: "",
@@ -47,11 +44,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		const input = { [e.target.name]: e.target.value };
 		setHandleInput((prev) => ({ ...prev, ...input }));
 	};
-	const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	const handleSubmit = async (
+		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+	) => {
 		e.preventDefault();
-		if (!validation()) return;
-		dispatch(logIn({ payload: handleInput }));
-        navigate('/home')
+		try {
+			if (!validation()) return;
+			dispatch(logIn({ payload: handleInput }));
+			//navigate("/home");
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	return (
@@ -95,7 +98,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 							<Button
 								type="submit"
 								className="font-bold"
-								onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+								onClick={(
+									e: React.MouseEvent<
+										HTMLButtonElement,
+										MouseEvent
+									>
+								) => {
 									handleSubmit(e);
 								}}
 							>

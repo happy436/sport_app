@@ -6,6 +6,7 @@ import history from "../utils/history";
 import generateAuthError from "../utils/generateAuthError";
 import {authFirebase} from "../firebase"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { Bounce, toast } from "react-toastify";
 
 const initialState = localStorageService.getAccessToken()
 	? {
@@ -96,8 +97,21 @@ export const logIn =
 			dispatch(authRequestSuccess({ userId: data.user.uid }));
 			localStorageService.setTokens(data.user);
 		} catch (error) {
-            console.log(error)
-			const { code, message } = error.response.data.error;
+            const {code, message} = error
+            
+            toast.error(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
+			//const { code, message } = error.response.data.error;
 			if (code === 400) {
 				const errorMessage = generateAuthError(message);
 				dispatch(authRequestFailed(errorMessage));
