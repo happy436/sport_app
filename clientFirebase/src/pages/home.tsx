@@ -28,6 +28,8 @@ export interface historyData {
 }
 
 const Home: React.FC<profileProps> = () => {
+    const today = Date.now();
+	const timestamp = new Date(new Date(today).setHours(0, 0, 0, 0)).getTime();
 	const [activeDay, setActiveDay] = useState(new Date().getTime());
 	const [achievements, setAchievements] = useState(0);
 
@@ -40,10 +42,12 @@ const Home: React.FC<profileProps> = () => {
 
 	useEffect(() => {
 		setHabits(getData);
+        setActiveDay(timestamp)
 	}, []);
 
 	useEffect(() => {
 		setAchievements(checkGoalsAchievedToday(habits));
+        console.log(habits)
 	}, [habits]);
 
 	const checkGoalsAchievedToday = (tasks: habitData[]) => {
