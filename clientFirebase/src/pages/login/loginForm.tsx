@@ -50,8 +50,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		e.preventDefault();
 		try {
 			if (!validation()) return;
-			dispatch(logIn({ payload: handleInput }));
-			//navigate("/home");
+			await dispatch(logIn({ payload: handleInput })) && navigate("/home");
 		} catch (error) {
 			console.log(error);
 		}
@@ -70,7 +69,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 								Login
 							</h3>
 							<div className="flex flex-col gap-2">
-								<label>Name</label>
+								<label>Email</label>
 								<TextInput
 									error={errors.includes("email")}
 									errorMessage="This field is required!"
