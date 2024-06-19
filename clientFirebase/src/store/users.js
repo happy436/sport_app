@@ -146,7 +146,7 @@ function createUser(payload) {
 	};
 }
 
-export const loadUsersList = () => async (dispatch, getState) => {
+export const loadUsersList = () => async (dispatch) => {
 	dispatch(usersRequested());
 	try {
 		const { content } = await userService.get();
