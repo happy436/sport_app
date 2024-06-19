@@ -10,12 +10,9 @@ import HabitCard from "./habitCard";
 const Habits: React.FC = () => {
 	// TODO custom hook
     const [data, setData] = useState([]);
-    const dispatch = useDispatch()
-	const loadHabits = () => dispatch(loadHabitsList());
     const getData = useSelector(getHabits());
 	const [activeDay, setActiveDay] = useState(0);
 	useEffect(() => {
-        loadHabits();
 		const today = Date.now();
 		const timestamp = new Date(
 			new Date(today).setHours(0, 0, 0, 0)
