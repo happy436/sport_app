@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { loginField } from "./loginForm";
 import { Button, Card, TextInput } from "@tremor/react";
-import { signUp } from "../../store/users"
+import { signUp } from "../../store/users";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -9,30 +9,43 @@ type RegisterFormProps = {
 	onChangePageType: () => void;
 };
 
+type errorField = {
+    email?:string,
+    password?:string;
+}
+
 const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
-	const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const [handleInput, setHandleInput] = useState<loginField>({
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const [handleInput, setHandleInput] = useState<loginField>({
 		email: "",
 		password: "",
 	});
-	const [errors, setErrors] = useState([]);
+	const [errors, setErrors] = useState<errorField>({});
 	const validation = () => {
 		// TODO validation and add toastify
-		const error = [];
-		setErrors([]);
+		const newErrors:errorField = {};
+
+		// Check if email is empty or invalid
 		if (handleInput.email === "") {
-			setErrors((prev) => [...prev, "email"]);
-			error.push(["email"]);
+			newErrors.email = "This field is required";
+		} else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(handleInput.email)) {
+			newErrors.email =
+				"Email must be in the form {name}@{domain}";
 		}
+
+		// Check if password is empty or less than 6 characters
 		if (handleInput.password === "") {
-			setErrors((prev) => [...prev, "password"]);
-			error.push("tepasswordxt");
+			newErrors.password = "This field is required";
+		} else if (handleInput.password.length < 6) {
+			newErrors.password = "Password must be at least 6 characters long";
 		}
-		if (error.length > 0) {
-			return false;
-		}
-		return true;
+        console.log(newErrors)
+
+		setErrors(newErrors);
+
+		// Return true if there are no errors
+		return Object.keys(newErrors).length === 0;
 	};
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const input = { [e.target.name]: e.target.value };
@@ -40,10 +53,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 	};
 	const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
-		validation();
-		const { email, password } = handleInput;
-		dispatch(signUp({email, password}))
-        navigate('/home')
+		const isValid = validation();
+		if (isValid) {
+			const { email, password } = handleInput;
+			dispatch(signUp({ email, password }));
+			navigate("/home");
+		}
 	};
 
 	return (
@@ -61,8 +76,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 							<div className="flex flex-col gap-2">
 								<label>Name</label>
 								<TextInput
-									error={errors.includes("email")}
-									errorMessage="his field is required!"
+									error={Object.keys(errors).includes("email")}
+									errorMessage={errors.email}
 									type="email"
 									name="email"
 									placeholder="Enter your email"
@@ -74,8 +89,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 							<div className="flex flex-col gap-2">
 								<label>Password</label>
 								<TextInput
-									error={errors.includes("password")}
-									errorMessage="This field is required!"
+									error={Object.keys(errors).includes("password")}
+									errorMessage={errors.password}
 									placeholder="Enter your password"
 									type="password"
 									name="password"
