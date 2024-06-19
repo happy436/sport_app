@@ -2,10 +2,16 @@ import { Card } from "@tremor/react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-type ListCardsProps = {};
+type ListCardsProps = Record<string, never>;
+
+type cardType = {
+    url:string,
+    name:string,
+    color?:string,
+}
 
 const ListCards: React.FC<ListCardsProps> = () => {
-	const cardList = [
+	const cardList:cardType[] = [
 		/* { url: "/measurements", name: "Measurements", color: "lime" }, */
 		/*{ url: "/nutrition", name: "Nutrition", color: "yellow" }, */
 	];

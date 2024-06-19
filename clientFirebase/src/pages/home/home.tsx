@@ -1,13 +1,9 @@
-import { Card, Divider, ProgressCircle } from "@tremor/react";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { getHabits } from "../../store/habits.js";
-import { useHabit } from "../../hook/useHabits.jsx";
+import { Divider } from "@tremor/react";
+import React from "react";
 import ListCards from "./ListCards.js";
 import DailyCard from "./DailyCard.js";
 
-type profileProps = {};
+type profileProps = Record<string, never>;
 
 export interface habitData {
 	_id?: string;
