@@ -96,10 +96,12 @@ export const logIn =
             const data = await signInWithEmailAndPassword(authFirebase, email, password)
 			dispatch(authRequestSuccess({ userId: data.user.uid }));
 			localStorageService.setTokens(data.user);
+            return true
 		} catch (error) {
-            const {code, message} = error
-            
-            toast.error(message, {
+            const {code} = error
+            const errorMessage = generateAuthError(code);
+            console.log({...error})
+            toast.error(errorMessage, {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -110,14 +112,7 @@ export const logIn =
                 theme: "dark",
                 transition: Bounce,
             });
-
-			//const { code, message } = error.response.data.error;
-			if (code === 400) {
-				const errorMessage = generateAuthError(message);
-				dispatch(authRequestFailed(errorMessage));
-			} else {
-				dispatch(authRequestFailed(error.message));
-			}
+            return false
 		}
 	};
 
