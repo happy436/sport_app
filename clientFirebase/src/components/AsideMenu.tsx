@@ -13,6 +13,7 @@ const AsideMenu: React.FC<AsideMenuProps> = () => {
 		{ url: "/habits", name: "Habits" },
 		/* { url: "/workouts", name: "Workouts" },
 		{ url: "/settings", name: "Settings" }, */
+		{ url: "/logOut", name: "Log Out" },
 	];
 	// TODO delete
 	const avatar = maskote;
