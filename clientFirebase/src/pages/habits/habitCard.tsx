@@ -1,5 +1,5 @@
 import { Card } from "@tremor/react";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { habitData } from "../home/home";
 import { useHabit } from "../../hook/useHabits";
 
@@ -8,7 +8,32 @@ type HabitCardProps = {
 };
 
 const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
-	const { getHabitCompletionPercentage, getTodayHabitValue } = useHabit();
+	const { getHabitCompletionPercentage, getTodayHabitValue, activeDay } = useHabit();
+    const [streak, setStreak] = useState(0)
+
+    const calculateStreak = (habit:habitData, timestamp:number) => {
+        //debugger
+        const {history} = habit
+        const time = 86400000
+        const indexActiveDay = history.findIndex(item => item.date === timestamp)
+        for(let i = indexActiveDay; i >= 0; i-- ){
+            if(i === 0) return 0;
+
+            if(history[i].date - time === history[i-1].date){
+                if(history[i].value === Number(habit.goal)){
+                    setStreak(prev => (prev+1))
+
+                }
+                if(history[i-1].value === Number(habit.goal)){
+                    setStreak(prev => (prev+1))
+
+                }
+            }
+        }
+    }
+    useEffect(()=>{
+        calculateStreak(habit, activeDay)
+    }, [activeDay])
 	return (
 		<li className="">
 			<Card
@@ -26,6 +51,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
                         🔥 1 Day
                         {calculateStreak(activeDay, habit)}
                     </span> */}
+                    <span>{streak} Day</span>
 				<div className="flex gap-3 items-center w-full">
 					<div className="h-full flex items-center text-2xl">
 						{habit.icon}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import { Button, DatePicker } from "@tremor/react";
 import Page from "../../components/common/page";
@@ -7,9 +7,9 @@ import HabitCard from "./habitCard";
 import { useHabit } from "../../hook/useHabits";
 
 const Habits: React.FC = () => {
-	// TODO custom hook
 	const { handleChangeDate, activeDay, habits } = useHabit();
 
+    // TODO calculate streak
 	/* function calculateStreak(currentDate:number, data:habitData) {
 		const startOfDay = new Date(
 			new Date(currentDate).setHours(0, 0, 0, 0)
@@ -25,6 +25,8 @@ const Habits: React.FC = () => {
         streak = filteredData.length;
 		return streak > 0 ? `🔥 ${streak} Day${streak > 1 ? "s" : ""}` : "";
 	} */
+
+
 
 	return (
 		<Page>
