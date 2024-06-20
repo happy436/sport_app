@@ -4,8 +4,11 @@ import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage.service";
 import history from "../utils/history";
 import generateAuthError from "../utils/generateAuthError";
-import {authFirebase} from "../firebase"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { authFirebase } from "../firebase";
+import {
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+} from "firebase/auth";
 import { Bounce, toast } from "react-toastify";
 
 const initialState = localStorageService.getAccessToken()
@@ -93,26 +96,29 @@ export const logIn =
 		const { email, password } = payload;
 		dispatch(authRequested());
 		try {
-            const data = await signInWithEmailAndPassword(authFirebase, email, password)
+			const data = await signInWithEmailAndPassword(
+				authFirebase,
+				email,
+				password
+			);
 			dispatch(authRequestSuccess({ userId: data.user.uid }));
 			localStorageService.setTokens(data.user);
-            return true
+			return true;
 		} catch (error) {
-            const {code} = error
-            const errorMessage = generateAuthError(code);
-            console.log({...error})
-            toast.error(errorMessage, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            });
-            return false
+			const { code } = error;
+			const errorMessage = generateAuthError(code);
+			toast.error(errorMessage, {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "dark",
+				transition: Bounce,
+			});
+			return false;
 		}
 	};
 
@@ -121,10 +127,13 @@ export const signUp =
 	async (dispatch) => {
 		dispatch(authRequested());
 		try {
-			const data = await createUserWithEmailAndPassword(authFirebase, email, password)
+			const data = await createUserWithEmailAndPassword(
+				authFirebase,
+				email,
+				password
+			);
 			localStorageService.setTokens(data.user);
 			dispatch(authRequestSuccess({ userId: data.user.uid }));
-            // TODO делать запись в базе данных firebase для нового пользователя
 			await dispatch(
 				createUser({
 					_id: data.user.uid,
@@ -132,8 +141,22 @@ export const signUp =
 					...rest,
 				})
 			);
+			return true;
 		} catch (error) {
-			dispatch(authRequestFailed(error.message));
+			const { code } = error;
+			const errorMessage = generateAuthError(code);
+			toast.error(errorMessage, {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: "dark",
+				transition: Bounce,
+			});
+			return false;
 		}
 	};
 export const logOut = () => (dispatch) => {

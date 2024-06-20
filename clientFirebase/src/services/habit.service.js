@@ -8,7 +8,7 @@ const habitsService = {
 			const habits = data.val();
 			return Object.values(habits);
 		} else {
-			console.log("No data available for this user.");
+			//console.log("No data available for this user.");
 			return [];
 		}
 	},

@@ -57,6 +57,7 @@ const Goal: React.FC<goalProps> = ({
 						placeholder="goal number"
 						min="0"
 						max="10000"
+                        type="number"
 					/>
 					<Button
 						color={color}

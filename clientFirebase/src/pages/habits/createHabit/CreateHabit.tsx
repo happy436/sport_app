@@ -153,7 +153,6 @@ const CreateHabitPage = () => {
 		if (data.reminderTime.length > 0 && data.reminderTime[0] !== "") {
 			data.reminderTime.forEach((time) => setReminder(time));
 		}
-        console.log(data)
         dispatch(createHabit(data));
 		if (validateForm(data)) {
 			navigate("/habits");

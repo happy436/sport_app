@@ -35,6 +35,7 @@ const Counter: React.FC<CounterProps> = ({
 						setIsOpen(true);
 					}}
                     color={color}
+                    disabled={value >= goal} tooltip="Disabled"
 				>
 					<p className="text-xl">+</p>
 				</Button>

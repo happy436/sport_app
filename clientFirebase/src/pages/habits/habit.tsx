@@ -51,8 +51,11 @@ const Habit: React.FC<habitProps> = () => {
 	}, [value]);
 
 	const handleIncreaseValue = () => {
-		const newValue = Number(value) + Number(inputValue);
+		let newValue = Number(value) + Number(inputValue);
 		setValue(newValue);
+        if(newValue > habitData.goal) {
+            newValue = habitData.goal
+        }
 		dispatch(
 			editHabitData({
 				_id: habitData._id,

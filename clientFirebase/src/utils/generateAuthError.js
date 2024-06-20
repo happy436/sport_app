@@ -4,6 +4,8 @@ function generateAuthError(message) {
             return "Too many request. Try later!";
         case "auth/invalid-credential":
             return "Invalid email / password!";
+        case "auth/email-already-in-use":
+            return "This email has already been registered"
     }
 }
 

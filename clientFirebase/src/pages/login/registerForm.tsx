@@ -10,9 +10,9 @@ type RegisterFormProps = {
 };
 
 type errorField = {
-    email?:string,
-    password?:string;
-}
+	email?: string;
+	password?: string;
+};
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 	const dispatch = useDispatch();
@@ -24,14 +24,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 	const [errors, setErrors] = useState<errorField>({});
 	const validation = () => {
 		// TODO validation and add toastify
-		const newErrors:errorField = {};
+		const newErrors: errorField = {};
 
 		// Check if email is empty or invalid
 		if (handleInput.email === "") {
 			newErrors.email = "This field is required";
 		} else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(handleInput.email)) {
-			newErrors.email =
-				"Email must be in the form {name}@{domain}";
+			newErrors.email = "Email must be in the form {name}@{domain}";
 		}
 
 		// Check if password is empty or less than 6 characters
@@ -40,8 +39,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 		} else if (handleInput.password.length < 6) {
 			newErrors.password = "Password must be at least 6 characters long";
 		}
-        console.log(newErrors)
-
 		setErrors(newErrors);
 
 		// Return true if there are no errors
@@ -51,13 +48,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 		const input = { [e.target.name]: e.target.value };
 		setHandleInput((prev) => ({ ...prev, ...input }));
 	};
-	const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	const submit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 		const isValid = validation();
 		if (isValid) {
 			const { email, password } = handleInput;
-			dispatch(signUp({ email, password }));
-			navigate("/home");
+			(await dispatch(signUp({ email, password }))) && navigate("/home");
 		}
 	};
 
@@ -76,7 +72,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 							<div className="flex flex-col gap-2">
 								<label>Name</label>
 								<TextInput
-									error={Object.keys(errors).includes("email")}
+									error={Object.keys(errors).includes(
+										"email"
+									)}
 									errorMessage={errors.email}
 									type="email"
 									name="email"
@@ -89,7 +87,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onChangePageType }) => {
 							<div className="flex flex-col gap-2">
 								<label>Password</label>
 								<TextInput
-									error={Object.keys(errors).includes("password")}
+									error={Object.keys(errors).includes(
+										"password"
+									)}
 									errorMessage={errors.password}
 									placeholder="Enter your password"
 									type="password"
