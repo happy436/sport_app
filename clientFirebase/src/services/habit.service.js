@@ -30,12 +30,19 @@ const habitsService = {
 					historyArray = Object.values(historyArray);
 				}
 
-				const updatedHistoryArray = historyArray.map((item) => {
-					if (item.date === payload.history.date) {
-						return { ...item, value: payload.history.value };
-					}
-					return item;
-				});
+                const findIndex = historyArray.findIndex(item => item.date === payload.history.date)
+                let updatedHistoryArray
+                if(findIndex !== -1){
+                    updatedHistoryArray = historyArray.map((item) => {
+                        if (item.date === payload.history.date) {
+                            return { ...item, value: payload.history.value };
+                        }
+                        return item;
+                    });
+                } else {
+                    updatedHistoryArray = [...historyArray, payload.history]
+                }
+				
 
 				await set(habitRef, updatedHistoryArray);
 				console.log("History value updated successfully.");
