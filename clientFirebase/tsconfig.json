@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/test.test.js"],
+  "include": ["src", "src/tests/calculateStreak.test.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

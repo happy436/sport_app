@@ -11,7 +11,8 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
 	const { getHabitCompletionPercentage, getTodayHabitValue, activeDay } =
 		useHabit();
 	const [streak, setStreak] = useState(0);
-	const calculateStreak = (habit: habitData, activeDay:number) => {
+	const calculateStreak = (habit: habitData, activeDay: number) => {
+		setStreak(0);
 		const history = habit.history;
 		const goal = parseInt(habit.goal);
 		let streak = 0;
@@ -31,14 +32,14 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
 
 		for (let i = currentDayIndex - 1; i >= 0; i--) {
 			const currentDate = history[i + 1].date;
+			//console.log("curr", new Date(currentDate));
 			const previousDate = history[i].date;
+			//console.log("prev", new Date(previousDate));
 			const condition1 =
 				currentDate - 1000 * 60 * 60 * 24 === previousDate;
 			const condition2 = history[i].value === goal;
-			if (condition1) {
-				if (condition2) {
-					streak++;
-				}
+			if (condition1 && condition2) {
+				streak++;
 			} else {
 				break;
 			}

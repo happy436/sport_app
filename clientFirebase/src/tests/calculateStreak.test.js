@@ -51,7 +51,7 @@ const data = {
         },
         {
             date: 1719003600000,
-            value: 1,
+            value: 0,
         },
         {
             date: 1719090000000,
@@ -84,11 +84,11 @@ describe("calculateStreak function", () => {
 
 	test("test 3", () => {
 		
-		expect(calculateStreak(data, 1719003600000)).toBe(3);
+		expect(calculateStreak(data, 1719003600000)).toBe(0);
 	});
 	test("test 4", () => {
 		
-		expect(calculateStreak(data, 1719090000000)).toBe(4);
+		expect(calculateStreak(data, 1719090000000)).toBe(1);
 	});
 	test("test 5", () => {
 		
