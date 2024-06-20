@@ -1,75 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 import { Link } from "react-router-dom";
-import { getHabits } from "../../store/habits.js";
-import { Button, DatePicker, DatePickerValue } from "@tremor/react";
+import { Button, DatePicker } from "@tremor/react";
 import Page from "../../components/common/page";
-import { habitData, historyData } from "../home/home.js";
+import { habitData } from "../home/home.js";
 import HabitCard from "./habitCard";
+import { useHabit } from "../../hook/useHabits";
 
 const Habits: React.FC = () => {
 	// TODO custom hook
-	const [data, setData] = useState([]);
-	const getData = useSelector(getHabits());
-	const [activeDay, setActiveDay] = useState(0);
-	useEffect(() => {
-		const today = Date.now();
-		const timestamp = new Date(
-			new Date(today).setHours(0, 0, 0, 0)
-		).getTime();
-		setActiveDay(timestamp);
-	}, []);
-	useEffect(() => {
-		setData(getData);
-	}, [getData]);
-	const handleChange = (value: DatePickerValue) => {
-		if (value !== undefined) {
-			const date = new Date(value);
-			const timestamp = new Date(
-				new Date(date).setHours(0, 0, 0, 0)
-			).getTime();
-			setActiveDay(timestamp);
-		}
-	};
-
-	const getPercent = (habit: habitData, timestamp: number): number => {
-		const { history, goal } = habit;
-		const date = new Date(timestamp);
-		const startOfDay = new Date(
-			date.getFullYear(),
-			date.getMonth(),
-			date.getDate()
-		);
-		const startOfDayTimestamp = startOfDay.getTime();
-
-		const data = history.filter((item: historyData) => {
-			if (item.date === startOfDayTimestamp) {
-				return item;
-			}
-		});
-		if (data.length > 0) {
-			return (Number(data[0].value) * 100) / Number(goal);
-		} else {
-			return 0;
-		}
-	};
-
-	const giveTodayValue = (arr: historyData[], timestamp: number): number => {
-		const date = new Date(timestamp);
-		const startOfDay = new Date(
-			date.getFullYear(),
-			date.getMonth(),
-			date.getDate()
-		);
-		const startOfDayTimestamp = startOfDay.getTime();
-		const data = arr.filter((item: historyData) => {
-			if (item.date === startOfDayTimestamp) {
-				return item;
-			}
-		});
-
-		return data.length > 0 ? data[0].value : 0;
-	};
+	const { handleChangeDate, activeDay, habits } = useHabit();
 
 	/* function calculateStreak(currentDate:number, data:habitData) {
 		const startOfDay = new Date(
@@ -95,15 +34,15 @@ const Habits: React.FC = () => {
 				<section>
 					{activeDay !== 0 && (
 						<DatePicker
-							onValueChange={handleChange}
+							onValueChange={handleChangeDate}
 							defaultValue={new Date(activeDay)}
 						/>
 					)}
 				</section>
 
-				{data.length !== 0 ? (
+				{habits.length !== 0 ? (
 					<ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-						{data
+						{habits
 							.filter((item) => activeDay >= item.createdAt)
 							.map((habit: habitData) => (
 								<Link
@@ -113,9 +52,6 @@ const Habits: React.FC = () => {
 								>
 									<HabitCard
 										habit={habit}
-										activeDay={activeDay}
-										getPercent={getPercent}
-										giveTodayValue={giveTodayValue}
 									/>
 								</Link>
 							))}

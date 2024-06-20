@@ -1,20 +1,14 @@
 import { Card } from "@tremor/react";
 import React from "react";
-import { habitData, historyData } from "../home/home";
+import { habitData } from "../home/home";
+import { useHabit } from "../../hook/useHabits";
 
 type HabitCardProps = {
 	habit: habitData;
-	activeDay: number;
-	getPercent: (habit: habitData, activeDay: number) => void;
-	giveTodayValue: (arr: historyData[], activeDay: number) => number;
 };
 
-const HabitCard: React.FC<HabitCardProps> = ({
-	habit,
-	activeDay,
-	getPercent,
-	giveTodayValue,
-}) => {
+const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
+	const { getHabitCompletionPercentage, getTodayHabitValue } = useHabit();
 	return (
 		<li className="">
 			<Card
@@ -25,7 +19,7 @@ const HabitCard: React.FC<HabitCardProps> = ({
 				<div
 					className={`h-full absolute bg-indigo-500/25 left-0 top-0`}
 					style={{
-						width: `${getPercent(habit, activeDay)}%`,
+						width: `${getHabitCompletionPercentage(habit)}%`,
 					}}
 				></div>
 				{/* <span className="text-xs absolute top-0 right-3">
@@ -47,7 +41,7 @@ const HabitCard: React.FC<HabitCardProps> = ({
 						</div>
 						<div className="flex">
 							<span className="text-lg">
-								{giveTodayValue(habit.history, activeDay)} / {" "}
+								{getTodayHabitValue(habit.history)} /{" "}
 								{habit.goal} {habit.units}
 							</span>
 						</div>

@@ -15,7 +15,15 @@ export const useHabit = () => {
 };
 
 const HabitProvider = ({ children }) => {
-	//utils
+    //! CONSTS
+	const dispatch = useDispatch();
+
+	//! SELECTORS
+	const isLoading = useSelector(getHabitsLoadingStatus());
+	const isLoggedIn = useSelector(getIsLoggedIn());
+	const habits = useSelector(getHabits());
+
+	//! UNTILS
 	const getStartOfDayTimestamp = (date = Date.now()) => {
 		const targetDate = new Date(date);
 		const timestamp = new Date(targetDate.setHours(0, 0, 0, 0)).getTime();
@@ -50,16 +58,39 @@ const HabitProvider = ({ children }) => {
 		return achievedToday;
 	};
 
-	//consts
-	const dispatch = useDispatch();
-
-	//selectors
-	const isLoading = useSelector(getHabitsLoadingStatus());
-	const isLoggedIn = useSelector(getIsLoggedIn());
-	const habits = useSelector(getHabits());
-
-	//common functions
+	//! FUNCTIONS
 	const loadHabits = () => dispatch(loadHabitsList());
+
+    const handleChangeDate = (value) => {
+		if (value !== undefined) {
+			const timestamp = getStartOfDayTimestamp(value)
+			setActiveDay(timestamp);
+		}
+	};
+
+    const getHabitCompletionPercentage = (habit) => {
+		const { history, goal } = habit;
+
+		const data = history.filter((item) => {
+			if (item.date === activeDay) {
+				return item;
+			}
+		});
+		if (data.length > 0) {
+			return (Number(data[0].value) * 100) / Number(goal);
+		} else {
+			return 0;
+		}
+	};
+    const getTodayHabitValue = (arr) => {
+		const data = arr.filter((item) => {
+			if (item.date === activeDay) {
+				return item;
+			}
+		});
+
+		return data.length > 0 ? data[0].value : 0;
+	};
 
 	//! STATES
 	const [activeDay, setActiveDay] = useState(new Date().getTime());
@@ -90,6 +121,9 @@ const HabitProvider = ({ children }) => {
 		<HabitContext.Provider
 			value={{
 				getStartOfDayTimestamp,
+                handleChangeDate,
+                getHabitCompletionPercentage,
+                getTodayHabitValue,
 				habits,
 				activeDay,
 				completedDayliAchievements,
