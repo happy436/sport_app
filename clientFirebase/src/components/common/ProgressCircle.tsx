@@ -5,7 +5,7 @@ import {
 	getColorClassNames,
 	makeClassName,
 	tremorTwMerge,
-} from "@lib";
+} from "@lib/index";
 import React from "react";
 
 const makeProgressCircleClassName = makeClassName("ProgressBar");
@@ -123,7 +123,7 @@ const ProgressCircle = React.forwardRef<HTMLDivElement, ProgressCircleProps>(
 												color,
 												colorPalette.background
 											).strokeColor
-									  } opacity-20 dark:opacity-25`
+                                    } opacity-20 dark:opacity-25`
 									: "stroke-tremor-brand-muted/50 dark:stroke-dark-tremor-brand-muted"
 							)}
 						/>
@@ -146,7 +146,7 @@ const ProgressCircle = React.forwardRef<HTMLDivElement, ProgressCircleProps>(
 										? getColorClassNames(
 												color,
 												colorPalette.background
-										  ).strokeColor
+                                        ).strokeColor
 										: "stroke-tremor-brand dark:stroke-dark-tremor-brand",
 									showAnimation
 										? "transition-all duration-300 ease-in-out"

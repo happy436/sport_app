@@ -1,21 +1,29 @@
 import React, { useState } from "react";
 import TextField from "../../../components/common/textField";
-import { Button, Card } from "@tremor/react";
+import { Button, Card, Color } from "@tremor/react";
 import IconColor from "./blocks/IconColor";
-import Tags from "./blocks/Tags";
+//import Tags from "./blocks/Tags";
 import Goal from "./blocks/Goal";
-import Reminder from "./blocks/Reminder";
+//import Reminder from "./blocks/Reminder";
 import { createHabit } from "../../../store/habits.js";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Bounce, toast } from "react-toastify";
 import { habitData } from "../../home/home.js";
+import { Dispatch } from "@reduxjs/toolkit";
+
+export interface CustomEvent {
+	target: {
+		name: string;
+		value: string;
+	};
+}
 
 const CreateHabitPage = () => {
 	// TODO to do useHabit castom hook
-	const dispatch = useDispatch();
+	const dispatch: Dispatch = useDispatch();
 	const navigate = useNavigate();
-	const colorList = [
+	const colorList: Color[] = [
 		"slate",
 		"gray",
 		"zinc",
@@ -40,9 +48,9 @@ const CreateHabitPage = () => {
 		"rose",
 	];
 
-	function getRandomColor() {
+	function getRandomColor(): Color {
 		const randomIndex = Math.floor(Math.random() * colorList.length);
-		return colorList[randomIndex].toString();
+		return colorList[randomIndex];
 	}
 	const [data, setData] = useState<habitData>({
 		name: "",
@@ -98,13 +106,21 @@ const CreateHabitPage = () => {
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
-	const handleChangeCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setData((prev) => ({ ...prev, [e.target.name]: e.target.checked }));
-	};
-	const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
+	const handleCustomChange = (e: CustomEvent): void => {
+		const target = e.target;
 		setData((prev) => ({
 			...prev,
-			[e.currentTarget.name]: e.currentTarget.value,
+			[target.name]: target.value,
+		}));
+	};
+	/* const handleChangeCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setData((prev) => ({ ...prev, [e.target.name]: e.target.checked }));
+	}; */
+	const handleClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
+		const target = e.target as HTMLInputElement; // Cast e.target to HTMLInputElement
+		setData((prev) => ({
+			...prev,
+			[target.name]: target.value, // Use target.name and target.value
 		}));
 	};
 
@@ -153,7 +169,7 @@ const CreateHabitPage = () => {
 		if (data.reminderTime.length > 0 && data.reminderTime[0] !== "") {
 			data.reminderTime.forEach((time) => setReminder(time));
 		}
-        dispatch(createHabit(data));
+		dispatch(createHabit(data));
 		if (validateForm(data)) {
 			navigate("/habits");
 		}
@@ -174,13 +190,14 @@ const CreateHabitPage = () => {
 					colorList={colorList}
 					handleClick={handleClick}
 				/>
-{/* 				<Tags
+				{/* 				<Tags
 					tags={data.tags}
 					color={data.color}
 					onChange={handleChange}
 				/> */}
 				<Goal
 					handleChange={handleChange}
+					handleCustomChange={handleCustomChange}
 					color={data.color}
 					goalPeriod={data.goalPeriod}
 					units={data.units}

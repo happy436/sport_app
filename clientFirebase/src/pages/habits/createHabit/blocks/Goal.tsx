@@ -1,23 +1,43 @@
-import {
-	Button,
-	Card,
-	Dialog,
-	DialogPanel,
-	NumberInput,
-} from "@tremor/react";
+import { Button, Card, Dialog, DialogPanel, NumberInput } from "@tremor/react";
 import React, { useState } from "react";
+import { CustomEvent } from "../CreateHabit";
 
 type goalProps = {
-	handleChange: () => void;
-	color: string;
+	handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	handleCustomChange: (e: CustomEvent) => void;
+	color?:
+		| "slate"
+		| "gray"
+		| "zinc"
+		| "neutral"
+		| "stone"
+		| "red"
+		| "orange"
+		| "amber"
+		| "yellow"
+		| "lime"
+		| "green"
+		| "emerald"
+		| "teal"
+		| "cyan"
+		| "sky"
+		| "blue"
+		| "indigo"
+		| "violet"
+		| "purple"
+		| "fuchsia"
+		| "pink"
+		| "rose"
+		| undefined;
 	units: string;
 	goalPeriod: string;
 };
 
 const Goal: React.FC<goalProps> = ({
 	handleChange,
+	handleCustomChange,
 	color,
-	goalPeriod,
+	//goalPeriod,
 	units,
 }) => {
 	const unitsButtonList = [
@@ -36,7 +56,7 @@ const Goal: React.FC<goalProps> = ({
 		"mg",
 		"kg",
 	];
-	const goalPeriodButtonsList = ["day", "week", "month"];
+	//const goalPeriodButtonsList = ["day", "week", "month"];
 	const [isOpen, setIsOpen] = useState(false);
 	return (
 		<Card>
@@ -57,7 +77,6 @@ const Goal: React.FC<goalProps> = ({
 						placeholder="goal number"
 						min="0"
 						max="10000"
-                        type="number"
 					/>
 					<Button
 						color={color}
@@ -83,7 +102,7 @@ const Goal: React.FC<goalProps> = ({
 											type="button"
 											name={button}
 											onClick={() =>
-												handleChange({
+												handleCustomChange({
 													target: {
 														name: "units",
 														value: button,

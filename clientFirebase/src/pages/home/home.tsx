@@ -5,6 +5,31 @@ import DailyCard from "./DailyCard.js";
 
 type profileProps = Record<string, never>;
 
+export type Color =
+	| "slate"
+	| "gray"
+	| "zinc"
+	| "neutral"
+	| "stone"
+	| "red"
+	| "orange"
+	| "amber"
+	| "yellow"
+	| "lime"
+	| "green"
+	| "emerald"
+	| "teal"
+	| "cyan"
+	| "sky"
+	| "blue"
+	| "indigo"
+	| "violet"
+	| "purple"
+	| "fuchsia"
+	| "pink"
+	| "rose"
+	| undefined;
+
 export interface habitData {
 	_id?: string;
 	name: string;
@@ -12,13 +37,13 @@ export interface habitData {
 	goal: number;
 	units: string;
 	icon: string;
-	color: string;
+	color?: Color;
 	tags: string[];
 	goalPeriod: string;
 	reminderTime: string[];
 	reminderMessage: string;
 	showMemo: boolean;
-	history: historyData[];
+	history?: historyData[];
 }
 
 export interface historyData {
