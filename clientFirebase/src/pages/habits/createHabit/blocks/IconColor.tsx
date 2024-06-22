@@ -2,7 +2,7 @@ import { Button, Card, Color, Dialog, DialogPanel } from "@tremor/react";
 import React, { useState } from "react";
 
 type IconColorProps = {
-	color: Color;
+	color?: Color;
 	colorList: Color[];
 	handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 	icon: string;
