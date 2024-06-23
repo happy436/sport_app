@@ -11,18 +11,21 @@ import {
 	TextInput,
 } from "@tremor/react";
 import Measurement from "./measurement";
-import {getMeasurements} from "../../store/measurements"
+import {
+	createMeasurementCategory,
+	getMeasurements,
+} from "../../store/measurements";
 import { useDispatch, useSelector } from "react-redux";
 import { getStartOfDayTimestamp } from "@/utils/getStartOfDayTimestamp";
 
 type measurementsProps = {};
 
 const Measurements: React.FC<measurementsProps> = () => {
-    const getData = useSelector(getMeasurements())
-    const dispatch = useDispatch()
+	const getData = useSelector(getMeasurements());
+	const dispatch = useDispatch();
 	const unitsArray = ["mm", "cm", "m", "kg"];
 
-    const [data, setData] = useState([])
+	const [data, setData] = useState([]);
 	const [activeDay, setActiveDay] = useState(0);
 	const [inputText, setInputText] = useState("");
 	const [inputSelect, setInputSelect] = useState("");
@@ -30,40 +33,46 @@ const Measurements: React.FC<measurementsProps> = () => {
 	const [errors, setErrors] = useState([]);
 	const [isOpen, setIsOpen] = useState(false);
 	useEffect(() => {
-        setData(getData)
-        const timestamp = getStartOfDayTimestamp()
+		setData(getData);
+		const timestamp = getStartOfDayTimestamp();
 		setActiveDay(timestamp);
 	}, []);
 	const handleChangeDate = (value: number) => {
 		if (value !== undefined) {
-			const timestamp = getStartOfDayTimestamp(value)
+			const timestamp = getStartOfDayTimestamp(value);
 			setActiveDay(timestamp);
 		}
 	};
 
 	const validation = () => {
 		// TODO validation and add toastify
-        const error = []
-        setErrors([])
+		const error = [];
+		setErrors([]);
 		if (inputSelect === "") {
 			setErrors((prev) => [...prev, "select"]);
-            error.push(["select"])
-		} 
-        if (inputText === "") {
-			setErrors((prev) => [...prev, "text"]);
-            error.push("text")
+			error.push(["select"]);
 		}
-        if(error.length > 0){
-            return false;
-        }
-        return true
+		if (inputText === "") {
+			setErrors((prev) => [...prev, "text"]);
+			error.push("text");
+		}
+		if (error.length > 0) {
+			return false;
+		}
+		return true;
 	};
 
-    const onSubmit = () => {
-        if(validation()) {
-            setIsOpen(false);
-        }
-    }
+	const onSubmit = () => {
+		if (validation()) {
+			dispatch(
+				createMeasurementCategory({
+					name: inputText,
+					units: inputSelect,
+				})
+			);
+			setIsOpen(false);
+		}
+	};
 
 	return (
 		<Page>
@@ -82,7 +91,7 @@ const Measurements: React.FC<measurementsProps> = () => {
 						<AccordionList>
 							{data.map((item) => (
 								<li key={item._id}>
-									<Measurement data={item} date={activeDay}/>
+									<Measurement data={item} date={activeDay} />
 								</li>
 							))}
 						</AccordionList>
@@ -135,7 +144,7 @@ const Measurements: React.FC<measurementsProps> = () => {
 							color="indigo"
 							className=" w-full text-white"
 							onClick={() => {
-								onSubmit()
+								onSubmit();
 							}}
 							type="button"
 						>

@@ -1,9 +1,9 @@
 import { ref, set, get, update } from "firebase/database";
 import { database } from "../firebase";
 
-const habitsService = {
-	get: async (userId) => {
-		const data = await get(ref(database, `habits/${userId}`));
+const measurementService = {
+    get: async (userId) => {
+		const data = await get(ref(database, `measurements/${userId}`));
 		if (data.exists()) {
 			const habits = data.val();
 			return Object.values(habits);
@@ -12,16 +12,13 @@ const habitsService = {
 			return [];
 		}
 	},
-	create: async (habit) => {
-		const { userId, _id } = habit;
-		await set(ref(database, "habits/" + userId + "/" + _id), habit);
-		return habit;
-	},
-	delete: () => {},
-	edit: () => {},
-	updateValue: async (payload) => {
-		const { _id, userId } = payload;
-		const habitRef = ref(database, `habits/${userId}/${_id}/history`);
+    addCategory: async(payload) => {
+        const {userId, _id} = payload
+        await set(ref(database, "measurements/" + userId + _id), payload.data)
+    },
+    addMeasure: async(payload) => {
+        const { _id, userId } = payload;
+		const habitRef = ref(database, `measurements/${userId}/${_id}/measurements`);
 		try {
 			const snapshot = await get(habitRef);
 			if (snapshot.exists()) {
@@ -50,7 +47,7 @@ const habitsService = {
 		} catch (error) {
             console.error(error)
         }
-	},
-};
+    },
+}
 
-export default habitsService;
+export default measurementService

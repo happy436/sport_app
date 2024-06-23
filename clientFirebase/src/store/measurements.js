@@ -1,3 +1,5 @@
+import localStorageService from "@/services/localStorage.service";
+import measurementService from "@/services/measurement.service";
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { Bounce, toast } from "react-toastify";
 
@@ -112,7 +114,9 @@ const measurementsSlice = createSlice({
 			state.isLoading = false;
 		},
 		addMeasure: (state, action) => {
-			state.entities.push(action.payload);
+            const {_id, data} = action.payload
+            const categoryIndex = state.entities.findIndex(item => item._id === _id)
+            state.entities[categoryIndex].measurements.push(data)
 			state.isLoading = false;
 		},
 		addMeasureCategory: (state, action) => {
@@ -132,10 +136,10 @@ const {
 } = actions;
 
 export const loadMeasurementsList = () => async (dispatch) => {
-	/* const userId = localStorageService.getUserId(); */
+	const userId = localStorageService.getUserId();
 	dispatch(measurementsRequested());
 	try {
-		/* const { content } = await habitsService.getHabits(userId); */
+		const data = await measurementService.get(userId)
 		dispatch(measurementsReceived(/* content */));
 	} catch (error) {
 		dispatch(measurementsRequestFailed(error.message));
@@ -143,24 +147,28 @@ export const loadMeasurementsList = () => async (dispatch) => {
 };
 
 export const createMeasurementCategory = (data) => async (dispatch) => {
-	const note = {
+	const userId = localStorageService.getUserId();
+    debugger;
+    const measurement = {
 		...data,
 		_id: nanoid(),
-		createdtAt: Date.now(),
+        userId:userId,
+		createdAt: Date.now(),
 	};
 	dispatch(measurementsRequested());
 	try {
-		/* const { content } = await habitsService.createNote(note); */
-		dispatch(addMeasureCategory(note));
+        const fetchData = await measurementService.addCategory(measurement)
+		dispatch(addMeasureCategory(fetchData));
 	} catch (error) {
 		dispatch(measurementsRequestFailed(error.message));
 	}
 };
 
-export const createMeasure = (data) => async (dispatch) => {
+export const createMeasure = (payload) => async (dispatch) => {
+    const userId = localStorageService.getUserId();
     dispatch(measurementsRequested());
 	try {
-		/* const { content } = await habitsService.createNote(note); */
+		const data = await measurementService.addMeasure({_id:userId, ...payload})
 		dispatch(addMeasure(data));
 	} catch (error) {
 		dispatch(measurementsRequestFailed(error.message));
