@@ -13,7 +13,7 @@ const mockData = [
 			{ date: "01.04.24", value: 35.5 },
 			{ date: "01.05.24", value: 37 },
 			{ date: "01.06.24", value: 38 },
-			{ date: "01.07.24", value: 31 },
+			/* { date: "01.07.24", value: 31 },
 			{ date: "01.08.24", value: 31 },
 			{ date: "01.09.24", value: 31 },
 			{ date: "01.10.24", value: 31 },
@@ -43,7 +43,7 @@ const mockData = [
 			{ date: "01.10.26", value: 31 },
 			{ date: "01.11.26", value: 31 },
 			{ date: "01.12.26", value: 31 },
-			{ date: "01.01.27", value: 31 },
+			{ date: "01.01.27", value: 31 }, */
 		],
 	},
 	{

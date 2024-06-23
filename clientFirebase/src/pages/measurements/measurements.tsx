@@ -78,11 +78,11 @@ const Measurements: React.FC<measurementsProps> = () => {
 					)}
 				</section>
 				<div>
-					<ul>
+					<ul className="mb-[60px]">
 						<AccordionList>
 							{data.map((item) => (
 								<li key={item._id}>
-									<Measurement data={item} />
+									<Measurement data={item} date={activeDay}/>
 								</li>
 							))}
 						</AccordionList>
