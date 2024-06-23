@@ -1,23 +1,26 @@
-import { Button, Card, Dialog, DialogPanel, TextInput } from "@tremor/react";
+import { Button, Card, Color, Dialog, DialogPanel, TextInput } from "@tremor/react";
 import React, { useEffect, useState } from "react";
 
 type TagsProps = {
 	tags: string[];
-	color: string;
-	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; // Указываем тип функции onChange
+	color: Color;
+	onChange: (e: { target: { name: string; value: string[] } }) => void; // Указываем тип функции onChange
 };
 
 const Tags: React.FC<TagsProps> = ({ tags, color, onChange }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [tagName, setTagName] = useState("");
+
 	useEffect(() => {
 		if (tags.length !== 0) {
 			setTagName(tags.join(" "));
 		}
-	}, []);
+	}, [tags]);
+
 	const handleClick = () => {
 		onChange({ target: { name: "tags", value: tagName !== "" ? tagName.split(" ") : [] } });
 	};
+
     const handleDelete = (tag:string) => {
         const newTags = tags.filter(el => el !== tag)
         onChange({ target: { name: "tags", value: newTags } });

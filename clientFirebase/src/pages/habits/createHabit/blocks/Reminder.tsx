@@ -2,22 +2,24 @@ import { Button, Card, Color, Dialog, DialogPanel } from "@tremor/react";
 import React, { useState } from "react";
 import TextField from "../../../../components/common/textField";
 
-type reminderProps = {
-	handleChange: (e: CustomEvent)=> void;
-	reminderTime: [];
+type ReminderProps = {
+	handleChange: (e: { target: { name: string; value: any } }) => void;
+	reminderTime: string[];
 	color: Color;
 };
 
-const Reminder: React.FC<reminderProps> = ({
+const Reminder: React.FC<ReminderProps> = ({
 	handleChange,
 	reminderTime,
 	color,
 }) => {
 	const [selectedTime, setSelectedTime] = useState("00:00");
 	const [isOpen, setIsOpen] = useState(false);
-	const handleChangeTime = (e) => {
+
+	const handleChangeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSelectedTime(e.target.value);
 	};
+
 	const handleDelete = (tag: string) => {
 		const newTags = reminderTime.filter((el) => el !== tag);
 		handleChange({ target: { name: "reminderTime", value: newTags } });
