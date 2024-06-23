@@ -1,11 +1,11 @@
-import { Button, Card, Dialog, DialogPanel } from "@tremor/react";
+import { Button, Card, Color, Dialog, DialogPanel } from "@tremor/react";
 import React, { useState } from "react";
 import TextField from "../../../../components/common/textField";
 
 type reminderProps = {
-	handleChange: () => void;
+	handleChange: (e: CustomEvent)=> void;
 	reminderTime: [];
-	color: string;
+	color: Color;
 };
 
 const Reminder: React.FC<reminderProps> = ({

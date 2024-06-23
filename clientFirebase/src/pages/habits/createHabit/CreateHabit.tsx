@@ -203,7 +203,7 @@ const CreateHabitPage = () => {
 					units={data.units}
 				/>
 				{/* <Reminder
-					handleChange={handleChange}
+					handleChange={handleCustomChange}
 					reminderTime={data.reminderTime}
 					color={data.color}
 				/> 
