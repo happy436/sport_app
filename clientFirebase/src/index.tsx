@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./app";
-import { createStore } from "./store/createStore";
+import { createStore } from "./store/createStore.ts";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

@@ -2,9 +2,6 @@ import { Divider } from "@tremor/react";
 import React from "react";
 import ListCards from "./ListCards.js";
 import DailyCard from "./DailyCard.js";
-import { getIsLoggedIn } from "@/store/users.js";
-import { useSelector } from "react-redux";
-import LoginFactory from "../login/loginFactory.js";
 
 type profileProps = Record<string, never>;
 
@@ -47,6 +44,7 @@ export interface habitData {
 	reminderMessage: string;
 	showMemo: boolean;
 	history?: historyData[];
+    createdAt:number;
 }
 
 export interface historyData {

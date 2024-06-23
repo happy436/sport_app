@@ -1,10 +1,11 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Counter from "./Counter";
 import Timer from "./Timer";
+import { Color } from "@tremor/react";
 
 export type CounterFactoryProps = {
 	value: number;
-	color: string;
+	color: Color;
 	goal: number;
 	setIsOpen: Dispatch<SetStateAction<boolean>>;
 	handleResetValue: () => void;
@@ -13,6 +14,7 @@ export type CounterFactoryProps = {
 	setValue: Dispatch<SetStateAction<number>>;
 	id: string | undefined;
 	timestamp: string | undefined;
+	persentValue: number
 };
 
 const CounterFactory: React.FC<CounterFactoryProps> = (props) => {
