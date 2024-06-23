@@ -2,6 +2,9 @@ import { Divider } from "@tremor/react";
 import React from "react";
 import ListCards from "./ListCards.js";
 import DailyCard from "./DailyCard.js";
+import { getIsLoggedIn } from "@/store/users.js";
+import { useSelector } from "react-redux";
+import LoginFactory from "../login/loginFactory.js";
 
 type profileProps = Record<string, never>;
 
@@ -52,18 +55,21 @@ export interface historyData {
 }
 
 const Home: React.FC<profileProps> = () => {
+	
 	return (
 		<>
-			<div>
+			
 				<div>
-					<h3 className="text-2xl">Actions</h3>
-					<Divider></Divider>
-					<ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-						<DailyCard />
-						<ListCards />
-					</ul>
+					<div>
+						<h3 className="text-2xl">Actions</h3>
+						<Divider></Divider>
+						<ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+							<DailyCard />
+							<ListCards />
+						</ul>
+					</div>
 				</div>
-			</div>
+			
 		</>
 	);
 };
