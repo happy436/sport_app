@@ -24,7 +24,7 @@ const AsideMenu: React.FC<AsideMenuProps> = () => {
 	const avatar = maskote;
 	return (
         <>
-        <Button icon={!activeMenu? RiMenuLine : RiMenuFoldLine} className={`min-sm:hidden w-min h-min fixed top-[20px] ${activeMenu ? `left-[170px]` : "left-[10px]"}`} onClick={() => handleActiveMenu()}/>
+        <Button icon={!activeMenu? RiMenuLine : RiMenuFoldLine} className={`min-sm:hidden w-min h-min absolute top-[20px] ${activeMenu ? `left-[170px]` : "left-[10px]"}`} onClick={() => handleActiveMenu()}/>
 		<aside className={`bg-slate-900 w-200px p-4 h-full flex flex-col gap-3 pt-[50px] ${activeMenu ? `max-sm:` : `max-sm:hidden`} z-20 fixed`}>
 			<div className="rounded-full overflow-hidden w-32 h-32">
 				<img src={avatar} className="w-full h-full object-cover" />
