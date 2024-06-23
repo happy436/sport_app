@@ -5,38 +5,44 @@ import {
 	AreaChart,
 	Button,
 } from "@tremor/react";
+import { FC } from "react";
 
-type measurementProps = {
-	data: measurementData;
+type MeasurementProps = {
+	data: MeasurementData;
 	date: number;
-	setIsOpenModal: () => void;
-	setEditedCategoryId: () => void;
+	setIsOpenModal: (value: any) => void;
+	setEditedCategoryId: (id: string) => void;
 };
 
-type measurementData = {
+type MeasurementData = {
 	_id: string;
 	name: string;
-	measurements: measure[];
+	measurements: Measure[];
 	units: string;
 };
 
-type measure = {
+type Measure = {
 	date: string;
 	value: number;
 };
 
-const Measurement: React.FC<measurementProps> = ({
+type CustomTooltipProps = {
+	payload: any;
+	active: boolean;
+};
+
+const Measurement: FC<MeasurementProps> = ({
 	data,
 	date,
 	setIsOpenModal,
 	setEditedCategoryId,
 }) => {
-	const customTooltip = (props) => {
+	const customTooltip = (props: CustomTooltipProps) => {
 		const { payload, active } = props;
 		if (!active || !payload) return null;
 		return (
 			<div className="w-56 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown">
-				{payload.map((category, idx) => {
+				{payload.map((category: any, idx: number) => {
 					return (
 						<div key={idx} className="flex flex-1 space-x-2.5">
 							<div
@@ -57,20 +63,20 @@ const Measurement: React.FC<measurementProps> = ({
 		);
 	};
 
-    function sortObjectsByDate(arr) {
-        return [...arr].sort((a, b) => {
-            const [dayA, monthA, yearA] = a.date.split('.').map(Number);
-            const [dayB, monthB, yearB] = b.date.split('.').map(Number);
-    
-            const dateA = new Date(`20${yearA}`, monthA - 1, dayA);
-            const dateB = new Date(`20${yearB}`, monthB - 1, dayB);
-    
-            return dateA - dateB;
-        });
-    }
+	function sortObjectsByDate(arr: Measure[]): Measure[] {
+		return [...arr].sort((a, b) => {
+			const [dayA, monthA, yearA] = a.date.split(".").map(Number);
+			const [dayB, monthB, yearB] = b.date.split(".").map(Number);
+
+			const dateA = new Date(`20${yearA}`, monthA - 1, dayA);
+			const dateB = new Date(`20${yearB}`, monthB - 1, dayB);
+
+			return dateA - dateB;
+		});
+	}
 
 	const getClosestData = (data, timestamp) => {
-        const sortedData = sortObjectsByDate(data)
+		const sortedData = sortObjectsByDate(data);
 		const targetDate = new Date(timestamp);
 
 		const parseDate = (dateString) => {

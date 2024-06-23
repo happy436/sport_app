@@ -5,16 +5,15 @@ import { Color } from "@tremor/react";
 
 export type CounterFactoryProps = {
 	value: number;
-	color: Color;
+	color?: Color;
 	goal: number;
 	setIsOpen: Dispatch<SetStateAction<boolean>>;
 	handleResetValue: () => void;
 	units: string;
-	percentValue: number;
+	persentValue: number;
 	setValue: Dispatch<SetStateAction<number>>;
 	id: string | undefined;
 	timestamp: string | undefined;
-	persentValue: number
 };
 
 const CounterFactory: React.FC<CounterFactoryProps> = (props) => {
