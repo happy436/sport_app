@@ -15,8 +15,8 @@ function App() {
 		<>
 			<HabitProvider>
 				<Routes location={location} key={location.pathname}>
-					{/* <Route path="/" element={<LoginFactory />} /> */}
-					<Route path="/*" element={<MainPage />}>
+					<Route path="/" element={<LoginFactory />} />
+					<Route path="/" element={<MainPage />}>
 						<Route path="home" element={<Home />} />
 						<Route path="habits" element={<Habits />} />
 						<Route

@@ -8,19 +8,19 @@ import { useSelector } from "react-redux";
 type MainPageProps = {};
 
 const MainPage: React.FC<MainPageProps> = () => {
-	const isLogin = useSelector(getIsLoggedIn());
+	/* const isLogin = useSelector(getIsLoggedIn()); */
 	return (
 		<>
-			{isLogin ? (
+			{/* {isLogin ? ( */}
 				<>
 					<AsideMenu />
 					<main className="p-4 w-full flex flex-col gap-3 sm:pl-44 max-sm:mt-[50px]">
 						<Outlet />
 					</main>
 				</>
-			) : (
+			{/* ) : (
 				<LoginFactory />
-			)}
+			)} */}
 		</>
 	);
 };
