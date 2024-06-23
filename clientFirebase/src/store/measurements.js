@@ -114,9 +114,29 @@ const measurementsSlice = createSlice({
 			state.isLoading = false;
 		},
 		addMeasure: (state, action) => {
-            const {_id, data} = action.payload
-            const categoryIndex = state.entities.findIndex(item => item._id === _id)
-            state.entities[categoryIndex].measurements.push(data)
+			const { _id, data } = action.payload;
+			const categoryIndex = state.entities.findIndex(
+				(item) => item._id === _id
+			);
+
+			if (categoryIndex !== -1) {
+				const measurementIndex = state.entities[
+					categoryIndex
+				].measurements.findIndex((item) => item.date === data.date);
+
+				if (measurementIndex === -1) {
+					state.entities[categoryIndex].measurements.push(data);
+				} else {
+					state.entities[categoryIndex].measurements[
+						measurementIndex
+					] = data;
+				}
+			} else {
+				console.error(`Category with _id ${_id} not found`);
+			}
+
+			state.isLoading = false;
+
 			state.isLoading = false;
 		},
 		addMeasureCategory: (state, action) => {
@@ -132,14 +152,14 @@ const {
 	measurementsReceived,
 	measurementsRequestFailed,
 	addMeasure,
-    addMeasureCategory
+	addMeasureCategory,
 } = actions;
 
 export const loadMeasurementsList = () => async (dispatch) => {
 	const userId = localStorageService.getUserId();
 	dispatch(measurementsRequested());
 	try {
-		const data = await measurementService.get(userId)
+		const data = await measurementService.get(userId);
 		dispatch(measurementsReceived(data));
 	} catch (error) {
 		dispatch(measurementsRequestFailed(error.message));
@@ -148,15 +168,15 @@ export const loadMeasurementsList = () => async (dispatch) => {
 
 export const createMeasurementCategory = (data) => async (dispatch) => {
 	const userId = localStorageService.getUserId();
-    const measurement = {
+	const measurement = {
 		...data,
 		_id: nanoid(),
-        userId:userId,
+		userId: userId,
 		createdAt: Date.now(),
 	};
 	dispatch(measurementsRequested());
 	try {
-        const fetchData = await measurementService.addCategory(measurement)
+		const fetchData = await measurementService.addCategory(measurement);
 		dispatch(addMeasureCategory(fetchData));
 	} catch (error) {
 		dispatch(measurementsRequestFailed(error.message));
@@ -164,18 +184,21 @@ export const createMeasurementCategory = (data) => async (dispatch) => {
 };
 
 export const createMeasure = (payload) => async (dispatch) => {
-    const userId = localStorageService.getUserId();
-    dispatch(measurementsRequested());
+	const userId = localStorageService.getUserId();
+	dispatch(measurementsRequested());
 	try {
-		const data = await measurementService.addMeasure({userId:userId, ...payload})
+		const data = await measurementService.addMeasure({
+			userId: userId,
+			...payload,
+		});
 		dispatch(addMeasure(data));
 	} catch (error) {
 		dispatch(measurementsRequestFailed(error.message));
 	}
-}
+};
 
 export const getMeasurements = () => (state) => state.measurements.entities;
-export const getMeasurementsLoadingStatus = () => (state) => state.measurements.isLoading;
-
+export const getMeasurementsLoadingStatus = () => (state) =>
+	state.measurements.isLoading;
 
 export default measurementsReducer;

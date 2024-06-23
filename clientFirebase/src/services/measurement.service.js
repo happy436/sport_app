@@ -26,8 +26,6 @@ const measurementService = {
 			database,
 			`measurements/${userId}/${_id}/measurements`
 		);
-        console.log(payload.data)
-        debugger
 		try {
 			const snapshot = await get(habitRef);
 			if (snapshot.exists()) {
@@ -52,6 +50,7 @@ const measurementService = {
 				}
 				await set(habitRef, updatedHistoryArray);
 				console.log("History value updated successfully.");
+                return payload
 			} else {
 				await set(habitRef, [payload.data])
 			}

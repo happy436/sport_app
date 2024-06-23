@@ -88,7 +88,6 @@ const Measurement: React.FC<measurementProps> = ({
 
 		const start = Math.max(0, closestIndex - 6);
 		const result = sortedData.slice(start, closestIndex + 1);
-        console.log(result)
 		return result;
 	};
 	return (
