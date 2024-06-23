@@ -71,7 +71,6 @@ const CreateHabitPage = () => {
 		// TODO to do validation
 		const errors = [];
 
-		// Проверка обязательных полей
 		if (!formData.name || formData.name.trim() === "") {
 			errors.push({ field: "name", message: "Name is required" });
 		}
@@ -82,7 +81,6 @@ const CreateHabitPage = () => {
 			});
 		}
 
-		// Вывод ошибок
 		if (errors.length > 0) {
 			errors.forEach((error) => {
 				toast.error(error.message, {
@@ -100,7 +98,7 @@ const CreateHabitPage = () => {
 			return false;
 		}
 
-		return true; // Форма прошла валидацию
+		return true; 
 	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,8 +135,8 @@ const CreateHabitPage = () => {
 			now.getFullYear(),
 			now.getMonth(),
 			now.getDate(),
-			Number(hours), // Часы (в данном случае 13:57)
-			Number(minutes) // Минуты
+			Number(hours), 
+			Number(minutes) 
 		);
 
 		if (Notification.permission === "granted") {

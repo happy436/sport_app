@@ -63,7 +63,6 @@ const Timer: React.FC<TimerProps> = ({
 					})
 				);
 			}
-			// Очистка интервала при размонтировании компонента
 			return () => clearInterval(timerId);
 		}
 	}, [couldown, start]);
@@ -76,12 +75,9 @@ const Timer: React.FC<TimerProps> = ({
 
 	function secondsToMinutes(seconds: number): string {
 		const hours = Math.floor(seconds / 3600);
-		// Вычисляем количество минут
 		const minutes = Math.floor(seconds / 60);
-		// Вычисляем оставшиеся секунды
 		const remainingSeconds = seconds % 60;
 
-		// Форматируем минуты и секунды с ведущими нулями, если нужно
 		const formattedHourses = String(hours).padStart(2, "0");
 		const formattedMinutes = String(minutes).padStart(2, "0");
 		const formattedSeconds = String(remainingSeconds).padStart(2, "0");

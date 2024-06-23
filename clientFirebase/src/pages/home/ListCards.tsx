@@ -12,7 +12,7 @@ type cardType = {
 
 const ListCards: React.FC<ListCardsProps> = () => {
 	const cardList:cardType[] = [
-		/* { url: "/measurements", name: "Measurements", color: "lime" }, */
+		{ url: "/measurements", name: "Measurements", color: "lime" },
 		/*{ url: "/nutrition", name: "Nutrition", color: "yellow" }, */
 	];
 

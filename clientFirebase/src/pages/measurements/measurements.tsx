@@ -6,35 +6,43 @@ import {
 	DatePicker,
 	Dialog,
 	DialogPanel,
+	NumberInput,
 	Select,
 	SelectItem,
 	TextInput,
 } from "@tremor/react";
 import Measurement from "./measurement";
 import {
+    createMeasure,
 	createMeasurementCategory,
 	getMeasurements,
+	loadMeasurementsList,
 } from "../../store/measurements";
 import { useDispatch, useSelector } from "react-redux";
 import { getStartOfDayTimestamp } from "@/utils/getStartOfDayTimestamp";
+import { formatDate } from "@/utils/formatDate";
 
 type measurementsProps = {};
 
 const Measurements: React.FC<measurementsProps> = () => {
-	const getData = useSelector(getMeasurements());
 	const dispatch = useDispatch();
+
+	const data = useSelector(getMeasurements());
+
 	const unitsArray = ["mm", "cm", "m", "kg"];
 
-	const [data, setData] = useState([]);
 	const [activeDay, setActiveDay] = useState(0);
 	const [inputText, setInputText] = useState("");
 	const [inputSelect, setInputSelect] = useState("");
 	// TODO validation error
 	const [errors, setErrors] = useState([]);
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState({
+		createMeasurement: false,
+		addMeasure: false,
+	});
 	useEffect(() => {
-		setData(getData);
 		const timestamp = getStartOfDayTimestamp();
+		dispatch(loadMeasurementsList());
 		setActiveDay(timestamp);
 	}, []);
 	const handleChangeDate = (value: number) => {
@@ -70,7 +78,37 @@ const Measurements: React.FC<measurementsProps> = () => {
 					units: inputSelect,
 				})
 			);
-			setIsOpen(false);
+			setIsOpen((prev) => ({ ...prev, createMeasurement: false }));
+		}
+	};
+
+	const [inputTextModal, setInputTextModal] = useState(0);
+	const [errorsModal, setErrorsModal] = useState([]);
+
+	const validationModal = () => {
+		// TODO validation and add toastify
+		const error = [];
+		setErrors([]);
+		if (inputText) {
+			setErrorsModal((prev) => [...prev, "text"]);
+			error.push("text");
+		}
+		if (error.length > 0) {
+			return false;
+		}
+		return true;
+	};
+	const [editedCategoryId, setEditedCategoryId] = useState("");
+
+	const handleAddMeasure = () => {
+		setIsOpen((prev) => ({ ...prev, addMeasure: false }));
+		const formatedDate = formatDate(activeDay);
+		const data = {
+			_id: editedCategoryId,
+			data: { value: inputTextModal, date: formatedDate },
+		};
+		if (validationModal()) {
+			dispatch(createMeasure(data));
 		}
 	};
 
@@ -91,7 +129,14 @@ const Measurements: React.FC<measurementsProps> = () => {
 						<AccordionList>
 							{data.map((item) => (
 								<li key={item._id}>
-									<Measurement data={item} date={activeDay} />
+									<Measurement
+										data={item}
+										date={activeDay}
+										setIsOpenModal={setIsOpen}
+										setEditedCategoryId={
+											setEditedCategoryId
+										}
+									/>
 								</li>
 							))}
 						</AccordionList>
@@ -100,16 +145,22 @@ const Measurements: React.FC<measurementsProps> = () => {
 				<Button
 					color="indigo"
 					onClick={() => {
-						setIsOpen(true);
+						setIsOpen((prev) => ({
+							...prev,
+							createMeasurement: true,
+						}));
 					}}
 					className=" fixed bottom-10 w-[30px] h-[30px] flex items-center justify-center rounded-full"
 				>
 					+
 				</Button>
 				<Dialog
-					open={isOpen}
-					onClose={(val) => {
-						setIsOpen(val);
+					open={isOpen.createMeasurement}
+					onClose={(val: boolean) => {
+						setIsOpen((prev) => ({
+							...prev,
+							createMeasurement: val,
+						}));
 					}}
 					static={true}
 				>
@@ -145,6 +196,38 @@ const Measurements: React.FC<measurementsProps> = () => {
 							className=" w-full text-white"
 							onClick={() => {
 								onSubmit();
+							}}
+							type="button"
+						>
+							Got it!
+						</Button>
+					</DialogPanel>
+				</Dialog>
+				<Dialog
+					open={isOpen.addMeasure}
+					onClose={(val) => {
+						setIsOpen((prev) => ({ ...prev, addMeasure: val }));
+					}}
+					static={true}
+					className="rouded-xl"
+				>
+					<DialogPanel className="flex flex-col gap-2 p-6">
+						<h3 className="text-lg mb-3 font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
+							Add {} measurement
+						</h3>
+						<NumberInput
+							error={errorsModal.includes("text")}
+							errorMessage="Text input is empty!"
+							placeholder={`Measurement size`}
+							onValueChange={(value) => {
+								setInputTextModal(value);
+							}}
+						/>
+						<Button
+							color="indigo"
+							className=" w-full text-white"
+							onClick={() => {
+								handleAddMeasure();
 							}}
 							type="button"
 						>

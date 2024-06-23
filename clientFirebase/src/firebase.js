@@ -20,10 +20,8 @@ export const firebaseConfig = {
 const firebaseApp  = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(firebaseApp);
 
-//авторизация
 export const authFirebase = getAuth();
 
-// получение данных
 export const database = getDatabase();
 
 export default firebaseApp;

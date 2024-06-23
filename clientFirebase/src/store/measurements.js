@@ -97,7 +97,7 @@ const mockData = [
 const measurementsSlice = createSlice({
 	name: "measurements",
 	initialState: {
-		entities: mockData,
+		entities: [],
 		isLoading: true,
 		error: null,
 	},
@@ -140,7 +140,7 @@ export const loadMeasurementsList = () => async (dispatch) => {
 	dispatch(measurementsRequested());
 	try {
 		const data = await measurementService.get(userId)
-		dispatch(measurementsReceived(/* content */));
+		dispatch(measurementsReceived(data));
 	} catch (error) {
 		dispatch(measurementsRequestFailed(error.message));
 	}
@@ -148,7 +148,6 @@ export const loadMeasurementsList = () => async (dispatch) => {
 
 export const createMeasurementCategory = (data) => async (dispatch) => {
 	const userId = localStorageService.getUserId();
-    debugger;
     const measurement = {
 		...data,
 		_id: nanoid(),
@@ -168,7 +167,7 @@ export const createMeasure = (payload) => async (dispatch) => {
     const userId = localStorageService.getUserId();
     dispatch(measurementsRequested());
 	try {
-		const data = await measurementService.addMeasure({_id:userId, ...payload})
+		const data = await measurementService.addMeasure({userId:userId, ...payload})
 		dispatch(addMeasure(data));
 	} catch (error) {
 		dispatch(measurementsRequestFailed(error.message));
