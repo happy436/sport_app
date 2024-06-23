@@ -7,6 +7,7 @@ import {
 	getHabits,
 } from "../store/habits";
 import { getIsLoggedIn } from "../store/users";
+import { getStartOfDayTimestamp } from "@/utils/getStartOfDayTimestamp";
 
 const HabitContext = createContext();
 
@@ -24,11 +25,6 @@ const HabitProvider = ({ children }) => {
 	const habits = useSelector(getHabits());
 
 	//! UNTILS
-	const getStartOfDayTimestamp = (date = Date.now()) => {
-		const targetDate = new Date(date);
-		const timestamp = new Date(targetDate.setHours(0, 0, 0, 0)).getTime();
-		return timestamp;
-	};
 
 	const getPercentCompleted = (num1, num2) => {
 		const percent = (num1 * 100) / num2;

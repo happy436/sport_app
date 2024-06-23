@@ -13,6 +13,7 @@ import {
 import Measurement from "./measurement";
 import {getMeasurements} from "../../store/measurements"
 import { useDispatch, useSelector } from "react-redux";
+import { getStartOfDayTimestamp } from "@/utils/getStartOfDayTimestamp";
 
 type measurementsProps = {};
 
@@ -30,16 +31,12 @@ const Measurements: React.FC<measurementsProps> = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	useEffect(() => {
         setData(getData)
-		const today = Date.now();
-		const timestamp = new Date(
-			new Date(today).setHours(0, 0, 0, 0)
-		).getTime();
+        const timestamp = getStartOfDayTimestamp()
 		setActiveDay(timestamp);
 	}, []);
 	const handleChangeDate = (value: number) => {
 		if (value !== undefined) {
-			const date = new Date(value);
-			const timestamp = date.getTime();
+			const timestamp = getStartOfDayTimestamp(value)
 			setActiveDay(timestamp);
 		}
 	};
@@ -61,6 +58,12 @@ const Measurements: React.FC<measurementsProps> = () => {
         }
         return true
 	};
+
+    const onSubmit = () => {
+        if(validation()) {
+            setIsOpen(false);
+        }
+    }
 
 	return (
 		<Page>
@@ -132,9 +135,7 @@ const Measurements: React.FC<measurementsProps> = () => {
 							color="indigo"
 							className=" w-full text-white"
 							onClick={() => {
-								validation() && setIsOpen(false);
-                                
-								
+								onSubmit()
 							}}
 							type="button"
 						>
