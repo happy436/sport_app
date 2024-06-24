@@ -28,32 +28,32 @@ type Measure = {
 	value: number;
 };
 
-type CustomTooltipProps = {
-    active:boolean,
-    label:undefined,
-    payload:[]
-}
+type CustomTooltipProps  = {
+	active: boolean;
+	label: undefined;
+	payload: [];
+};
 
 type CategoryTypes = {
-    chartType:string | undefined,
-    className:string,
-    color:string,
-    dataKey:string,
-    fill:string,
-    fillOpacity:number,
-    formatter:string | undefined,
-    hide:boolean,
-    name:string,
-    payload:[],
-    stroke:string,
-    strokeLinecap:string,
-    strokeLinejoin:string,
-    strokeOpacity:number,
-    strokeWidth:number,
-    type:string | undefined,
-    unit:string,
-    value:number,
-}
+	chartType: string | undefined;
+	className: string;
+	color: string;
+	dataKey: string;
+	fill: string;
+	fillOpacity: number;
+	formatter: string | undefined;
+	hide: boolean;
+	name: string;
+	payload: { date: string; value: number };
+	stroke: string;
+	strokeLinecap: string;
+	strokeLinejoin: string;
+	strokeOpacity: number;
+	strokeWidth: number;
+	type: string | undefined;
+	unit: string;
+	value: number;
+};
 
 const Measurement: React.FC<MeasurementProps> = ({
 	data,
@@ -61,14 +61,15 @@ const Measurement: React.FC<MeasurementProps> = ({
 	setIsOpenModal,
 	setEditedCategoryId,
 }) => {
-	const customTooltip = (props: CustomTooltipProps): JSX.Element | undefined | null => {
+	const customTooltip = (
+		props: CustomTooltipProps
+	): JSX.Element | undefined | null => {
 		const { payload, active } = props;
 		if (!active || !payload) return null;
 		return (
 			<div className="w-56 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown">
-				{payload.map((category: CategoryTypes, idx: any) => {
-                    console.log(category)
-                    console.log(idx)
+				{payload.map((category: CategoryTypes, idx: number) => {
+					console.log(idx);
 					return (
 						<div key={idx} className="flex flex-1 space-x-2.5">
 							<div
