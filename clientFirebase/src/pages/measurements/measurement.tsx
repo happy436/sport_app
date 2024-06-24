@@ -5,12 +5,15 @@ import {
 	AreaChart,
 	Button,
 } from "@tremor/react";
+import React from "react";
 
 type MeasurementProps = {
 	data: MeasurementData;
 	date: number;
-	setIsOpenModal: () => void;
-	setEditedCategoryId: () => void;
+	setIsOpenModal: React.Dispatch<
+		React.SetStateAction<{ addMeasure: boolean }>
+	>;
+	setEditedCategoryId: React.Dispatch<React.SetStateAction<string>>;
 };
 
 type MeasurementData = {
@@ -25,18 +28,47 @@ type Measure = {
 	value: number;
 };
 
-const Measurement: React.FC<measurementProps> = ({
+type CustomTooltipProps = {
+    active:boolean,
+    label:undefined,
+    payload:[]
+}
+
+type CategoryTypes = {
+    chartType:string | undefined,
+    className:string,
+    color:string,
+    dataKey:string,
+    fill:string,
+    fillOpacity:number,
+    formatter:string | undefined,
+    hide:boolean,
+    name:string,
+    payload:[],
+    stroke:string,
+    strokeLinecap:string,
+    strokeLinejoin:string,
+    strokeOpacity:number,
+    strokeWidth:number,
+    type:string | undefined,
+    unit:string,
+    value:number,
+}
+
+const Measurement: React.FC<MeasurementProps> = ({
 	data,
 	date,
 	setIsOpenModal,
 	setEditedCategoryId,
 }) => {
-	const customTooltip = (props) => {
+	const customTooltip = (props: CustomTooltipProps): JSX.Element | undefined | null => {
 		const { payload, active } = props;
 		if (!active || !payload) return null;
 		return (
 			<div className="w-56 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown">
-				{payload.map((category, idx) => {
+				{payload.map((category: CategoryTypes, idx: any) => {
+                    console.log(category)
+                    console.log(idx)
 					return (
 						<div key={idx} className="flex flex-1 space-x-2.5">
 							<div
@@ -57,20 +89,20 @@ const Measurement: React.FC<measurementProps> = ({
 		);
 	};
 
-    function sortObjectsByDate(arr) {
-        return [...arr].sort((a, b) => {
-            const [dayA, monthA, yearA] = a.date.split('.').map(Number);
-            const [dayB, monthB, yearB] = b.date.split('.').map(Number);
-    
-            const dateA = new Date(`20${yearA}`, monthA - 1, dayA);
-            const dateB = new Date(`20${yearB}`, monthB - 1, dayB);
-    
-            return dateA - dateB;
-        });
-    }
+	function sortObjectsByDate(arr: Measure[]): Measure[] {
+		return [...arr].sort((a, b) => {
+			const [dayA, monthA, yearA] = a.date.split(".").map(Number);
+			const [dayB, monthB, yearB] = b.date.split(".").map(Number);
 
-	const getClosestData = (data, timestamp) => {
-        const sortedData = sortObjectsByDate(data)
+			const dateA = new Date(`20${yearA}`, monthA - 1, dayA);
+			const dateB = new Date(`20${yearB}`, monthB - 1, dayB);
+
+			return dateA.getTime() - dateB.getTime();
+		});
+	}
+
+	const getClosestData = (data: Measure[], timestamp: number): Measure[] => {
+		const sortedData = sortObjectsByDate(data);
 		const targetDate = new Date(timestamp);
 
 		const parseDate = (dateString: string): Date => {
