@@ -1,34 +1,11 @@
-import { Button, Card, Dialog, DialogPanel, NumberInput } from "@tremor/react";
+import { Button, Card, Color, Dialog, DialogPanel, NumberInput } from "@tremor/react";
 import React, { useState } from "react";
 import { CustomEvent } from "../CreateHabit";
 
 type goalProps = {
 	handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	handleCustomChange: (e: CustomEvent) => void;
-	color?:
-		| "slate"
-		| "gray"
-		| "zinc"
-		| "neutral"
-		| "stone"
-		| "red"
-		| "orange"
-		| "amber"
-		| "yellow"
-		| "lime"
-		| "green"
-		| "emerald"
-		| "teal"
-		| "cyan"
-		| "sky"
-		| "blue"
-		| "indigo"
-		| "violet"
-		| "purple"
-		| "fuchsia"
-		| "pink"
-		| "rose"
-		| undefined;
+	color?:Color;
 	units: string;
 	goalPeriod: string;
 };

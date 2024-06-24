@@ -14,10 +14,10 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
 	const calculateStreak = (habit: habitData, activeDay: number) => {
 		setStreak(0);
 
-        const notSortedHistory = [...habit.history]
+        const notSortedHistory = [...habit.history!]
 		const history = notSortedHistory.sort((a,b) => (a.date - b.date))
 
-		const goal = parseInt(habit.goal);
+		const goal = habit.goal
 		let streak = 0;
 		const currentDayIndex = history.findIndex(
 			(entry) => entry.date === activeDay

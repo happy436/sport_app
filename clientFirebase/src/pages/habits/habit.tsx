@@ -16,7 +16,7 @@ import { RiArrowLeftLine } from "@remixicon/react";
 import { habitData, historyData } from "../home/home.js";
 import CounterFactory from "./factoryComponent/CounterFactory";
 
-type habitProps = {};
+type habitProps = Record<string, never>
 
 const Habit: React.FC<habitProps> = () => {
 	const param = useParams();
@@ -35,7 +35,7 @@ const Habit: React.FC<habitProps> = () => {
 
 	useEffect(() => {
 		if (habitData) {
-			const findItem = habitData.history.find(
+			const findItem = habitData.history!.find(
 				(item: historyData) => item.date === Number(timestamp)
 			);
 			findItem && setValue(findItem.value);
