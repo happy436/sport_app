@@ -147,6 +147,7 @@ const Measurement: React.FC<MeasurementProps> = ({
 				) : (
 					"Empty"
 				)}
+                {data.measurements.length > 1 ? "1" : "2"}
 				<Button
 					className=""
 					onClick={() => {

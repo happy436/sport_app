@@ -5,37 +5,61 @@ import {
 	getHabitsLoadingStatus,
 	loadHabitsList,
 	getHabits,
+    Habit,
+    HabitHistory,
 } from "../store/habits";
 import { getIsLoggedIn } from "../store/users";
 import { getStartOfDayTimestamp } from "@/utils/getStartOfDayTimestamp";
+import { RootState } from "../store/createStore";
 
-const HabitContext = createContext();
+// Define the type for the context
+interface HabitContextType {
+	getStartOfDayTimestamp: typeof getStartOfDayTimestamp;
+	handleChangeDate: (value: any) => void;
+	getHabitCompletionPercentage: (habit: any) => number;
+	getTodayHabitValue: (arr: any[]) => number;
+	habits: Habit[]; // Replace with actual type if possible
+	activeDay: number;
+	completedDayliAchievements: string;
+	achievements: number;
+}
+
+const HabitContext = createContext<HabitContextType | undefined>(undefined);
 
 export const useHabit = () => {
-	return useContext(HabitContext);
+	const context = useContext(HabitContext);
+	if (!context) {
+		throw new Error("useHabit must be used within a HabitProvider");
+	}
+	return context;
 };
 
-const HabitProvider = ({ children }) => {
-    //! CONSTS
+interface HabitProviderProps {
+	children: React.ReactNode;
+}
+
+const HabitProvider: React.FC<HabitProviderProps> = ({ children }) => {
+	//! CONSTS
 	const dispatch = useDispatch();
 
 	//! SELECTORS
-	const isLoading = useSelector(getHabitsLoadingStatus());
-	const isLoggedIn = useSelector(getIsLoggedIn());
-	const habits = useSelector(getHabits());
+	const isLoading = useSelector((state: RootState) =>
+		getHabitsLoadingStatus(state)
+	);
+	const isLoggedIn = useSelector((state: RootState) => getIsLoggedIn(state));
+	const habits = useSelector(getHabits);
 
-	//! UNTILS
-
-	const getPercentCompleted = (num1, num2) => {
+	//! UTILS
+	const getPercentCompleted = (num1: number, num2: number): string => {
 		const percent = (num1 * 100) / num2;
 		return percent.toFixed(0);
-	}
+	};
 
-	const checkGoalsAchievedToday = (tasks) => {
+	const checkGoalsAchievedToday = (tasks: any[]): number => {
 		let achievedToday = 0;
 		tasks.forEach((task) => {
 			let goalMet = false;
-			task.history.forEach((record) => {
+			task.history.forEach((record: any) => {
 				if (record.date === activeDay) {
 					if (record.value >= task.goal) {
 						goalMet = true;
@@ -57,17 +81,17 @@ const HabitProvider = ({ children }) => {
 	//! FUNCTIONS
 	const loadHabits = () => dispatch(loadHabitsList());
 
-    const handleChangeDate = (value) => {
+	const handleChangeDate = (value: any) => {
 		if (value !== undefined) {
-			const timestamp = getStartOfDayTimestamp(value)
+			const timestamp = getStartOfDayTimestamp(value);
 			setActiveDay(timestamp);
 		}
 	};
 
-    const getHabitCompletionPercentage = (habit) => {
+	const getHabitCompletionPercentage = (habit: any): number => {
 		const { history, goal } = habit;
 
-		const data = history.filter((item) => {
+		const data = history.filter((item: any) => {
 			if (item.date === activeDay) {
 				return item;
 			}
@@ -78,8 +102,9 @@ const HabitProvider = ({ children }) => {
 			return 0;
 		}
 	};
-    const getTodayHabitValue = (arr) => {
-		const data = arr.filter((item) => {
+
+	const getTodayHabitValue = (arr: HabitHistory[]): number => {
+		const data = arr.filter((item: HabitHistory) => {
 			if (item.date === activeDay) {
 				return item;
 			}
@@ -89,11 +114,11 @@ const HabitProvider = ({ children }) => {
 	};
 
 	//! STATES
-	const [activeDay, setActiveDay] = useState(new Date().getTime());
+	const [activeDay, setActiveDay] = useState<number>(new Date().getTime());
 
 	//* for home page
-	const [achievements, setAchievements] = useState(0);
-    const completedDayliAchievements = getPercentCompleted(
+	const [achievements, setAchievements] = useState<number>(0);
+	const completedDayliAchievements = getPercentCompleted(
 		achievements,
 		habits.length
 	);
@@ -117,13 +142,13 @@ const HabitProvider = ({ children }) => {
 		<HabitContext.Provider
 			value={{
 				getStartOfDayTimestamp,
-                handleChangeDate,
-                getHabitCompletionPercentage,
-                getTodayHabitValue,
+				handleChangeDate,
+				getHabitCompletionPercentage,
+				getTodayHabitValue,
 				habits,
 				activeDay,
 				completedDayliAchievements,
-                achievements
+				achievements,
 			}}
 		>
 			{isLoading && isLoggedIn ? <Loader /> : children}

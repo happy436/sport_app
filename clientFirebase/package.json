@@ -9,14 +9,15 @@
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"preview": "vite preview",
 		"deploy": "firebase deploy",
-        "test": "jest"
+		"test": "jest"
 	},
 	"dependencies": {
 		"@headlessui/react": "^1.7.19",
 		"@headlessui/tailwindcss": "^0.2.0",
-		"@reduxjs/toolkit": "^2.2.4",
+		"@reduxjs/toolkit": "^2.2.5",
 		"@remixicon/react": "^4.2.0",
 		"@tremor/react": "^3.16.2",
+		"@types/react-redux": "^7.1.33",
 		"axios": "^1.7.2",
 		"classnames": "^2.5.1",
 		"firebase": "^10.12.2",
