@@ -29,11 +29,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onChangePageType }) => {
 		setErrors([]);
 		if (handleInput.email === "") {
 			setErrors((prev) => [...prev, "email"]);
-			error.push(["email"]);
 		}
 		if (handleInput.password === "") {
 			setErrors((prev) => [...prev, "password"]);
-			error.push("password");
 		}
 		if (error.length > 0) {
 			return false;

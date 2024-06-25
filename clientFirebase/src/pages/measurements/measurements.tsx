@@ -4,6 +4,7 @@ import {
 	AccordionList,
 	Button,
 	DatePicker,
+	DatePickerValue,
 	Dialog,
 	DialogPanel,
 	NumberInput,
@@ -45,7 +46,7 @@ const Measurements: React.FC<measurementsProps> = () => {
 		dispatch(loadMeasurementsList());
 		setActiveDay(timestamp);
 	}, []);
-	const handleChangeDate = (value: number) => {
+	const handleChangeDate = (value: DatePickerValue) => {
 		if (value !== undefined) {
 			const timestamp = getStartOfDayTimestamp(value);
 			setActiveDay(timestamp);
@@ -58,11 +59,11 @@ const Measurements: React.FC<measurementsProps> = () => {
 		setErrors([]);
 		if (inputSelect === "") {
 			setErrors((prev) => [...prev, "select"]);
-			error.push(["select"]);
+
 		}
 		if (inputText === "") {
 			setErrors((prev) => [...prev, "text"]);
-			error.push("text");
+
 		}
 		if (error.length > 0) {
 			return false;
@@ -91,7 +92,6 @@ const Measurements: React.FC<measurementsProps> = () => {
 		setErrors([]);
 		if (inputText) {
 			setErrorsModal((prev) => [...prev, "text"]);
-			error.push("text");
 		}
 		if (error.length > 0) {
 			return false;

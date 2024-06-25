@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { logOut } from "../../store/users";
 import { useNavigate } from "react-router-dom";
 
-type logOutProps = {};
+type logOutProps = NonNullable<unknown>
 
 const LogOut: React.FC<logOutProps> = () => {
 	const dispatch = useDispatch();
@@ -16,6 +16,7 @@ const LogOut: React.FC<logOutProps> = () => {
             navigation("/")
 		})
 		.catch((error) => {
+            console.log(error)
 			// An error happened.
 		});
 	return <div>Loading...</div>;
