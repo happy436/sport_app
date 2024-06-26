@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Page from "../../components/common/page";
+import Page from "../../components/common/page.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { getHabitById, Habit } from "../../store/habits.js";
+import { getHabitById } from "../../store/habits.js";
 import {
 	Button,
 	Dialog,
@@ -13,30 +13,28 @@ import {
 import { editHabitData } from "../../store/habits.js";
 import { Bounce, toast } from "react-toastify";
 import { RiArrowLeftLine } from "@remixicon/react";
-import {  historyData } from "../home/home.js";
-import CounterFactory from "./factoryComponent/CounterFactory";
+import CounterFactory from "./factoryComponent/CounterFactory.jsx";
+import { useHabit } from "../../hook/useHabits.jsx";
 
-type habitProps = Record<string, never>;
-
-const HabitPage: React.FC<habitProps> = () => {
+const HabitPage = () => {
 	const param = useParams();
 	const { id, timestamp } = param;
-	const habitData: Habit | undefined = useSelector(getHabitById(id));
+	const habitData = useSelector(getHabitById(id));
 	const dispatch = useDispatch();
 	const [isOpen, setIsOpen] = useState(false);
-	const [value, setValue] = useState<number>(0);
+	const [value, setValue] = useState(0);
 	const [inputValue, setInputValue] = useState(0);
 	const [persentValue, setPercentValue] = useState(0);
-	const [isSwitchOn, setIsSwitchOn] = React.useState<boolean>(false);
+	const [isSwitchOn, setIsSwitchOn] = useState(false);
 
-	const handleSwitchChange = (value: boolean) => {
+	const handleSwitchChange = (value) => {
 		setIsSwitchOn(value);
 	};
 
 	useEffect(() => {
 		if (habitData) {
-			const findItem = habitData.history!.find(
-				(item: historyData) => item.date === Number(timestamp)
+			const findItem = habitData.history.find(
+				(item) => item.date === Number(timestamp)
 			);
 			findItem && setValue(findItem.value);
 			setPercentValue((Number(value) * 100) / Number(habitData.goal));
@@ -45,14 +43,14 @@ const HabitPage: React.FC<habitProps> = () => {
 
 	useEffect(() => {
 		congratulations();
-		setPercentValue((Number(value) * 100) / Number(habitData!.goal));
+		setPercentValue((Number(value) * 100) / Number(habitData.goal));
 	}, [value]);
 
 	const handleIncreaseValue = () => {
 		let newValue = Number(value) + Number(inputValue);
 		setValue(newValue);
-		if (newValue > habitData!.goal) {
-			newValue = habitData!.goal;
+		if (newValue > habitData.goal) {
+			newValue = habitData.goal;
 		}
 		dispatch(
 			editHabitData({
@@ -73,7 +71,7 @@ const HabitPage: React.FC<habitProps> = () => {
 		);
 	};
 
-	const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChangeValue = (e) => {
 		if (e.target.value !== "") {
 			setInputValue(Number(e.target.value));
 		}
@@ -102,21 +100,21 @@ const HabitPage: React.FC<habitProps> = () => {
 					<Link to="/habits">
 						<Button
 							icon={RiArrowLeftLine}
-							color={habitData!.color}
+							color={habitData.color}
 						/>
 					</Link>
-					{habitData!.name}
+					{habitData.name}
 				</div>
-				<p className="text-xl font-normal">{habitData!.description}</p>
+				<p className="text-xl font-normal">{habitData.description}</p>
 			</Page.PageTitle>
 			<Page.PageContent className="h-full justify-center">
 				<CounterFactory
 					persentValue={persentValue}
 					value={value}
 					id={id}
-					color={habitData!.color}
-					goal={habitData!.goal}
-					units={habitData!.units}
+					color={habitData.color}
+					goal={habitData.goal}
+					units={habitData.units}
 					setIsOpen={setIsOpen}
 					handleResetValue={handleResetValue}
 					setValue={setValue}
@@ -138,8 +136,8 @@ const HabitPage: React.FC<habitProps> = () => {
 							// TODO validation and error
 							min="0"
 							/* defaultValue={inputValue} */
-							max={habitData!.goal.toString()}
-							placeholder={`Value (${habitData!.units})`}
+							max={habitData.goal.toString()}
+							placeholder={`Value (${habitData.units})`}
 							onChange={handleChangeValue}
 						/>
 						{inputValue !== 0 && (
@@ -154,7 +152,7 @@ const HabitPage: React.FC<habitProps> = () => {
 							</div>
 						)}
 						<Button
-							color={habitData!.color}
+							color={habitData.color}
 							className=" w-full text-white"
 							onClick={() => {
 								setIsOpen(false);

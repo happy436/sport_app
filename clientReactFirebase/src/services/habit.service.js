@@ -1,9 +1,8 @@
 import { ref, set, get } from "firebase/database";
 import { database } from "../firebase";
-import { Habit } from "@/store/habits";
 
 const habitsService = {
-	get: async (userId): Promise<Habit[]> => {
+	get: async (userId) => {
 		const data = await get(ref(database, `habits/${userId}`));
 		if (data.exists()) {
 			const habits = data.val();

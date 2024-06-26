@@ -1,0 +1,26 @@
+{
+	"rules": {
+		"users": {
+			".read": "auth != null",
+			"$uid": {
+				".write": "$uid === auth.uid"
+			}
+		},
+		"habits": {
+			".read": "auth != null",
+			"$userId": {
+				"$habitId": {
+					".write": "auth != null && $userId === auth.uid"
+				}
+			}
+		},
+		"measurements": {
+			".read": "auth != null",
+			"$userId": {
+				"$habitId": {
+					".write": "auth != null && $userId === auth.uid"
+				}
+			}
+		}
+	}
+}

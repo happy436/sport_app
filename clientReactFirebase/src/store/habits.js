@@ -1,39 +1,9 @@
-import { createSlice, Dispatch, nanoid, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { Bounce, toast } from "react-toastify";
 import localStorageService from "../services/localStorage.service";
 import habitsService from "../services/habit.service";
-import { AppThunk, RootState } from "./createStore";
 
-export interface Habit {
-	_id: string;
-	name: string;
-	description: string;
-	goal: number;
-	units: string;
-	icon: string;
-	color: string;
-	tags: string[];
-	goalPeriod: string;
-	reminderTime: string[];
-	reminderMessage: string;
-	history: HabitHistory[];
-	createdAt: number;
-	showMemo: boolean;
-	userId: string | null;
-}
-
-export interface HabitHistory {
-	value: number;
-	date: number;
-}
-
-interface HabitsState {
-	entities: Habit[];
-	isLoading: boolean;
-	error: string | null;
-}
-
-const initialState: HabitsState = {
+const initialState = {
 	entities: [],
 	isLoading: false,
 	error: null,
@@ -46,26 +16,26 @@ const habitsSlice = createSlice({
 		habitsRequested: (state) => {
 			state.isLoading = true;
 		},
-		habitsReceived: (state, action: PayloadAction<Habit[]>) => {
+		habitsReceived: (state, action) => {
 			state.entities = action.payload;
 			state.isLoading = false;
 		},
-		habitsRequestFailed: (state, action: PayloadAction<string>) => {
+		habitsRequestFailed: (state, action) => {
 			state.error = action.payload;
 			state.isLoading = false;
 		},
-		addHabit: (state, action: PayloadAction<Habit>) => {
+		addHabit: (state, action) => {
 			state.entities.push(action.payload);
 			state.isLoading = false;
 		},
-		deleteHabit: (state, action: PayloadAction<{ id: string }>) => {
+		deleteHabit: (state, action) => {
 			state.entities.splice(
 				state.entities.findIndex((c) => c._id === action.payload.id),
 				1
 			);
 			state.isLoading = false;
 		},
-		editHabit: (state, action: PayloadAction<Habit>) => {
+		editHabit: (state, action) => {
 			const index = state.entities.findIndex(
 				(c) => c._id === action.payload._id
 			);
@@ -100,65 +70,57 @@ const {
 	editHabit,
 } = actions;
 
-export const loadHabitsList = (): AppThunk => async (dispatch) => {
+export const loadHabitsList = () => async (dispatch) => {
 	const userId = localStorageService.getUserId();
 	dispatch(habitsRequested());
 	try {
 		const fetch = await habitsService.get(userId);
 		dispatch(habitsReceived(fetch));
 	} catch (error) {
-		dispatch(habitsRequestFailed((error as Error).message));
+		dispatch(habitsRequestFailed(error.message));
 	}
 };
 
-export const createHabit =
-	(
-		payload: Omit<Habit, "_id" | "createdAt" | "userId" | "history">
-	): AppThunk =>
-	async (dispatch) => {
-		const today = Date.now();
-		const timestamp = new Date(
-			new Date(today).setHours(0, 0, 0, 0)
-		).getTime();
-		const habit: Habit = {
-			...payload,
-			_id: nanoid(),
-			createdAt: timestamp,
-			userId: localStorageService.getUserId(),
-			history: [{ value: 0, date: timestamp }],
-		};
-		dispatch(habitsRequested());
-		try {
-			const data = await habitsService.create(habit);
-			dispatch(addHabit(data));
-		} catch (error) {
-			dispatch(habitsRequestFailed((error as Error).message));
-		}
+export const createHabit = (payload) => async (dispatch) => {
+	const today = Date.now();
+	const timestamp = new Date(new Date(today).setHours(0, 0, 0, 0)).getTime();
+	const habit = {
+		...payload,
+		_id: nanoid(),
+		createdAt: timestamp,
+		userId: localStorageService.getUserId(),
+		history: [{ value: 0, date: timestamp }],
 	};
+	dispatch(habitsRequested());
+	try {
+		const data = await habitsService.create(habit);
+		dispatch(addHabit(data));
+	} catch (error) {
+		dispatch(habitsRequestFailed(error.message));
+	}
+};
 
-export const editHabitData =
-	(payload: Habit): AppThunk =>
-	async (dispatch:Dispatch) => {
-		dispatch(habitsRequested());
-		const newData = { ...payload, userId: localStorageService.getUserId() };
-		try {
-			await habitsService.updateValue(newData);
-			toast.success("Habit edit successful", {
-				autoClose: 2000,
-				position: "top-right",
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: "dark",
-				transition: Bounce,
-			});
-			dispatch(editHabit(payload));
-		} catch (error) {
-			dispatch(habitsRequestFailed((error as Error).message));
-		}
-	};
+export const editHabitData = (payload) => async (dispatch) => {
+	dispatch(habitsRequested());
+	const newData = { ...payload, userId: localStorageService.getUserId() };
+	try {
+		await habitsService.updateValue(newData);
+		toast.success("Habit edit successful", {
+			autoClose: 2000,
+			position: "top-right",
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: "dark",
+			transition: Bounce,
+		});
+		dispatch(editHabit(payload));
+	} catch (error) {
+		dispatch(habitsRequestFailed(error.message));
+	}
+};
 
 /* export const removeHabit =
 	(id: string): AppThunk =>
@@ -175,15 +137,12 @@ export const editHabitData =
 		}
 	} */
 
-export const getHabits = (state: RootState): Habit[] => state.habits.entities;
-export const getHabitsLoadingStatus = () => (state: RootState): boolean =>
-	state.habits.isLoading;
+export const getHabits = (state) => state.habits.entities;
+export const getHabitsLoadingStatus = () => (state) => state.habits.isLoading;
 
-export const getHabitById =
-	(id: string) =>
-	(state: RootState): Habit | undefined => {
-		return state.habits.entities.find((n) => n._id === id);
-	};
+export const getHabitById = (id) => (state) => {
+	return state.habits.entities.find((n) => n._id === id);
+};
 
 export default habitsReducer;
 
