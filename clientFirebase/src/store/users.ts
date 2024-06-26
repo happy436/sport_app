@@ -15,6 +15,17 @@ interface AuthState {
 	userId: string | null;
 }
 
+interface CustomError extends Error {
+	code: string;
+}
+
+export interface firebaseUser {
+	user: {
+		uid: string;
+		stsTokenManager: { refreshToken: string; accessToken: string };
+	};
+}
+
 interface UserEntities {
 	email: string;
 	userId: string;
@@ -35,14 +46,14 @@ const initialState: UserState = localStorageService.getAccessToken()
 			error: null,
 			auth: { userId: localStorageService.getUserId() },
 			isLoggedIn: true,
-	}
+	  }
 	: {
 			entities: null,
 			isLoading: false,
 			error: null,
 			auth: null,
 			isLoggedIn: false,
-	};
+	  };
 
 const usersSlice = createSlice({
 	name: "users",
@@ -119,10 +130,10 @@ export const logIn =
 				password
 			);
 			dispatch(authRequestSuccess({ userId: data.user.uid }));
-			localStorageService.setTokens(data.user);
+			localStorageService.setTokens(data);
 			return true;
 		} catch (error) {
-			const { code } = error as Error;
+			const { code } = error as CustomError;
 			const errorMessage = generateAuthError(code);
 			toast.error(errorMessage, {
 				position: "top-right",
@@ -139,14 +150,46 @@ export const logIn =
 		}
 	};
 
+/* {
+    "user": {
+        "uid": "KhgwNstqYFQ7JqlPYTpy5INrSiq1",
+        "email": "a@a3.com",
+        "emailVerified": false,
+        "isAnonymous": false,
+        "providerData": [
+            {
+                "providerId": "password",
+                "uid": "a@a3.com",
+                "displayName": null,
+                "email": "a@a3.com",
+                "phoneNumber": null,
+                "photoURL": null
+            }
+        ],
+        "stsTokenManager": {
+            "refreshToken": "AMf-vBxCzdQIgeKvM3HACld9IELwFcGKOLgYjGmEQbUNNU-Rl2g89jeSZVKV2MCfI1CFK9_24ylU4JzlCVEMTUfuia34JBu879kquzD9Dv2_90UE_obKCTHvGy1HbOaaAqnHSiWQxkRQC4KWpCAqmLJPft4HL237TneyVkBAXuM-OGOe69u1lUzFA-P3FL_g3BlChIMTzfqd",
+            "accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijc5M2Y3N2Q0N2ViOTBiZjRiYTA5YjBiNWFkYzk2ODRlZTg1NzJlZTYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc3BvcnQtYXBwLTZmMjg4IiwiYXVkIjoic3BvcnQtYXBwLTZmMjg4IiwiYXV0aF90aW1lIjoxNzE5NDEzNzE1LCJ1c2VyX2lkIjoiS2hnd05zdHFZRlE3SnFsUFlUcHk1SU5yU2lxMSIsInN1YiI6IktoZ3dOc3RxWUZRN0pxbFBZVHB5NUlOclNpcTEiLCJpYXQiOjE3MTk0MTM3MTUsImV4cCI6MTcxOTQxNzMxNSwiZW1haWwiOiJhQGEzLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJhQGEzLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.OilnOnREt8Z8uCKAN2yMD2qyYr4F19yOr72gXPinHxnl0wfU1Hyxn6Ie-xGjHrLk4P9T7diFHgBA3SOD5GcHVMCw_u6jR8iNpzibKeluF6lTqiq8Ky7eBJfAVoLULwcrQVuZeXUg3m9pdHqwJk7yuOeaL5IArYj_u0fayTU6mfUjNiI61sk7yQdCFqobFUwJwNaEcMc5b8kralI_W9RW0dWBT9E6uhidpD8c3NHBBgM7QEv9fl0mOVoXe1nXedzrUux6Im1uYqkr2sLg4RfhnDKsY8ts3oDiT_YZwMEX1smCvO0RgkUdtkbt6ygzazKV4HGwKYWCbz8hzTOAS2TSxw",
+            "expirationTime": 1719417314560
+        },
+        "createdAt": "1719413715302",
+        "lastLoginAt": "1719413715302",
+        "apiKey": "AIzaSyDIPA0v-q38ARnA98QCI6I-jZ9SW6CGKPE",
+        "appName": "[DEFAULT]"
+    },
+    "providerId": null,
+    "_tokenResponse": {
+        "kind": "identitytoolkit#SignupNewUserResponse",
+        "idToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijc5M2Y3N2Q0N2ViOTBiZjRiYTA5YjBiNWFkYzk2ODRlZTg1NzJlZTYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc3BvcnQtYXBwLTZmMjg4IiwiYXVkIjoic3BvcnQtYXBwLTZmMjg4IiwiYXV0aF90aW1lIjoxNzE5NDEzNzE1LCJ1c2VyX2lkIjoiS2hnd05zdHFZRlE3SnFsUFlUcHk1SU5yU2lxMSIsInN1YiI6IktoZ3dOc3RxWUZRN0pxbFBZVHB5NUlOclNpcTEiLCJpYXQiOjE3MTk0MTM3MTUsImV4cCI6MTcxOTQxNzMxNSwiZW1haWwiOiJhQGEzLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJhQGEzLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.OilnOnREt8Z8uCKAN2yMD2qyYr4F19yOr72gXPinHxnl0wfU1Hyxn6Ie-xGjHrLk4P9T7diFHgBA3SOD5GcHVMCw_u6jR8iNpzibKeluF6lTqiq8Ky7eBJfAVoLULwcrQVuZeXUg3m9pdHqwJk7yuOeaL5IArYj_u0fayTU6mfUjNiI61sk7yQdCFqobFUwJwNaEcMc5b8kralI_W9RW0dWBT9E6uhidpD8c3NHBBgM7QEv9fl0mOVoXe1nXedzrUux6Im1uYqkr2sLg4RfhnDKsY8ts3oDiT_YZwMEX1smCvO0RgkUdtkbt6ygzazKV4HGwKYWCbz8hzTOAS2TSxw",
+        "email": "a@a3.com",
+        "refreshToken": "AMf-vBxCzdQIgeKvM3HACld9IELwFcGKOLgYjGmEQbUNNU-Rl2g89jeSZVKV2MCfI1CFK9_24ylU4JzlCVEMTUfuia34JBu879kquzD9Dv2_90UE_obKCTHvGy1HbOaaAqnHSiWQxkRQC4KWpCAqmLJPft4HL237TneyVkBAXuM-OGOe69u1lUzFA-P3FL_g3BlChIMTzfqd",
+        "expiresIn": "3600",
+        "localId": "KhgwNstqYFQ7JqlPYTpy5INrSiq1"
+    },
+    "operationType": "signIn"
+} */
+
 export const signUp =
-	({
-		email,
-		password,
-	}: {
-		email: string;
-		password: string;
-	}): AppThunk =>
+	({ email, password }: { email: string; password: string }): AppThunk =>
 	async (dispatch) => {
 		dispatch(authRequested());
 		try {
@@ -155,19 +198,17 @@ export const signUp =
 				email,
 				password
 			);
-            console.log(data.user)
-			localStorageService.setTokens(data.user);
+			localStorageService.setTokens(data);
 			dispatch(authRequestSuccess({ userId: data.user.uid }));
 			await dispatch(
 				createUser({
 					_id: data.user.uid,
 					email,
-					...rest,
 				})
 			);
 			return true;
 		} catch (error) {
-			const { code } = error as Error;
+			const { code } = error as CustomError;
 			const errorMessage = generateAuthError(code);
 			toast.error(errorMessage, {
 				position: "top-right",
