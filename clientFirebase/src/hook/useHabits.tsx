@@ -43,10 +43,10 @@ const HabitProvider: React.FC<HabitProviderProps> = ({ children }) => {
 	const dispatch = useDispatch();
 
 	//! SELECTORS
-	const isLoading = useSelector((state: RootState) =>
-		getHabitsLoadingStatus(state)
+	const isLoading = useSelector(
+		getHabitsLoadingStatus()
 	);
-	const isLoggedIn = useSelector((state: RootState) => getIsLoggedIn(state));
+	const isLoggedIn = useSelector(getIsLoggedIn());
 	const habits = useSelector(getHabits);
 
 	//! UTILS

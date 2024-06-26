@@ -176,7 +176,7 @@ export const editHabitData =
 	} */
 
 export const getHabits = (state: RootState): Habit[] => state.habits.entities;
-export const getHabitsLoadingStatus = (state: RootState): boolean =>
+export const getHabitsLoadingStatus = () => (state: RootState): boolean =>
 	state.habits.isLoading;
 
 export const getHabitById =

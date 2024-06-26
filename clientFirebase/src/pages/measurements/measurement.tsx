@@ -28,7 +28,7 @@ type Measure = {
 	value: number;
 };
 
-type CustomTooltipProps  = {
+type CustomTooltipProps = {
 	active: boolean;
 	label: undefined;
 	payload: [];
@@ -95,8 +95,8 @@ const Measurement: React.FC<MeasurementProps> = ({
 			const [dayA, monthA, yearA] = a.date.split(".").map(Number);
 			const [dayB, monthB, yearB] = b.date.split(".").map(Number);
 
-			const dateA = new Date(`20${yearA}`, monthA - 1, dayA);
-			const dateB = new Date(`20${yearB}`, monthB - 1, dayB);
+			const dateA = new Date(2000 + yearA, monthA - 1, dayA);
+			const dateB = new Date(2000 + yearB, monthB - 1, dayB);
 
 			return dateA.getTime() - dateB.getTime();
 		});
@@ -147,7 +147,7 @@ const Measurement: React.FC<MeasurementProps> = ({
 				) : (
 					"Empty"
 				)}
-                {data.measurements.length > 1 ? "1" : "2"}
+				{data.measurements.length > 1 ? "1" : "2"}
 				<Button
 					className=""
 					onClick={() => {
