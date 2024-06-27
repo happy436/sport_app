@@ -8,7 +8,7 @@ const measurementService = {
 			const measurements = data.val();
 			return Object.values(measurements);
 		} else {
-			//console.log("No data available for this user.");
+
 			return [];
 		}
 	},
@@ -49,7 +49,7 @@ const measurementService = {
 					updatedHistoryArray = [...historyArray, payload.data];
 				}
 				await set(habitRef, updatedHistoryArray);
-				console.log("History value updated successfully.");
+
                 return payload
 			} else {
 				await set(habitRef, [payload.data])

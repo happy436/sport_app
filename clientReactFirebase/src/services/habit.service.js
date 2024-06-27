@@ -8,7 +8,6 @@ const habitsService = {
 			const habits = data.val();
 			return Object.values(habits);
 		} else {
-			//console.log("No data available for this user.");
 			return [];
 		}
 	},
@@ -45,9 +44,9 @@ const habitsService = {
 					updatedHistoryArray = [...historyArray, payload.history];
 				}
 				await set(habitRef, updatedHistoryArray);
-				console.log("History value updated successfully.");
+
 			} else {
-				console.log("No history data available for this habit.");
+
 			}
 		} catch (error) {
 			console.error(error);

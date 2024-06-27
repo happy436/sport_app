@@ -24,7 +24,6 @@ const measurementsSlice = createSlice({
 		},
 		addMeasure: (state, action) => {
 			const { _id, data } = action.payload;
-            console.log(action.payload)
 			const categoryIndex = state.entities.findIndex(
 				(item) => item._id === _id
 			);

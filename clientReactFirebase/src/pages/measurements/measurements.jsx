@@ -27,7 +27,7 @@ const Measurements = () => {
 
 	const data = useSelector(getMeasurements());
 
-	const unitsArray = ["mm", "cm", "m", "kg"];
+	const unitsArray = ["mm", "cm", "m", "kg", "%"];
 
 	const [activeDay, setActiveDay] = useState(0);
 	const [inputText, setInputText] = useState("");

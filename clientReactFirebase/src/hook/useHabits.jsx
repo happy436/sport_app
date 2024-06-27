@@ -5,7 +5,7 @@ import {
 	getHabitsLoadingStatus,
 	loadHabitsList,
 	getHabits,
-    getHabitById,
+	getHabitById,
 } from "../store/habits";
 import { getIsLoggedIn } from "../store/users";
 import { getStartOfDayTimestamp } from "@utils/getStartOfDayTimestamp";
@@ -21,9 +21,7 @@ const HabitProvider = ({ children }) => {
 	const dispatch = useDispatch();
 
 	//! SELECTORS
-	const isLoading = useSelector(
-		getHabitsLoadingStatus()
-	);
+	const isLoading = useSelector(getHabitsLoadingStatus());
 	const isLoggedIn = useSelector(getIsLoggedIn());
 	const habits = useSelector(getHabits());
 
@@ -103,19 +101,15 @@ const HabitProvider = ({ children }) => {
 
 	// useEffects
 	useEffect(() => {
-        console.log("useHabit init")
 		setActiveDay(getStartOfDayTimestamp());
-        console.log(isLoading && isLoggedIn)
 	}, []);
 
 	useEffect(() => {
-        console.log("habits change")
 		setAchievements(checkGoalsAchievedToday(habits));
 	}, [habits]);
 
 	useEffect(() => {
 		if (isLoggedIn) {
-            console.log("habits loading")
 			loadHabits();
 		}
 	}, [isLoggedIn]);
@@ -133,7 +127,7 @@ const HabitProvider = ({ children }) => {
 				achievements,
 			}}
 		>
-			{isLoading && !isLoggedIn ? <Loader /> : children }
+			{isLoading && !isLoggedIn ? <Loader /> : children}
 		</HabitContext.Provider>
 	);
 };

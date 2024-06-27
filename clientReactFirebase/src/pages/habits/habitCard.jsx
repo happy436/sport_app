@@ -9,10 +9,10 @@ const HabitCard = ({ habit }) => {
 	const calculateStreak = (habit, activeDay) => {
 		setStreak(0);
 
-        const notSortedHistory = [...habit.history]
-		const history = notSortedHistory.sort((a,b) => (a.date - b.date))
+		const notSortedHistory = [...habit.history];
+		const history = notSortedHistory.sort((a, b) => a.date - b.date);
 
-		const goal = habit.goal
+		const goal = habit.goal;
 		let streak = 0;
 		const currentDayIndex = history.findIndex(
 			(entry) => entry.date === activeDay
@@ -30,9 +30,9 @@ const HabitCard = ({ habit }) => {
 
 		for (let i = currentDayIndex - 1; i >= 0; i--) {
 			const currentDate = history[i + 1].date;
-			//console.log("curr", new Date(currentDate));
+
 			const previousDate = history[i].date;
-			//console.log("prev", new Date(previousDate));
+
 			const condition1 =
 				currentDate - 1000 * 60 * 60 * 24 === previousDate;
 			const condition2 = history[i].value === goal;

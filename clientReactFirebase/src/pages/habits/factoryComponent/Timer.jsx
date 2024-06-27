@@ -49,7 +49,6 @@ const Timer = ({
 			const diffPercent = (couldown * 100) / goalTime;
 			setPercent(diffPercent);
 			if (couldown === 0) {
-				console.log(goal);
 				clearInterval(timerId);
 				setStart(false);
 				setValue(goal);

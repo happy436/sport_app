@@ -8,10 +8,6 @@ import { useHabit } from "../../hook/useHabits.jsx";
 const Habits = () => {
 	const { handleChangeDate, activeDay, habits } = useHabit();
 
-    useEffect(() => {
-        console.log("habits init")
-    },[])
-
 	// TODO calculate streak
 	/* function calculateStreak(currentDate:number, data:habitData) {
 		const startOfDay = new Date(
