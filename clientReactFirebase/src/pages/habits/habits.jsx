@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useEffect} from "react";
 import { Link } from "react-router-dom";
 import { Button, DatePicker } from "@tremor/react";
 import Page from "../../components/common/page.jsx";
@@ -7,6 +7,10 @@ import { useHabit } from "../../hook/useHabits.jsx";
 
 const Habits = () => {
 	const { handleChangeDate, activeDay, habits } = useHabit();
+
+    useEffect(() => {
+        console.log("habits init")
+    },[])
 
 	// TODO calculate streak
 	/* function calculateStreak(currentDate:number, data:habitData) {

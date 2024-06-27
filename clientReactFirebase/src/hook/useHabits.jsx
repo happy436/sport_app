@@ -25,7 +25,7 @@ const HabitProvider = ({ children }) => {
 		getHabitsLoadingStatus()
 	);
 	const isLoggedIn = useSelector(getIsLoggedIn());
-	const habits = useSelector(getHabits);
+	const habits = useSelector(getHabits());
 
 	//! UTILS
 	const getPercentCompleted = (num1, num2) => {
@@ -58,8 +58,6 @@ const HabitProvider = ({ children }) => {
 
 	//! FUNCTIONS
 	const loadHabits = () => dispatch(loadHabitsList());
-
-    const getHabitDataById = (id) => useSelector(getHabitById(id));
 
 	const handleChangeDate = (value) => {
 		if (value !== undefined) {
@@ -105,16 +103,19 @@ const HabitProvider = ({ children }) => {
 
 	// useEffects
 	useEffect(() => {
-        console.log("useHabit")
+        console.log("useHabit init")
 		setActiveDay(getStartOfDayTimestamp());
+        console.log(isLoading && isLoggedIn)
 	}, []);
 
 	useEffect(() => {
+        console.log("habits change")
 		setAchievements(checkGoalsAchievedToday(habits));
 	}, [habits]);
 
 	useEffect(() => {
 		if (isLoggedIn) {
+            console.log("habits loading")
 			loadHabits();
 		}
 	}, [isLoggedIn]);
@@ -126,14 +127,13 @@ const HabitProvider = ({ children }) => {
 				handleChangeDate,
 				getHabitCompletionPercentage,
 				getTodayHabitValue,
-                getHabitDataById,
 				habits,
 				activeDay,
 				completedDayliAchievements,
 				achievements,
 			}}
 		>
-			{isLoading && isLoggedIn ? <Loader /> : children}
+			{isLoading && !isLoggedIn ? <Loader /> : children }
 		</HabitContext.Provider>
 	);
 };

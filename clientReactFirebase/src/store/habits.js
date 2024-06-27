@@ -41,7 +41,7 @@ const habitsSlice = createSlice({
 			);
 			if (index !== -1) {
 				const habit = state.entities[index];
-				const historyEntry = action.payload.history[0]; // Assume the payload contains a single history entry to update or add
+				const historyEntry = action.payload.history; // Assume the payload contains a single history entry to update or add
 
 				const historyIndex = habit.history.findIndex(
 					(h) => h.date === historyEntry.date
@@ -137,7 +137,7 @@ export const editHabitData = (payload) => async (dispatch) => {
 		}
 	} */
 
-export const getHabits = (state) => state.habits.entities;
+export const getHabits = () => (state) => state.habits.entities;
 export const getHabitsLoadingStatus = () => (state) => state.habits.isLoading;
 
 export const getHabitById = (id) => (state) => {

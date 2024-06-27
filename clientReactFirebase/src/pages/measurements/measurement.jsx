@@ -21,7 +21,6 @@ const Measurement = ({
 		return (
 			<div className="w-56 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown">
 				{payload.map((category, idx) => {
-					console.log(idx);
 					return (
 						<div key={idx} className="flex flex-1 space-x-2.5">
 							<div
@@ -99,7 +98,7 @@ const Measurement = ({
 				) : (
 					"Empty"
 				)}
-				{data.measurements.length > 1 ? "1" : "2"}
+
 				<Button
 					className=""
 					onClick={() => {

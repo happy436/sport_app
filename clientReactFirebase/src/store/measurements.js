@@ -3,97 +3,6 @@ import measurementService from "@/services/measurement.service";
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { Bounce, toast } from "react-toastify";
 
-const mockData = [
-	{
-		_id: "awdasdawdasdwa",
-		name: "Biceps",
-		units: "mm",
-		createdAt: "01.02.24",
-		measurements: [
-			{ date: "01.02.24", value: 36 },
-			{ date: "01.03.24", value: 35 },
-			{ date: "01.04.24", value: 35.5 },
-			{ date: "01.05.24", value: 37 },
-			{ date: "01.06.24", value: 38 },
-			/* { date: "01.07.24", value: 31 },
-			{ date: "01.08.24", value: 31 },
-			{ date: "01.09.24", value: 31 },
-			{ date: "01.10.24", value: 31 },
-			{ date: "01.11.24", value: 31 },
-			{ date: "01.12.24", value: 31 },
-			{ date: "01.01.25", value: 31 },
-			{ date: "01.02.25", value: 31 },
-			{ date: "01.03.25", value: 31 },
-			{ date: "01.04.25", value: 31 },
-			{ date: "01.05.25", value: 31 },
-			{ date: "01.06.25", value: 31 },
-			{ date: "01.07.25", value: 31 },
-			{ date: "01.08.25", value: 31 },
-			{ date: "01.09.25", value: 31 },
-			{ date: "01.10.25", value: 31 },
-			{ date: "01.11.25", value: 31 },
-			{ date: "01.12.25", value: 31 },
-			{ date: "01.01.26", value: 31 },
-			{ date: "01.02.26", value: 31 },
-			{ date: "01.03.26", value: 31 },
-			{ date: "01.04.26", value: 31 },
-			{ date: "01.05.26", value: 31 },
-			{ date: "01.06.26", value: 31 },
-			{ date: "01.07.26", value: 31 },
-			{ date: "01.08.26", value: 31 },
-			{ date: "01.09.26", value: 31 },
-			{ date: "01.10.26", value: 31 },
-			{ date: "01.11.26", value: 31 },
-			{ date: "01.12.26", value: 31 },
-			{ date: "01.01.27", value: 31 }, */
-		],
-	},
-	{
-		_id: "awdasdawsdwa",
-		name: "Cheast",
-		units: "mm",
-		createdAt: "01.02.24",
-		measurements: [
-			{ date: "01.02.24", value: 36 },
-			{ date: "01.03.24", value: 35 },
-			{ date: "01.04.24", value: 35.5 },
-			{ date: "01.05.24", value: 37 },
-			{ date: "01.06.24", value: 38 },
-			{ date: "01.07.24", value: 31 },
-			{ date: "01.08.24", value: 31 },
-			{ date: "01.09.24", value: 31 },
-			{ date: "01.10.24", value: 31 },
-			{ date: "01.11.24", value: 31 },
-			{ date: "01.12.24", value: 31 },
-			{ date: "01.01.25", value: 31 },
-			{ date: "01.02.25", value: 31 },
-			{ date: "01.03.25", value: 31 },
-			{ date: "01.04.25", value: 31 },
-			{ date: "01.05.25", value: 31 },
-			{ date: "01.06.25", value: 31 },
-			{ date: "01.07.25", value: 31 },
-			{ date: "01.08.25", value: 31 },
-			{ date: "01.09.25", value: 31 },
-			{ date: "01.10.25", value: 31 },
-			{ date: "01.11.25", value: 31 },
-			{ date: "01.12.25", value: 31 },
-			{ date: "01.01.26", value: 31 },
-			{ date: "01.02.26", value: 31 },
-			{ date: "01.03.26", value: 31 },
-			{ date: "01.04.26", value: 31 },
-			{ date: "01.05.26", value: 31 },
-			{ date: "01.06.26", value: 31 },
-			{ date: "01.07.26", value: 31 },
-			{ date: "01.08.26", value: 31 },
-			{ date: "01.09.26", value: 31 },
-			{ date: "01.10.26", value: 31 },
-			{ date: "01.11.26", value: 31 },
-			{ date: "01.12.26", value: 31 },
-			{ date: "01.01.27", value: 31 },
-		],
-	},
-];
-
 const measurementsSlice = createSlice({
 	name: "measurements",
 	initialState: {
@@ -115,6 +24,7 @@ const measurementsSlice = createSlice({
 		},
 		addMeasure: (state, action) => {
 			const { _id, data } = action.payload;
+            console.log(action.payload)
 			const categoryIndex = state.entities.findIndex(
 				(item) => item._id === _id
 			);
@@ -173,6 +83,7 @@ export const createMeasurementCategory = (data) => async (dispatch) => {
 		_id: nanoid(),
 		userId: userId,
 		createdAt: Date.now(),
+        measurements:[]
 	};
 	dispatch(measurementsRequested());
 	try {
@@ -187,11 +98,11 @@ export const createMeasure = (payload) => async (dispatch) => {
 	const userId = localStorageService.getUserId();
 	dispatch(measurementsRequested());
 	try {
-		const data = await measurementService.addMeasure({
+		await measurementService.addMeasure({
 			userId: userId,
 			...payload,
 		});
-		dispatch(addMeasure(data));
+		dispatch(addMeasure(payload));
 	} catch (error) {
 		dispatch(measurementsRequestFailed(error.message));
 	}
