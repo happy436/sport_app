@@ -18,9 +18,10 @@ import { useHabit } from "../../hook/useHabits.jsx";
 
 const HabitPage = () => {
 	const param = useParams();
-	const { id, timestamp } = param;
-	const habitData = useSelector(getHabitById(id));
 	const dispatch = useDispatch();
+	const { id, timestamp } = param;
+    const {getHabitDataById} = useHabit()
+	const habitData = getHabitDataById(id)
 	const [isOpen, setIsOpen] = useState(false);
 	const [value, setValue] = useState(0);
 	const [inputValue, setInputValue] = useState(0);
@@ -32,7 +33,7 @@ const HabitPage = () => {
 	};
 
 	useEffect(() => {
-		if (habitData) {
+		if (habitData.length !== 0) {
 			const findItem = habitData.history.find(
 				(item) => item.date === Number(timestamp)
 			);

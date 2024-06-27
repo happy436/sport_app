@@ -5,6 +5,7 @@ import {
 	getHabitsLoadingStatus,
 	loadHabitsList,
 	getHabits,
+    getHabitById,
 } from "../store/habits";
 import { getIsLoggedIn } from "../store/users";
 import { getStartOfDayTimestamp } from "@utils/getStartOfDayTimestamp";
@@ -58,6 +59,8 @@ const HabitProvider = ({ children }) => {
 	//! FUNCTIONS
 	const loadHabits = () => dispatch(loadHabitsList());
 
+    const getHabitDataById = (id) => useSelector(getHabitById(id));
+
 	const handleChangeDate = (value) => {
 		if (value !== undefined) {
 			const timestamp = getStartOfDayTimestamp(value);
@@ -102,12 +105,11 @@ const HabitProvider = ({ children }) => {
 
 	// useEffects
 	useEffect(() => {
-        console.log(1)
+        console.log("useHabit")
 		setActiveDay(getStartOfDayTimestamp());
 	}, []);
 
 	useEffect(() => {
-        console.log(habits)
 		setAchievements(checkGoalsAchievedToday(habits));
 	}, [habits]);
 
@@ -124,6 +126,7 @@ const HabitProvider = ({ children }) => {
 				handleChangeDate,
 				getHabitCompletionPercentage,
 				getTodayHabitValue,
+                getHabitDataById,
 				habits,
 				activeDay,
 				completedDayliAchievements,
