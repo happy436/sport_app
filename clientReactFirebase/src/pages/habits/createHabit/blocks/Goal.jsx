@@ -1,5 +1,6 @@
 import { Button, Card, Dialog, DialogPanel, NumberInput } from "@tremor/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import pagesService from "../../../../services/pages.service";
 
 const Goal = ({
 	handleChange,
@@ -8,23 +9,17 @@ const Goal = ({
 	//goalPeriod,
 	units,
 }) => {
-	const unitsButtonList = [
-		"count",
-		"steps",
-		"m",
-		"km",
-		"sec",
-		"min",
-		"hr",
-		"ml",
-		"L",
-		"Cal",
-		"Kcal",
-		"g",
-		"mg",
-		"kg",
-	];
-	//const goalPeriodButtonsList = ["day", "week", "month"];
+    const [unitsButtonList, setUnits] = useState([]);
+
+	const fetchUnits = async () => {
+		const data = await pagesService.getUnitsForHabitsPage();
+		setUnits(data);
+	};
+
+	useEffect(() => {
+		fetchUnits();
+	}, []);
+
 	const [isOpen, setIsOpen] = useState(false);
 	return (
 		<Card>

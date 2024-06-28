@@ -1,5 +1,6 @@
 import { Button, Card, Dialog, DialogPanel } from "@tremor/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import pagesService from "../../../../services/pages.service";
 
 const IconColor = ({
 	color,
@@ -9,46 +10,16 @@ const IconColor = ({
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenIcon, setIsOpenIcon] = useState(false);
-	const iconList = [
-		"🔥",
-		"📏",
-		"🍗",
-		"🚶‍♂️",
-		"🏃‍♂️",
-		"🛌",
-		"🤾‍♂️",
-		"🏋️‍♂️",
-		"🚴‍♂️",
-		"🤸‍♂️",
-		"💪",
-		"✍",
-		"📚",
-		"🎨",
-		"⚽",
-		"⚾",
-		"🏀",
-		"🏐",
-		"🎱",
-		"🎯",
-		"💧",
-		"🎮",
-		"♟",
-		"🎤",
-		"🎹",
-		"📴",
-		"📱",
-		"🍩",
-		"🍫",
-		"☕",
-		"🍺",
-		"🚲",
-		"🛴",
-		"🛹",
-		"🚿",
-		"🔇",
-		"☣",
-		"👁‍🗨",
-	];
+    const [iconList, setIconList] = useState([]);
+
+	const fetchIcons = async () => {
+		const data = await pagesService.getIconsForHabitsPage();
+		setIconList(data);
+	};
+
+	useEffect(() => {
+		fetchIcons();
+	}, []);
 	return (
 		<Card>
 			<div className="mb-4">

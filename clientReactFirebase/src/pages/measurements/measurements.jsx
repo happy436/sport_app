@@ -13,7 +13,7 @@ import {
 } from "@tremor/react";
 import Measurement from "./measurement";
 import {
-    createMeasure,
+	createMeasure,
 	createMeasurementCategory,
 	getMeasurements,
 	loadMeasurementsList,
@@ -21,13 +21,23 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getStartOfDayTimestamp } from "@/utils/getStartOfDayTimestamp";
 import { formatDate } from "@/utils/formatDate";
+import pagesService from "../../services/pages.service";
 
 const Measurements = () => {
 	const dispatch = useDispatch();
 
 	const data = useSelector(getMeasurements());
 
-	const unitsArray = ["mm", "cm", "m", "kg", "%"];
+	const [unitsArray, setUnits] = useState([]);
+
+	const fetchUnits = async () => {
+		const data = await pagesService.getUnitsForMeasurementPage();
+		setUnits(data);
+	};
+
+	useEffect(() => {
+		fetchUnits();
+	}, []);
 
 	const [activeDay, setActiveDay] = useState(0);
 	const [inputText, setInputText] = useState("");
@@ -56,11 +66,9 @@ const Measurements = () => {
 		setErrors([]);
 		if (inputSelect === "") {
 			setErrors((prev) => [...prev, "select"]);
-
 		}
 		if (inputText === "") {
 			setErrors((prev) => [...prev, "text"]);
-
 		}
 		if (error.length > 0) {
 			return false;
