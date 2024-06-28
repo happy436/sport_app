@@ -2,20 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Page from "../../components/common/page.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { getHabitById, getHabitsLoadingStatus } from "../../store/habits.js";
+import { getHabitById } from "../../store/habits.js";
 import {
 	Button,
+	Card,
 	Dialog,
 	DialogPanel,
+	List,
+	ListItem,
 	NumberInput,
 	Switch,
 } from "@tremor/react";
 import { editHabitData } from "../../store/habits.js";
 import { Bounce, toast } from "react-toastify";
-import { RiArrowLeftLine } from "@remixicon/react";
+import { RiArrowLeftLine, RiMore2Fill } from "@remixicon/react";
 import CounterFactory from "./factoryComponent/CounterFactory.jsx";
-import { getIsLoggedIn } from "../../store/users.js";
-import { useHabit } from "../../hook/useHabits.jsx";
 
 const HabitPage = () => {
 	const param = useParams();
@@ -27,10 +28,17 @@ const HabitPage = () => {
 	const [inputValue, setInputValue] = useState(0);
 	const [persentValue, setPercentValue] = useState(0);
 	const [isSwitchOn, setIsSwitchOn] = useState(false);
+    const [isOpenHabitMenu, setIsOpenHabitMenu] = useState(false)
+
+    const handleOpenHabitMenu = () => {
+        setIsOpenHabitMenu(prev => !prev)
+    }
 
 	const handleSwitchChange = (value) => {
 		setIsSwitchOn(value);
 	};
+
+	const habitMenuList = ["Delete"];
 
 	useEffect(() => {
 		if (habitData !== undefined) {
@@ -46,7 +54,8 @@ const HabitPage = () => {
 		if (persentValue === 100) {
 			congratulations();
 		}
-		habitData && setPercentValue((Number(value) * 100) / Number(habitData.goal));
+		habitData &&
+			setPercentValue((Number(value) * 100) / Number(habitData.goal));
 	}, [value]);
 
 	const handleIncreaseValue = () => {
@@ -100,20 +109,46 @@ const HabitPage = () => {
 		habitData && (
 			<Page className="h-full">
 				<Page.PageTitle>
-					<div className="flex gap-3 items-center">
-						<Link to="/habits">
-							<Button
-								icon={RiArrowLeftLine}
-								color={habitData.color}
-							/>
-						</Link>
-						{habitData.name}
+					<div className="flex justify-between">
+						<div className="flex gap-3 items-center">
+							<Link to="/habits">
+								<Button
+									icon={RiArrowLeftLine}
+									color={habitData.color}
+								/>
+							</Link>
+							{habitData.name}
+						</div>
+						<Button
+							className="z-10"
+							icon={RiMore2Fill}
+							color={habitData.color}
+                            onClick={() => handleOpenHabitMenu()}
+						/>
 					</div>
 					<p className="text-xl font-normal">
 						{habitData.description}
 					</p>
 				</Page.PageTitle>
 				<Page.PageContent className="h-full justify-center">
+					<Card
+						className={`${isOpenHabitMenu ? "flex" : "hidden"} flex-col absolute top-0 right-0 w-min pr-[55px]`}
+						decoration="right"
+						decorationColor={habitData.color}
+					>
+						<h3>Habit Menu</h3>
+						<List>
+							{habitMenuList.map((item) => (
+								<ListItem
+									key={item}
+									className="cursor-pointer hover:text-white"
+                                    onClick={() => {console.log("delete")}}
+								>
+									{item}
+								</ListItem>
+							))}
+						</List>
+					</Card>
 					<CounterFactory
 						persentValue={persentValue}
 						value={value}
