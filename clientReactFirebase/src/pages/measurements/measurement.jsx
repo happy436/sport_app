@@ -5,17 +5,41 @@ import {
 	AreaChart,
 	Button,
 } from "@tremor/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const Measurement = ({
-	data,
-	date,
-	setIsOpenModal,
-	setEditedCategoryId,
-}) => {
-	const customTooltip = (
-		props
-     ) => {
+const Measurement = ({ data, date, setIsOpenModal, setEditedCategoryId }) => {
+	function findMaxMin(arr) {
+		console.log(arr);
+		if (!Array.isArray(arr) || arr.length === 0) {
+			throw new Error("Input should be a non-empty array");
+		}
+
+		let maxObj = arr[0];
+		let minObj = arr[0];
+
+		for (let i = 1; i < arr.length; i++) {
+			if (arr[i].value > maxObj.value) {
+				maxObj = arr[i];
+			}
+			if (arr[i].value < minObj.value) {
+				minObj = arr[i];
+			}
+		}
+
+		return {
+			max: maxObj,
+			min: minObj,
+		};
+	}
+	const [maxMin, setMaxMin] = useState({});
+	useEffect(() => {
+		if (data.measurements) {
+			const find = findMaxMin(data.measurements);
+			setMaxMin(find);
+		}
+	}, [data]);
+
+	const customTooltip = (props) => {
 		const { payload, active } = props;
 		if (!active || !payload) return null;
 		return (
@@ -97,6 +121,21 @@ const Measurement = ({
 					/>
 				) : (
 					"Empty"
+				)}
+
+				{Object.keys(maxMin).length !== 0 && (
+					<section>
+						<div>
+							<span>
+								Max: {maxMin.max.value} - {maxMin.max.date}
+							</span>
+						</div>
+						<div>
+							<span>
+								Min: {maxMin.min.value} - {maxMin.min.date}
+							</span>
+						</div>
+					</section>
 				)}
 
 				<Button

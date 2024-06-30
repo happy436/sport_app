@@ -31,8 +31,8 @@ const Measurements = () => {
 	const [unitsArray, setUnits] = useState([]);
 
 	const fetchUnits = async () => {
-		const data = await pagesService.getUnitsForMeasurementPage();
-		setUnits(data);
+		const fetch = await pagesService.getUnitsForMeasurementPage();
+		setUnits(fetch);
 	};
 
 	useEffect(() => {
