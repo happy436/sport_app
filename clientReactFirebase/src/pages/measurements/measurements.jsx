@@ -85,7 +85,10 @@ const Measurements = () => {
 				})
 			);
 			setIsOpen((prev) => ({ ...prev, createMeasurement: false }));
+            setInputText("")
+            setInputSelect("")
 		}
+
 	};
 
 	const [inputTextModal, setInputTextModal] = useState(0);

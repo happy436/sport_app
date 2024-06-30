@@ -9,7 +9,6 @@ import React, { useState, useEffect } from "react";
 
 const Measurement = ({ data, date, setIsOpenModal, setEditedCategoryId }) => {
 	function findMaxMin(arr) {
-		console.log(arr);
 		if (!Array.isArray(arr) || arr.length === 0) {
 			throw new Error("Input should be a non-empty array");
 		}
@@ -33,7 +32,7 @@ const Measurement = ({ data, date, setIsOpenModal, setEditedCategoryId }) => {
 	}
 	const [maxMin, setMaxMin] = useState({});
 	useEffect(() => {
-		if (data.measurements) {
+		if (data.measurements && data.measurements.length > 2) {
 			const find = findMaxMin(data.measurements);
 			setMaxMin(find);
 		}

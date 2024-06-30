@@ -21,6 +21,9 @@
 					".write": "auth != null && $userId === auth.uid"
 				}
 			}
-		}
+		},
+        "pages":{
+            ".read":true
+        }
 	}
 }
