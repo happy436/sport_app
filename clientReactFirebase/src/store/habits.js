@@ -2,6 +2,7 @@ import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { Bounce, toast } from "react-toastify";
 import localStorageService from "../services/localStorage.service";
 import habitsService from "../services/habit.service";
+import history from "../utils/history";
 
 const initialState = {
 	entities: [],
@@ -28,7 +29,7 @@ const habitsSlice = createSlice({
 			state.entities.push(action.payload);
 			state.isLoading = false;
 		},
-		deleteHabit: (state, action) => {
+		removeHabit: (state, action) => {
 			state.entities.splice(
 				state.entities.findIndex((c) => c._id === action.payload.id),
 				1
@@ -66,6 +67,7 @@ const {
 	habitsReceived,
 	habitsRequestFailed,
 	addHabit,
+	removeHabit,
 	/* deleteHabit, */
 	editHabit,
 } = actions;
@@ -95,6 +97,27 @@ export const createHabit = (payload) => async (dispatch) => {
 	try {
 		const data = await habitsService.create(habit);
 		dispatch(addHabit(data));
+	} catch (error) {
+		dispatch(habitsRequestFailed(error.message));
+	}
+};
+
+export const deleteHabit = (id) => async (dispatch) => {
+	dispatch(habitsRequested());
+	try {
+		await habitsService.delete(id);
+		toast.success("Habit delet successful", {
+			autoClose: 2000,
+			position: "top-right",
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+			theme: "dark",
+			transition: Bounce,
+		});
+		dispatch(removeHabit(id));
 	} catch (error) {
 		dispatch(habitsRequestFailed(error.message));
 	}

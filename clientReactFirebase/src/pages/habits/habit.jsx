@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Page from "../../components/common/page.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { getHabitById } from "../../store/habits.js";
+import { deleteHabit, getHabitById } from "../../store/habits.js";
 import {
 	Button,
 	Card,
@@ -28,17 +28,41 @@ const HabitPage = () => {
 	const [inputValue, setInputValue] = useState(0);
 	const [persentValue, setPercentValue] = useState(0);
 	const [isSwitchOn, setIsSwitchOn] = useState(false);
-    const [isOpenHabitMenu, setIsOpenHabitMenu] = useState(false)
+	const [isOpenHabitMenu, setIsOpenHabitMenu] = useState(false);
+	const habitMenuRef = useRef(null);
 
-    const handleOpenHabitMenu = () => {
-        setIsOpenHabitMenu(prev => !prev)
-    }
+	const handleOpenHabitMenu = () => {
+		setIsOpenHabitMenu((prev) => !prev);
+	};
+
+	const handleClickOutside = (event) => {
+		if (
+			habitMenuRef.current &&
+			!habitMenuRef.current.contains(event.target)
+		) {
+			setIsOpenHabitMenu(false);
+		}
+	};
+
+    const navigate = useNavigate()
+
+	const handleDeleteHabit = () => {
+		dispatch(deleteHabit(habitData._id));
+        navigate("/habits")
+	};
+
+	useEffect(() => {
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
 
 	const handleSwitchChange = (value) => {
 		setIsSwitchOn(value);
 	};
 
-	const habitMenuList = ["Delete"];
+	const habitMenuList = [{name:"Delete", function:() => {handleDeleteHabit()}}];
 
 	useEffect(() => {
 		if (habitData !== undefined) {
@@ -120,10 +144,10 @@ const HabitPage = () => {
 							{habitData.name}
 						</div>
 						<Button
-							className="z-10"
+							className="z-10 w-min h-min"
 							icon={RiMore2Fill}
 							color={habitData.color}
-                            onClick={() => handleOpenHabitMenu()}
+							onClick={() => handleOpenHabitMenu()}
 						/>
 					</div>
 					<p className="text-xl font-normal">
@@ -132,19 +156,22 @@ const HabitPage = () => {
 				</Page.PageTitle>
 				<Page.PageContent className="h-full justify-center">
 					<Card
-						className={`${isOpenHabitMenu ? "flex" : "hidden"} flex-col absolute top-0 right-0 w-min pr-[55px]`}
+						ref={habitMenuRef}
+						className={`${
+							isOpenHabitMenu ? "flex" : "hidden"
+						} flex-col absolute top-0 right-0 w-min pr-[55px]`}
 						decoration="right"
 						decorationColor={habitData.color}
 					>
-						<h3>Habit Menu</h3>
+						<h3>Menu</h3>
 						<List>
 							{habitMenuList.map((item) => (
 								<ListItem
-									key={item}
+									key={item.name}
 									className="cursor-pointer hover:text-white"
-                                    onClick={() => {console.log("delete")}}
+									onClick={item.function}
 								>
-									{item}
+									{item.name}
 								</ListItem>
 							))}
 						</List>

@@ -1,5 +1,6 @@
-import { ref, set, get } from "firebase/database";
+import { ref, set, get, remove } from "firebase/database";
 import { database } from "../firebase";
+import localStorageService from "./localStorage.service";
 
 const habitsService = {
 	get: async (userId) => {
@@ -16,7 +17,16 @@ const habitsService = {
 		await set(ref(database, "habits/" + userId + "/" + _id), habit);
 		return habit;
 	},
-	delete: () => {},
+	delete: async (id) => {
+        const userId = localStorageService.getUserId()
+        const url = `habits/${userId}/${id}/`
+        try {
+            const databaseRef = await ref(database, url)
+            await set(databaseRef,null)
+        } catch (error) {
+            console.log(error)
+        }
+    },
 	edit: () => {},
 	updateValue: async (payload) => {
 		const { _id, userId } = payload;
